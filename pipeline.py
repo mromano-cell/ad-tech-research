@@ -260,8 +260,8 @@ def generate_digest(week_start, new_articles, counts):
         cat: sorted(topics.items(), key=lambda x: -x[1])[:5]
         for cat, topics in counts.items()
     }
-    articles_summary = "\n".join(
-        f"- [{a['publication']}] {a['title']}"
+    articles_list = "\n".join(
+        f"- [{a['publication']}] {a['title']} | URL: {a['url']}"
         for a in new_articles[:30]
     )
     prompt = f"""Write a weekly market research digest for a product marketing team covering the digital advertising industry.
@@ -272,15 +272,21 @@ Total new articles analyzed: {len(new_articles)}
 TOP TRENDING TOPICS BY CATEGORY:
 {json.dumps(top_topics, indent=2)}
 
-SAMPLE ARTICLE HEADLINES THIS WEEK:
-{articles_summary}
+ARTICLES THIS WEEK (with URLs):
+{articles_list}
 
 Write a 2-3 paragraph narrative digest that:
 1. Opens with the most significant overarching theme or story of the week
 2. Covers what's trending across programmatic advertising, retail media networks, FAANG activity, attribution/measurement, and ad formats — with specific mention of topic frequency (e.g., "CTV was mentioned in 12 articles") and any notable week-over-week changes
 3. Closes with a brief "what to watch" forward-looking observation
 
-Write in a professional but accessible tone for marketing professionals. Be specific — name the companies, technologies, and trends you see. Do not use bullet points; use flowing paragraphs."""
+FORMATTING RULES — follow these exactly:
+- Write in HTML, not markdown
+- When you reference a specific article or finding, hyperlink the relevant phrase using <a href="URL" target="_blank">linked text</a> — use the article URLs provided above
+- Use <strong>bold</strong> for company names, key topics, and important figures
+- Wrap each paragraph in <p> tags
+- Do not use ** for bold, do not use markdown, only HTML
+- Do not use bullet points; use flowing paragraphs only"""
 
     response = client.messages.create(
         model="claude-opus-4-7",
@@ -383,7 +389,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     .container{{max-width:1280px;margin:0 auto;padding:2rem 2.5rem}}
     .card{{background:#fff;border-radius:10px;padding:1.75rem;margin-bottom:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.08)}}
     h2{{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:1.2rem}}
-    .digest{{line-height:1.8;font-size:0.95rem;white-space:pre-wrap;color:#334155}}
+    .digest{{line-height:1.8;font-size:0.95rem;color:#334155}}
+    .digest p{{margin-bottom:1rem}}
+    .digest a{{color:#4f46e5;text-decoration:underline}}
+    .score-legend{{font-size:.72rem;color:#94a3b8;margin-top:.5rem}}
     .trends-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}}
     .trend-category h3{{font-size:0.72rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin-bottom:.6rem;font-weight:600}}
     .trend-item{{display:flex;justify-content:space-between;align-items:center;padding:.3rem 0;border-bottom:1px solid #f1f5f9;font-size:.82rem}}
@@ -426,7 +435,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <thead>
           <tr>
             <th>Date</th><th>Publication</th><th>Headline</th>
-            <th>Categories</th><th>FAANG</th><th>Ad Formats</th><th>Score</th>
+            <th>Categories</th><th>FAANG</th><th>Ad Formats</th>
+            <th>Score <span class="score-legend" title="1-10 relevance to ad tech professionals. 8-10 = highly relevant, 5-7 = moderately relevant, 1-4 = low relevance">(?)</span></th>
           </tr>
         </thead>
         <tbody>{rows_html}</tbody>
@@ -450,7 +460,7 @@ def generate_report(week_start, digest, counts, new_rows):
     content = HTML_TEMPLATE.format(
         week_start=week_start,
         article_count=len(new_rows),
-        digest=html_lib.escape(digest),
+        digest=digest,
         trends_html=build_trends_html(counts),
         rows_html=build_rows_html(new_rows),
     )
