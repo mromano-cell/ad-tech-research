@@ -24,7 +24,7 @@ TRENDS_CSV   = DATA_DIR / "trends.csv"
 
 ARTICLES_HEADERS = [
     "Date", "Publication", "Headline", "URL",
-    "Categories", "Topics", "FAANG Mentions",
+    "Categories", "Topics", "Major Ad Tech Companies",
     "Retail Media Networks", "Attribution Topics", "Ad Formats",
     "Relevance Score", "Summary",
 ]
@@ -55,12 +55,19 @@ RETAIL MEDIA NETWORKS
 - Albertsons Media Collective
 - Other retailer-owned ad networks
 
-FAANG & BIG TECH IN AD TECH
-- Meta / Facebook: Advantage+, Meta AI ads, Reels monetization
+MAJOR AD TECH COMPANIES
+- Meta / Facebook: Advantage+, Meta AI ads, Reels monetization, local business ads
+- Google: Performance Max (PMax), Privacy Sandbox, DV360, Google Ads, Topics API, Local Services Ads
 - Amazon: DSP, Sponsored Products, AMC, retail media
 - Apple: ATT (App Tracking Transparency), SKAdNetwork, Privacy manifests
 - Netflix: Ad-supported tier, Netflix Ads, programmatic partnerships
-- Google: Performance Max (PMax), Privacy Sandbox, DV360, Google Ads, Topics API
+- Microsoft / LinkedIn: LinkedIn Ads, Microsoft Advertising, Audience Network
+- Reddit: Reddit Ads, conversation targeting
+- Nextdoor: Nextdoor Ads, neighborhood targeting, local business ads
+- Angi (formerly Angie's List): home services advertising
+- TripAdvisor: travel/hospitality advertising, sponsored placements
+- OpenTable: restaurant advertising, diner targeting
+- The Trade Desk, Roku, Spotify, Pinterest, Snapchat, TikTok, Uber, DoorDash (when substantively covered in ad tech context)
 
 ATTRIBUTION & MEASUREMENT
 - Incrementality testing / lift studies
@@ -94,9 +101,9 @@ Summary/Excerpt: {summary}
 
 Return a JSON object with exactly these fields:
 {{
-  "categories": ["list of broad categories from: Programmatic, Retail Media, FAANG, Attribution/Measurement, Ad Formats, Industry/Business, Privacy/Regulation, Technology"],
+  "categories": ["list of broad categories from: Programmatic, Retail Media, Major Ad Tech Companies, Attribution/Measurement, Ad Formats, Industry/Business, Privacy/Regulation, Technology"],
   "topics": ["specific topics covered, e.g. 'header bidding', 'incrementality testing', 'CTV advertising'"],
-  "faang_mentions": ["which FAANG companies are mentioned: Meta, Amazon, Apple, Netflix, Google — only include if substantively covered"],
+  "faang_mentions": ["which major ad tech companies are mentioned: Meta, Google, Amazon, Apple, Netflix, Microsoft/LinkedIn, Reddit, Nextdoor, Angi, TripAdvisor, OpenTable, The Trade Desk, Roku, Spotify, Pinterest, Snapchat, TikTok, Uber, DoorDash — only include if substantively covered"],
   "retail_media_networks": ["which retail media networks: Amazon Ads, Walmart Connect, Target Roundel, Kroger, Instacart, Albertsons, Other — only if substantively covered"],
   "attribution_topics": ["which attribution/measurement topics: Incrementality, Last-Click, View-Through, MMM, MTA, Clean Rooms, Cookieless, ID Solutions — only if substantively covered"],
   "ad_formats": ["which ad formats: CTV/OTT, Audio, DOOH, Display, Native, Video, Social, Search, Retail Media Ads — only if substantively covered"],
@@ -212,9 +219,9 @@ def aggregate_trends(new_rows, week_start):
         for item in (row[col["Topics"]] or "").split(", "):
             if item.strip():
                 counts["Topics"][item.strip()] += 1
-        for item in (row[col["FAANG Mentions"]] or "").split(", "):
+        for item in (row[col["Major Ad Tech Companies"]] or "").split(", "):
             if item.strip():
-                counts["FAANG"][item.strip()] += 1
+                counts["Major Ad Tech Companies"][item.strip()] += 1
         for item in (row[col["Retail Media Networks"]] or "").split(", "):
             if item.strip():
                 counts["Retail Media Networks"][item.strip()] += 1
@@ -277,7 +284,7 @@ ARTICLES THIS WEEK (with URLs):
 
 Write a 3-4 paragraph narrative digest that:
 1. Opens with the most significant overarching theme or story of the week
-2. Covers what's trending across programmatic advertising, retail media networks, FAANG activity, attribution/measurement, and ad formats — with specific mention of topic frequency (e.g., "CTV was mentioned in 12 articles") and any notable week-over-week changes
+2. Covers what's trending across programmatic advertising, retail media networks, major ad tech company activity, attribution/measurement, and ad formats — with specific mention of topic frequency (e.g., "CTV was mentioned in 12 articles") and any notable week-over-week changes
 3. Closes with a brief "what to watch" forward-looking observation
 4. Write a final paragraph under the subheading <h3>Yelp Impact Analysis</h3> that specifically covers:
    - News affecting restaurant, services, and local business verticals (Yelp's core business)
@@ -381,7 +388,7 @@ def build_rows_html(new_rows):
         score     = row[col["Relevance Score"]]
         sc        = _score_class(score)
         cats      = html_lib.escape(row[col["Categories"]])
-        faang     = row[col["FAANG Mentions"]]
+        companies = row[col["Major Ad Tech Companies"]]
         formats   = row[col["Ad Formats"]]
         headline  = html_lib.escape(row[col["Headline"]])
         url       = html_lib.escape(row[col["URL"]])
@@ -399,7 +406,7 @@ def build_rows_html(new_rows):
             f'<td><a href="{url}" target="_blank" rel="noopener">{headline}</a>'
             f'<div style="color:#888;font-size:0.75rem;margin-top:0.2rem">{summary}</div></td>'
             f'<td>{tags(cats)}</td>'
-            f'<td>{tags(faang)}</td>'
+            f'<td>{tags(companies)}</td>'
             f'<td>{tags(formats)}</td>'
             f'<td><span class="score {sc}">{score}</span></td>'
             f"</tr>"
@@ -486,8 +493,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <thead>
           <tr>
             <th>Date</th><th>Publication</th><th>Headline</th>
-            <th>Categories</th><th>FAANG</th><th>Ad Formats</th>
-            <th>Score <span class="score-legend" title="1-10 relevance to ad tech professionals. 8-10 = highly relevant, 5-7 = moderately relevant, 1-4 = low relevance">(?)</span></th>
+            <th>Categories</th><th>Companies</th><th>Ad Formats</th>
+            <th>Score <span class="score-legend" title="How relevant is this article to digital ad tech? 8-10 (green) = highly relevant, 5-7 (yellow) = somewhat relevant, 1-4 (blue) = low relevance">(?)</span></th>
           </tr>
         </thead>
         <tbody>{rows_html}</tbody>
@@ -508,7 +515,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     var categoryColors = {{
       'Ad Formats':            {{base:'#4f46e5',variants:['#4f46e5','#6366f1','#818cf8','#a5b4fc','#c7d2fe','#3730a3','#312e81','#4338ca','#5b21b6','#7c3aed']}},
       'Attribution':           {{base:'#0891b2',variants:['#0891b2','#06b6d4','#22d3ee','#67e8f9','#0e7490','#155e75','#164e63','#0284c7','#0369a1','#075985']}},
-      'FAANG':                 {{base:'#dc2626',variants:['#dc2626','#ef4444','#f87171','#fca5a5','#b91c1c','#991b1b','#7f1d1d','#e11d48','#be123c','#9f1239']}},
+      'Major Ad Tech Companies':{{base:'#dc2626',variants:['#dc2626','#ef4444','#f87171','#fca5a5','#b91c1c','#991b1b','#7f1d1d','#e11d48','#be123c','#9f1239']}},
       'Retail Media Networks': {{base:'#16a34a',variants:['#16a34a','#22c55e','#4ade80','#86efac','#15803d','#166534','#14532d','#059669','#047857','#065f46']}},
       'Topics':                {{base:'#d97706',variants:['#d97706','#f59e0b','#fbbf24','#fcd34d','#b45309','#92400e','#78350f','#a16207','#ca8a04','#eab308']}}
     }};
