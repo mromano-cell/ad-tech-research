@@ -275,22 +275,29 @@ TOP TRENDING TOPICS BY CATEGORY:
 ARTICLES THIS WEEK (with URLs):
 {articles_list}
 
-Write a 2-3 paragraph narrative digest that:
+Write a 3-4 paragraph narrative digest that:
 1. Opens with the most significant overarching theme or story of the week
 2. Covers what's trending across programmatic advertising, retail media networks, FAANG activity, attribution/measurement, and ad formats — with specific mention of topic frequency (e.g., "CTV was mentioned in 12 articles") and any notable week-over-week changes
 3. Closes with a brief "what to watch" forward-looking observation
+4. Write a final paragraph under the subheading <h3>Yelp Impact Analysis</h3> that specifically covers:
+   - News affecting restaurant, services, and local business verticals (Yelp's core business)
+   - Ad tech developments relevant to high-intent audience platforms (Yelp is a high-intent platform where consumers are actively searching for businesses and ready to convert)
+   - Competitive moves from Google Local Services Ads, Meta local business ads, Nextdoor, Apple Business Connect, and other local advertising products
+   - Implications for programmatic or managed-service ad products targeting multi-location businesses (restaurants, home services, auto, etc.)
+   If nothing this week is directly relevant to these areas, briefly note that and highlight the closest adjacent trend that could impact Yelp's competitive position.
 
 FORMATTING RULES — follow these exactly:
 - Write in HTML, not markdown
 - When you reference a specific article or finding, hyperlink the relevant phrase using <a href="URL" target="_blank">linked text</a> — use the article URLs provided above
 - Use <strong>bold</strong> for company names, key topics, and important figures
 - Wrap each paragraph in <p> tags
+- Use <h3> tags for section subheadings within the digest
 - Do not use ** for bold, do not use markdown, only HTML
 - Do not use bullet points; use flowing paragraphs only"""
 
     response = client.messages.create(
         model="claude-opus-4-7",
-        max_tokens=1200,
+        max_tokens=1500,
         thinking={"type": "adaptive"},
         messages=[{"role": "user", "content": prompt}],
     )
@@ -341,6 +348,32 @@ def build_trends_html(counts):
     return "\n".join(parts)
 
 
+def load_all_trends():
+    """Read all historical trend data for the interactive chart."""
+    if not TRENDS_CSV.exists():
+        return {}
+    data = defaultdict(lambda: defaultdict(list))
+    with open(TRENDS_CSV, "r", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            data[row["Category"]][row["Topic"]].append({
+                "week": row["Week Start"],
+                "count": int(row.get("Count") or 0),
+            })
+    # Keep only top 15 topics per category by max count
+    result = {}
+    for category, topics in data.items():
+        sorted_topics = sorted(
+            topics.items(),
+            key=lambda x: max(p["count"] for p in x[1]),
+            reverse=True,
+        )[:15]
+        result[category] = {
+            topic: sorted(points, key=lambda x: x["week"])
+            for topic, points in sorted_topics
+        }
+    return result
+
+
 def build_rows_html(new_rows):
     col = {h: i for i, h in enumerate(ARTICLES_HEADERS)}
     rows = []
@@ -380,6 +413,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ad Tech Digest &mdash; {week_start}</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <style>
     *{{margin:0;padding:0;box-sizing:border-box}}
     body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f7fa;color:#222}}
@@ -392,7 +426,14 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     .digest{{line-height:1.8;font-size:0.95rem;color:#334155}}
     .digest p{{margin-bottom:1rem}}
     .digest a{{color:#4f46e5;text-decoration:underline}}
+    .digest h3{{font-size:0.88rem;font-weight:700;color:#0f172a;margin:1.4rem 0 0.5rem;padding-top:0.8rem;border-top:1px solid #e2e8f0}}
     .score-legend{{font-size:.72rem;color:#94a3b8;margin-top:.5rem}}
+    .chart-controls{{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}}
+    .cat-btn{{padding:.35rem .75rem;border:1px solid #e2e8f0;border-radius:6px;background:#fff;font-size:.78rem;cursor:pointer;color:#475569;transition:all .15s}}
+    .cat-btn:hover{{border-color:#6366f1;color:#4f46e5}}
+    .cat-btn.active{{background:#4f46e5;color:#fff;border-color:#4f46e5}}
+    .chart-container{{position:relative;height:400px;width:100%}}
+    .chart-note{{font-size:.72rem;color:#94a3b8;margin-top:.75rem}}
     .trends-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}}
     .trend-category h3{{font-size:0.72rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin-bottom:.6rem;font-weight:600}}
     .trend-item{{display:flex;justify-content:space-between;align-items:center;padding:.3rem 0;border-bottom:1px solid #f1f5f9;font-size:.82rem}}
@@ -425,6 +466,16 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       <div class="digest">{digest}</div>
     </div>
     <div class="card">
+      <h2>Topic Trends Over Time</h2>
+      <div class="chart-controls">
+        <button class="cat-btn active" data-category="all">All</button>
+      </div>
+      <div class="chart-container">
+        <canvas id="trendsChart"></canvas>
+      </div>
+      <p class="chart-note">Click category buttons to filter. Click legend items to toggle individual topics.</p>
+    </div>
+    <div class="card">
       <h2>Trending Topics This Week</h2>
       <div class="trends-grid">{trends_html}</div>
     </div>
@@ -451,11 +502,129 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       }});
     }});
   </script>
+  <script>
+  (function() {{
+    var trendData = {trends_json};
+    var categoryColors = {{
+      'Ad Formats':            {{base:'#4f46e5',variants:['#4f46e5','#6366f1','#818cf8','#a5b4fc','#c7d2fe','#3730a3','#312e81','#4338ca','#5b21b6','#7c3aed']}},
+      'Attribution':           {{base:'#0891b2',variants:['#0891b2','#06b6d4','#22d3ee','#67e8f9','#0e7490','#155e75','#164e63','#0284c7','#0369a1','#075985']}},
+      'FAANG':                 {{base:'#dc2626',variants:['#dc2626','#ef4444','#f87171','#fca5a5','#b91c1c','#991b1b','#7f1d1d','#e11d48','#be123c','#9f1239']}},
+      'Retail Media Networks': {{base:'#16a34a',variants:['#16a34a','#22c55e','#4ade80','#86efac','#15803d','#166534','#14532d','#059669','#047857','#065f46']}},
+      'Topics':                {{base:'#d97706',variants:['#d97706','#f59e0b','#fbbf24','#fcd34d','#b45309','#92400e','#78350f','#a16207','#ca8a04','#eab308']}}
+    }};
+    var allWeeks = [];
+    var weekSet = {{}};
+    for (var cat in trendData) {{
+      for (var topic in trendData[cat]) {{
+        trendData[cat][topic].forEach(function(p) {{
+          if (!weekSet[p.week]) {{
+            weekSet[p.week] = true;
+            allWeeks.push(p.week);
+          }}
+        }});
+      }}
+    }}
+    allWeeks.sort();
+    var datasets = [];
+    for (var cat in trendData) {{
+      var colors = categoryColors[cat] || {{base:'#64748b',variants:['#64748b']}};
+      var colorIdx = 0;
+      var topicEntries = [];
+      for (var topic in trendData[cat]) {{
+        var maxCount = 0;
+        trendData[cat][topic].forEach(function(p) {{
+          if (p.count > maxCount) maxCount = p.count;
+        }});
+        topicEntries.push({{topic: topic, points: trendData[cat][topic], maxCount: maxCount}});
+      }}
+      topicEntries.sort(function(a, b) {{ return b.maxCount - a.maxCount; }});
+      topicEntries.slice(0, 10).forEach(function(entry) {{
+        var weekMap = {{}};
+        entry.points.forEach(function(p) {{ weekMap[p.week] = p.count; }});
+        var color = colors.variants[colorIdx % colors.variants.length];
+        colorIdx++;
+        datasets.push({{
+          label: entry.topic,
+          data: allWeeks.map(function(w) {{ return weekMap[w] || 0; }}),
+          borderColor: color,
+          backgroundColor: color + '33',
+          tension: 0.3,
+          pointRadius: 3,
+          borderWidth: 2,
+          _category: cat,
+          hidden: false
+        }});
+      }});
+    }}
+    if (allWeeks.length < 2) {{
+      var note = document.querySelector('.chart-note');
+      if (note) note.textContent = 'Only one week of data so far. The trend lines will appear as more weekly reports are generated.';
+    }}
+    var ctx = document.getElementById('trendsChart').getContext('2d');
+    var chart = new Chart(ctx, {{
+      type: 'line',
+      data: {{ labels: allWeeks, datasets: datasets }},
+      options: {{
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {{ mode: 'index', intersect: false }},
+        plugins: {{
+          legend: {{
+            position: 'bottom',
+            labels: {{ font: {{ size: 11 }}, boxWidth: 12, padding: 8 }}
+          }},
+          tooltip: {{
+            callbacks: {{
+              title: function(items) {{ return 'Week of ' + items[0].label; }}
+            }}
+          }}
+        }},
+        scales: {{
+          x: {{
+            title: {{ display: true, text: 'Week', font: {{ size: 12 }} }},
+            grid: {{ display: false }}
+          }},
+          y: {{
+            title: {{ display: true, text: 'Mentions', font: {{ size: 12 }} }},
+            beginAtZero: true,
+            ticks: {{ stepSize: 1 }}
+          }}
+        }}
+      }}
+    }});
+    var controlsDiv = document.querySelector('.chart-controls');
+    var categories = Object.keys(trendData).sort();
+    categories.forEach(function(cat) {{
+      var btn = document.createElement('button');
+      btn.className = 'cat-btn';
+      btn.setAttribute('data-category', cat);
+      btn.textContent = cat;
+      controlsDiv.appendChild(btn);
+    }});
+    controlsDiv.addEventListener('click', function(e) {{
+      var btn = e.target.closest('.cat-btn');
+      if (!btn) return;
+      controlsDiv.querySelectorAll('.cat-btn').forEach(function(b) {{ b.classList.remove('active'); }});
+      btn.classList.add('active');
+      var selectedCat = btn.getAttribute('data-category');
+      chart.data.datasets.forEach(function(ds, i) {{
+        if (selectedCat === 'all') {{
+          chart.setDatasetVisibility(i, true);
+        }} else {{
+          chart.setDatasetVisibility(i, ds._category === selectedCat);
+        }}
+      }});
+      chart.update();
+    }});
+  }})();
+  </script>
 </body>
 </html>"""
 
 
 def generate_report(week_start, digest, counts, new_rows):
+    all_trends = load_all_trends()
+    trends_json = json.dumps(all_trends)
     report_path = REPORTS_DIR / f"{week_start}.html"
     content = HTML_TEMPLATE.format(
         week_start=week_start,
@@ -463,6 +632,7 @@ def generate_report(week_start, digest, counts, new_rows):
         digest=digest,
         trends_html=build_trends_html(counts),
         rows_html=build_rows_html(new_rows),
+        trends_json=trends_json,
     )
     report_path.write_text(content, encoding="utf-8")
     print(f"[INFO] Wrote report to {report_path}")
