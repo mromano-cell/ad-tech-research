@@ -285,178 +285,148 @@ Week Start,Topic,Category,Count,Prior Week Count,% Change
 2026-04-27,Cookieless,Attribution,1,0,NEW
 2026-04-27,Walmart Connect,Retail Media Networks,2,0,NEW
 2026-04-27,Amazon Ads,Retail Media Networks,1,2,-50%
-2026-05-04,generative AI,Topics,4,0,NEW
-2026-05-04,agentic AI,Topics,3,3,+0%
-2026-05-04,creator economy,Topics,3,2,+50%
-2026-05-04,retail media networks,Topics,2,0,NEW
+2026-05-04,CTV advertising,Topics,4,3,+33%
+2026-05-04,audience targeting,Topics,4,0,NEW
+2026-05-04,first-party data,Topics,2,1,+100%
+2026-05-04,retail media,Topics,2,0,NEW
+2026-05-04,AI in advertising,Topics,2,1,+100%
+2026-05-04,retail media measurement,Topics,2,0,NEW
+2026-05-04,creator marketing,Topics,2,1,+100%
+2026-05-04,publisher revenue,Topics,2,0,NEW
+2026-05-04,programmatic advertising,Topics,2,0,NEW
+2026-05-04,brand partnerships,Topics,2,0,NEW
+2026-05-04,creator economy,Topics,2,2,+0%
 2026-05-04,influencer marketing,Topics,2,3,-33%
-2026-05-04,AI in marketing,Topics,2,0,NEW
-2026-05-04,industry events,Topics,2,1,+100%
-2026-05-04,publisher monetization,Topics,2,1,+100%
-2026-05-04,CTV advertising,Topics,2,3,-33%
-2026-05-04,CEO leadership,Topics,1,0,NEW
-2026-05-04,brand identity,Topics,1,0,NEW
-2026-05-04,marketing leadership,Topics,1,0,NEW
-2026-05-04,AI in retail media,Topics,1,0,NEW
-2026-05-04,closed-loop measurement,Topics,1,0,NEW
-2026-05-04,CVS Media Exchange,Topics,1,0,NEW
-2026-05-04,CPG marketing,Topics,1,0,NEW
-2026-05-04,challenger brands,Topics,1,0,NEW
-2026-05-04,Ibotta,Topics,1,0,NEW
-2026-05-04,creator-led campaigns,Topics,1,0,NEW
-2026-05-04,small business marketing,Topics,1,0,NEW
-2026-05-04,branded content,Topics,1,0,NEW
-2026-05-04,audio advertising,Topics,1,0,NEW
-2026-05-04,brand trust,Topics,1,0,NEW
-2026-05-04,measurable outcomes,Topics,1,0,NEW
-2026-05-04,GroundTruth,Topics,1,0,NEW
-2026-05-04,AI answer engines,Topics,1,0,NEW
-2026-05-04,ChatGPT,Topics,1,0,NEW
-2026-05-04,customer journey,Topics,1,0,NEW
-2026-05-04,brand discovery,Topics,1,0,NEW
-2026-05-04,consumer engagement,Topics,1,0,NEW
-2026-05-04,Possible conference,Topics,1,0,NEW
-2026-05-04,event sponsorship,Topics,1,0,NEW
-2026-05-04,onsite retail media,Topics,1,0,NEW
-2026-05-04,DSP expansion into retail media,Topics,1,0,NEW
-2026-05-04,competition with Criteo,Topics,1,0,NEW
-2026-05-04,AI content scraping,Topics,1,0,NEW
-2026-05-04,ad tech tax,Topics,1,0,NEW
-2026-05-04,AI data brokers,Topics,1,0,NEW
-2026-05-04,supply chain transparency,Topics,1,0,NEW
-2026-05-04,programmatic media buying,Topics,1,0,NEW
-2026-05-04,trade bodies,Topics,1,0,NEW
-2026-05-04,industry standards,Topics,1,1,+0%
-2026-05-04,media planning automation,Topics,1,0,NEW
-2026-05-04,DOOH advertising,Topics,1,0,NEW
-2026-05-04,creative adaptation,Topics,1,0,NEW
-2026-05-04,OOH partnerships,Topics,1,0,NEW
-2026-05-04,cross-channel creative,Topics,1,0,NEW
-2026-05-04,AI workflow tools,Topics,1,0,NEW
-2026-05-04,influencer partnerships,Topics,1,0,NEW
-2026-05-04,ChatGPT ads,Topics,1,0,NEW
-2026-05-04,conversion pixel,Topics,1,0,NEW
-2026-05-04,EU privacy regulation,Topics,1,0,NEW
-2026-05-04,GDPR,Topics,1,0,NEW
-2026-05-04,consent-based advertising,Topics,1,0,NEW
-2026-05-04,AI advertising,Topics,1,1,+0%
-2026-05-04,creator strategy,Topics,1,0,NEW
-2026-05-04,sports marketing,Topics,1,2,-50%
-2026-05-04,fandom building,Topics,1,0,NEW
-2026-05-04,franchise model,Topics,1,0,NEW
-2026-05-04,AI visibility tools,Topics,1,0,NEW
-2026-05-04,generative AI search,Topics,1,0,NEW
-2026-05-04,zero-click search,Topics,1,0,NEW
-2026-05-04,measurement benchmarks,Topics,1,0,NEW
-2026-05-04,AI search optimization,Topics,1,0,NEW
-2026-05-04,YouTube creator data,Topics,1,0,NEW
-2026-05-04,audience data sharing,Topics,1,0,NEW
-2026-05-04,brand-creator partnerships,Topics,1,0,NEW
-2026-05-04,AI answer engine,Topics,1,0,NEW
-2026-05-04,audience engagement,Topics,1,0,NEW
-2026-05-04,AI content licensing,Topics,1,0,NEW
-2026-05-04,publisher revenue,Topics,1,0,NEW
-2026-05-04,programmatic advertising pressure,Topics,1,0,NEW
-2026-05-04,publisher traffic decline,Topics,1,0,NEW
-2026-05-04,X ad platform overhaul,Topics,1,0,NEW
-2026-05-04,ad platform performance,Topics,1,0,NEW
-2026-05-04,social advertising,Topics,1,0,NEW
-2026-05-04,AI-powered ad automation,Topics,1,0,NEW
-2026-05-04,Google AI Max,Topics,1,0,NEW
-2026-05-04,Alphabet Q1 earnings,Topics,1,0,NEW
-2026-05-04,campaign automation,Topics,1,0,NEW
-2026-05-04,geopolitical risk,Topics,1,0,NEW
-2026-05-04,advertiser uncertainty,Topics,1,0,NEW
-2026-05-04,ad spend impact,Topics,1,0,NEW
-2026-05-04,publisher ad sales,Topics,1,0,NEW
-2026-05-04,outcome-based advertising,Topics,1,0,NEW
-2026-05-04,performance advertising,Topics,1,1,+0%
-2026-05-04,sales team restructuring,Topics,1,0,NEW
-2026-05-04,AI governance,Topics,1,0,NEW
-2026-05-04,data privacy,Topics,1,0,NEW
-2026-05-04,consent management,Topics,1,0,NEW
-2026-05-04,data minimization,Topics,1,0,NEW
-2026-05-04,dark patterns,Topics,1,0,NEW
-2026-05-04,children's privacy,Topics,1,0,NEW
-2026-05-04,culture-first advertising,Topics,1,0,NEW
-2026-05-04,social media platforms,Topics,1,0,NEW
-2026-05-04,brand safety,Topics,1,1,+0%
-2026-05-04,Twitter/X alternatives,Topics,1,0,NEW
-2026-05-04,Black Twitter,Topics,1,0,NEW
-2026-05-04,niche social platforms,Topics,1,0,NEW
-2026-05-04,ad model scalability,Topics,1,0,NEW
-2026-05-04,AI search / generative engine optimization (GEO),Topics,1,0,NEW
-2026-05-04,SEO,Topics,1,0,NEW
-2026-05-04,viral product marketing,Topics,1,0,NEW
-2026-05-04,POSSIBLE conference,Topics,1,0,NEW
-2026-05-04,industry conference,Topics,1,0,NEW
-2026-05-04,POSSIBLE 2026,Topics,1,0,NEW
-2026-05-04,LGBTQ+ marketing,Topics,1,0,NEW
-2026-05-04,diverse audience targeting,Topics,1,0,NEW
-2026-05-04,TV advertising,Topics,1,0,NEW
-2026-05-04,POSSIBLE 2026 conference,Topics,1,0,NEW
-2026-05-04,marketing technology stack,Topics,1,0,NEW
-2026-05-04,SaaS replacement,Topics,1,0,NEW
-2026-05-04,martech vendor evaluation,Topics,1,0,NEW
-2026-05-04,data-driven advertising tools,Topics,1,0,NEW
-2026-05-04,ad experience,Topics,1,0,NEW
-2026-05-04,Amazon ad revenue,Topics,1,0,NEW
-2026-05-04,AI investment costs,Topics,1,0,NEW
-2026-05-04,Q1 earnings,Topics,1,0,NEW
-2026-05-04,Reddit ad revenue growth,Topics,1,0,NEW
-2026-05-04,daily active users,Topics,1,0,NEW
-2026-05-04,generative AI search impact on traffic,Topics,1,0,NEW
-2026-05-04,social platform growth,Topics,1,0,NEW
-2026-05-04,Other,Retail Media Networks,2,0,NEW
-2026-05-04,Amazon Ads,Retail Media Networks,1,1,+0%
-2026-05-04,Social,Ad Formats,4,5,-20%
-2026-05-04,CTV/OTT,Ad Formats,4,9,-56%
-2026-05-04,Retail Media Ads,Ad Formats,2,0,NEW
-2026-05-04,Audio,Ad Formats,1,3,-67%
-2026-05-04,DOOH,Ad Formats,1,1,+0%
-2026-05-04,Video,Ad Formats,1,5,-80%
-2026-05-04,Search,Ad Formats,1,1,+0%
-2026-05-04,Google,Major Ad Tech Companies,3,0,NEW
-2026-05-04,The Trade Desk,Major Ad Tech Companies,1,0,NEW
-2026-05-04,TikTok,Major Ad Tech Companies,1,0,NEW
-2026-05-04,Amazon,Major Ad Tech Companies,1,0,NEW
-2026-05-04,Reddit,Major Ad Tech Companies,1,0,NEW
-2026-05-04,CTV advertising,Topics,2,3,-33%
-2026-05-04,CTV measurement,Topics,1,0,NEW
+2026-05-04,consent management,Topics,2,0,NEW
 2026-05-04,unified measurement,Topics,1,0,NEW
 2026-05-04,independent measurement,Topics,1,0,NEW
-2026-05-04,streaming advertising,Topics,1,0,NEW
+2026-05-04,CTV ecosystem maturity,Topics,1,0,NEW
 2026-05-04,programmatic CTV,Topics,1,0,NEW
-2026-05-04,Viant,Topics,1,0,NEW
+2026-05-04,ad measurement standards,Topics,1,0,NEW
 2026-05-04,incrementality testing,Topics,1,0,NEW
 2026-05-04,campaign measurement,Topics,1,0,NEW
-2026-05-04,lift studies,Topics,1,0,NEW
+2026-05-04,behavioral lift,Topics,1,0,NEW
 2026-05-04,marketing effectiveness,Topics,1,0,NEW
 2026-05-04,purchase intent,Topics,1,0,NEW
-2026-05-04,audience targeting,Topics,1,0,NEW
-2026-05-04,retail media data,Topics,1,0,NEW
-2026-05-04,first-party data,Topics,1,1,+0%
-2026-05-04,consumer behavior,Topics,1,0,NEW
+2026-05-04,data-driven marketing,Topics,1,0,NEW
 2026-05-04,cable news ratings,Topics,1,0,NEW
 2026-05-04,TV viewership,Topics,1,0,NEW
 2026-05-04,sports advertising,Topics,1,0,NEW
-2026-05-04,brand campaigns,Topics,1,1,+0%
-2026-05-04,celebrity advertising,Topics,1,0,NEW
-2026-05-04,World Cup marketing,Topics,1,0,NEW
+2026-05-04,brand campaign,Topics,1,1,+0%
+2026-05-04,video advertising,Topics,1,0,NEW
+2026-05-04,celebrity endorsement,Topics,1,0,NEW
+2026-05-04,media personalities,Topics,1,0,NEW
+2026-05-04,cable news,Topics,1,0,NEW
+2026-05-04,podcast launch,Topics,1,0,NEW
+2026-05-04,brand identity,Topics,1,0,NEW
+2026-05-04,marketing leadership,Topics,1,0,NEW
+2026-05-04,CEO strategy,Topics,1,0,NEW
+2026-05-04,retail media networks,Topics,1,0,NEW
+2026-05-04,brand growth strategy,Topics,1,0,NEW
+2026-05-04,CVS Media Exchange,Topics,1,0,NEW
+2026-05-04,CPG advertising,Topics,1,0,NEW
+2026-05-04,challenger brand marketing,Topics,1,0,NEW
+2026-05-04,Ibotta,Topics,1,0,NEW
+2026-05-04,influencer campaigns,Topics,1,0,NEW
+2026-05-04,small business marketing,Topics,1,0,NEW
+2026-05-04,branded content,Topics,1,0,NEW
+2026-05-04,ad tech tax,Topics,1,0,NEW
+2026-05-04,AI content scraping,Topics,1,0,NEW
+2026-05-04,data brokers,Topics,1,0,NEW
+2026-05-04,AI training data,Topics,1,0,NEW
+2026-05-04,content licensing,Topics,1,0,NEW
+2026-05-04,publisher economics,Topics,1,0,NEW
+2026-05-04,intermediary fees,Topics,1,0,NEW
+2026-05-04,agentic media buying,Topics,1,0,NEW
+2026-05-04,agentic media planning,Topics,1,0,NEW
+2026-05-04,trade bodies,Topics,1,0,NEW
+2026-05-04,industry standards,Topics,1,1,+0%
+2026-05-04,DSPs,Topics,1,0,NEW
+2026-05-04,SSPs,Topics,1,0,NEW
+2026-05-04,AI in media buying,Topics,1,0,NEW
+2026-05-04,DOOH advertising,Topics,1,0,NEW
+2026-05-04,creative adaptation,Topics,1,0,NEW
+2026-05-04,OOH programmatic,Topics,1,0,NEW
+2026-05-04,ad creative strategy,Topics,1,0,NEW
+2026-05-04,generative AI,Topics,1,0,NEW
+2026-05-04,AI workflow tools,Topics,1,0,NEW
+2026-05-04,creator-brand partnerships,Topics,1,0,NEW
+2026-05-04,conversion pixel,Topics,1,0,NEW
+2026-05-04,EU privacy compliance,Topics,1,0,NEW
+2026-05-04,GDPR,Topics,1,0,NEW
+2026-05-04,ChatGPT advertising,Topics,1,1,+0%
+2026-05-04,ad measurement signals,Topics,1,0,NEW
+2026-05-04,sports media,Topics,1,0,NEW
+2026-05-04,fandom building,Topics,1,0,NEW
+2026-05-04,franchise sales,Topics,1,0,NEW
+2026-05-04,influencer strategy,Topics,1,0,NEW
+2026-05-04,AI visibility tools,Topics,1,0,NEW
+2026-05-04,zero-click search,Topics,1,0,NEW
+2026-05-04,AI search optimization,Topics,1,0,NEW
+2026-05-04,generative AI advertising,Topics,1,0,NEW
+2026-05-04,brand visibility in AI answers,Topics,1,0,NEW
+2026-05-04,measurement benchmarks,Topics,1,0,NEW
+2026-05-04,YouTube creator data,Topics,1,0,NEW
+2026-05-04,AI answer engine,Topics,1,0,NEW
+2026-05-04,publisher engagement,Topics,1,0,NEW
+2026-05-04,native advertising,Topics,1,0,NEW
+2026-05-04,content recommendation,Topics,1,0,NEW
+2026-05-04,AI-powered publishing tools,Topics,1,0,NEW
+2026-05-04,AI licensing,Topics,1,0,NEW
+2026-05-04,traffic pressure,Topics,1,0,NEW
+2026-05-04,programmatic revenue decline,Topics,1,0,NEW
 2026-05-04,AI search impact on publisher traffic,Topics,1,0,NEW
-2026-05-04,video content strategy,Topics,1,0,NEW
-2026-05-04,publisher monetization,Topics,1,1,+0%
+2026-05-04,video advertising strategy,Topics,1,0,NEW
+2026-05-04,publisher ad operations,Topics,1,0,NEW
 2026-05-04,sports media publishing,Topics,1,0,NEW
 2026-05-04,upfronts,Topics,1,0,NEW
 2026-05-04,outcomes-based buying,Topics,1,0,NEW
-2026-05-04,brand measurement,Topics,1,0,NEW
-2026-05-04,cross-channel measurement,Topics,1,0,NEW
-2026-05-04,retail media,Topics,1,0,NEW
-2026-05-04,television advertising,Topics,1,0,NEW
+2026-05-04,brand and cross-channel measurement,Topics,1,0,NEW
+2026-05-04,TV advertising,Topics,1,0,NEW
+2026-05-04,reach-based vs. outcomes-based buying,Topics,1,0,NEW
+2026-05-04,AI governance,Topics,1,0,NEW
+2026-05-04,data governance,Topics,1,0,NEW
+2026-05-04,privacy compliance,Topics,1,0,NEW
+2026-05-04,data minimization,Topics,1,0,NEW
+2026-05-04,social media advertising,Topics,1,0,NEW
+2026-05-04,multicultural marketing,Topics,1,0,NEW
+2026-05-04,niche social platforms,Topics,1,0,NEW
+2026-05-04,brand safety,Topics,1,1,+0%
+2026-05-04,culture-first advertising,Topics,1,0,NEW
+2026-05-04,AI search,Topics,1,0,NEW
+2026-05-04,generative engine optimization (GEO),Topics,1,0,NEW
+2026-05-04,SEO disruption,Topics,1,0,NEW
+2026-05-04,viral content monetization,Topics,1,0,NEW
+2026-05-04,AI in marketing,Topics,1,0,NEW
+2026-05-04,conference recap,Topics,1,0,NEW
+2026-05-04,industry trends,Topics,1,0,NEW
+2026-05-04,agentic AI,Topics,1,3,-67%
+2026-05-04,industry conference coverage,Topics,1,0,NEW
+2026-05-04,POSSIBLE 2026,Topics,1,0,NEW
+2026-05-04,LGBTQ+ advertising,Topics,1,0,NEW
+2026-05-04,brand marketing,Topics,1,1,+0%
+2026-05-04,diversity and inclusion in media,Topics,1,0,NEW
+2026-05-04,marketing analytics tools,Topics,1,0,NEW
+2026-05-04,SaaS platforms,Topics,1,0,NEW
+2026-05-04,data-driven advertising,Topics,1,0,NEW
+2026-05-04,marketing measurement,Topics,1,0,NEW
+2026-05-04,retail marketing technology,Topics,1,0,NEW
+2026-05-04,comic strip,Topics,1,0,NEW
+2026-05-04,digital advertising ecosystem,Topics,1,0,NEW
 2026-05-04,Incrementality,Attribution,3,0,NEW
-2026-05-04,MMM,Attribution,1,1,+0%
-2026-05-04,Video,Ad Formats,3,5,-40%
-2026-05-04,CTV/OTT,Ad Formats,2,9,-78%
-2026-05-04,Other,Retail Media Networks,1,0,NEW
+2026-05-04,MMM,Attribution,3,1,+200%
+2026-05-04,MTA,Attribution,1,0,NEW
+2026-05-04,Cookieless,Attribution,1,1,+0%
+2026-05-04,CTV/OTT,Ad Formats,4,9,-56%
+2026-05-04,Video,Ad Formats,4,5,-20%
+2026-05-04,Social,Ad Formats,4,5,-20%
+2026-05-04,Retail Media Ads,Ad Formats,1,0,NEW
+2026-05-04,DOOH,Ad Formats,1,1,+0%
+2026-05-04,Search,Ad Formats,1,1,+0%
+2026-05-04,Native,Ad Formats,1,1,+0%
+2026-05-04,Other,Retail Media Networks,3,0,NEW
 2026-05-04,Amazon Ads,Retail Media Networks,1,1,+0%
+2026-05-04,Google,Major Ad Tech Companies,3,0,NEW
+2026-05-04,The Trade Desk,Major Ad Tech Companies,1,0,NEW
+2026-05-04,TikTok,Major Ad Tech Companies,1,0,NEW
 2026-05-04,Amazon,Major Ad Tech Companies,1,0,NEW
