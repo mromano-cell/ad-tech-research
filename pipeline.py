@@ -70,6 +70,8 @@ MAJOR AD TECH COMPANIES
 - Angi (formerly Angie's List): home services advertising
 - TripAdvisor: travel/hospitality advertising, sponsored placements
 - OpenTable: restaurant advertising, diner targeting
+- OpenAI / ChatGPT: ChatGPT ads, AI search ads, conversational advertising
+- X (formerly Twitter): X Ads, ad revenue, brand safety
 - The Trade Desk, Roku, Spotify, Pinterest, Snapchat, TikTok, Uber, DoorDash (when substantively covered in ad tech context)
 
 ATTRIBUTION & MEASUREMENT
@@ -106,7 +108,7 @@ Return a JSON object with exactly these fields:
 {{
   "categories": ["list of broad categories from: Programmatic, Retail Media, Major Ad Tech Companies, Attribution/Measurement, Ad Formats, Industry/Business, Privacy/Regulation, Technology"],
   "topics": ["specific topics covered, e.g. 'header bidding', 'incrementality testing', 'CTV advertising'"],
-  "faang_mentions": ["which major ad tech companies are mentioned: Meta, Google, Amazon, Apple, Netflix, Microsoft/LinkedIn, Reddit, Nextdoor, Angi, TripAdvisor, OpenTable, The Trade Desk, Roku, Spotify, Pinterest, Snapchat, TikTok, Uber, DoorDash — only include if substantively covered"],
+  "faang_mentions": ["which major ad tech companies are mentioned: Meta, Google, Amazon, Apple, Netflix, Microsoft/LinkedIn, Reddit, Nextdoor, Angi, TripAdvisor, OpenTable, OpenAI/ChatGPT, X/Twitter, The Trade Desk, Roku, Spotify, Pinterest, Snapchat, TikTok, Uber, DoorDash — only include if substantively covered"],
   "retail_media_networks": ["which retail media networks: Amazon Ads, Walmart Connect, Target Roundel, Kroger, Instacart, Albertsons, Other — only if substantively covered"],
   "attribution_topics": ["which attribution/measurement topics: Incrementality, Last-Click, View-Through, MMM, MTA, Clean Rooms, Cookieless, ID Solutions — only if substantively covered"],
   "ad_formats": ["which ad formats: CTV/OTT, Audio, DOOH, Display, Native, Video, Social, Search, Retail Media Ads — only if substantively covered"],
@@ -431,7 +433,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     .digest p{{margin-bottom:1rem}}
     .digest a{{color:#4f46e5;text-decoration:underline}}
     .digest h3{{font-size:0.88rem;font-weight:700;color:#0f172a;margin:1.4rem 0 0.5rem;padding-top:0.8rem;border-top:1px solid #e2e8f0}}
-    .score-legend{{font-size:.72rem;color:#94a3b8;margin-top:.5rem}}
+    .score-legend{{font-size:.72rem;color:#94a3b8;cursor:help;position:relative;display:inline-block;border-bottom:1px dotted #94a3b8}}
+    .score-legend:hover::after{{content:'How relevant is this article to digital ad tech?\\A\\A8-10 (green) = Highly relevant\\A5-7 (yellow) = Somewhat relevant\\A1-4 (blue) = Low relevance';white-space:pre;position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;font-size:.72rem;padding:.6rem .8rem;border-radius:6px;width:220px;z-index:10;line-height:1.5;box-shadow:0 4px 12px rgba(0,0,0,.15)}}
     .chart-controls{{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}}
     .cat-btn{{padding:.35rem .75rem;border:1px solid #e2e8f0;border-radius:6px;background:#fff;font-size:.78rem;cursor:pointer;color:#475569;transition:all .15s}}
     .cat-btn:hover{{border-color:#6366f1;color:#4f46e5}}
@@ -472,7 +475,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     <div class="card">
       <h2>Topic Trends Over Time</h2>
       <div class="chart-controls">
-        <button class="cat-btn active" data-category="all">All</button>
+        <button class="cat-btn" data-category="all">All</button>
       </div>
       <div class="chart-container">
         <canvas id="trendsChart"></canvas>
@@ -491,7 +494,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           <tr>
             <th>Date</th><th>Publication</th><th>Headline</th>
             <th>Categories</th><th>Companies</th><th>Ad Formats</th>
-            <th>Score <span class="score-legend" title="How relevant is this article to digital ad tech? 8-10 (green) = highly relevant, 5-7 (yellow) = somewhat relevant, 1-4 (blue) = low relevance">(?)</span></th>
+            <th>Score <span class="score-legend">(?)</span></th>
           </tr>
         </thead>
         <tbody>{rows_html}</tbody>
@@ -509,13 +512,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <script>
   (function() {{
     var trendData = {trends_json};
-    var categoryColors = {{
-      'Ad Formats':            {{base:'#4f46e5',variants:['#4f46e5','#6366f1','#818cf8','#a5b4fc','#c7d2fe','#3730a3','#312e81','#4338ca','#5b21b6','#7c3aed']}},
-      'Attribution':           {{base:'#0891b2',variants:['#0891b2','#06b6d4','#22d3ee','#67e8f9','#0e7490','#155e75','#164e63','#0284c7','#0369a1','#075985']}},
-      'Major Ad Tech Companies':{{base:'#dc2626',variants:['#dc2626','#ef4444','#f87171','#fca5a5','#b91c1c','#991b1b','#7f1d1d','#e11d48','#be123c','#9f1239']}},
-      'Retail Media Networks': {{base:'#16a34a',variants:['#16a34a','#22c55e','#4ade80','#86efac','#15803d','#166534','#14532d','#059669','#047857','#065f46']}},
-      'Topics':                {{base:'#d97706',variants:['#d97706','#f59e0b','#fbbf24','#fcd34d','#b45309','#92400e','#78350f','#a16207','#ca8a04','#eab308']}}
-    }};
+    var distinctColors = ['#4f46e5','#dc2626','#16a34a','#d97706','#0891b2','#7c3aed','#db2777','#059669','#ea580c','#2563eb','#4338ca','#e11d48','#65a30d','#0d9488','#c026d3'];
     var allWeeks = [];
     var weekSet = {{}};
     for (var cat in trendData) {{
@@ -531,8 +528,6 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     allWeeks.sort();
     var datasets = [];
     for (var cat in trendData) {{
-      var colors = categoryColors[cat] || {{base:'#64748b',variants:['#64748b']}};
-      var colorIdx = 0;
       var topicEntries = [];
       for (var topic in trendData[cat]) {{
         var maxCount = 0;
@@ -542,11 +537,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         topicEntries.push({{topic: topic, points: trendData[cat][topic], maxCount: maxCount}});
       }}
       topicEntries.sort(function(a, b) {{ return b.maxCount - a.maxCount; }});
-      topicEntries.slice(0, 10).forEach(function(entry) {{
+      topicEntries.slice(0, 10).forEach(function(entry, idx) {{
         var weekMap = {{}};
         entry.points.forEach(function(p) {{ weekMap[p.week] = p.count; }});
-        var color = colors.variants[colorIdx % colors.variants.length];
-        colorIdx++;
+        var color = distinctColors[idx % distinctColors.length];
         datasets.push({{
           label: entry.topic,
           data: allWeeks.map(function(w) {{ return weekMap[w] || 0; }}),
@@ -556,13 +550,31 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           pointRadius: 3,
           borderWidth: 2,
           _category: cat,
-          hidden: false
+          hidden: true
         }});
       }});
     }}
     if (allWeeks.length < 2) {{
       var note = document.querySelector('.chart-note');
       if (note) note.textContent = 'Only one week of data so far. The trend lines will appear as more weekly reports are generated.';
+    }}
+    function applyFilter(selectedCat) {{
+      var colorIdx = 0;
+      chart.data.datasets.forEach(function(ds, i) {{
+        if (selectedCat === 'all') {{
+          ds.borderColor = distinctColors[i % distinctColors.length];
+          ds.backgroundColor = ds.borderColor + '33';
+          chart.setDatasetVisibility(i, true);
+        }} else if (ds._category === selectedCat) {{
+          ds.borderColor = distinctColors[colorIdx % distinctColors.length];
+          ds.backgroundColor = ds.borderColor + '33';
+          colorIdx++;
+          chart.setDatasetVisibility(i, true);
+        }} else {{
+          chart.setDatasetVisibility(i, false);
+        }}
+      }});
+      chart.update();
     }}
     var ctx = document.getElementById('trendsChart').getContext('2d');
     var chart = new Chart(ctx, {{
@@ -575,7 +587,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         plugins: {{
           legend: {{
             position: 'bottom',
-            labels: {{ font: {{ size: 11 }}, boxWidth: 12, padding: 8 }}
+            labels: {{
+              font: {{ size: 11 }}, boxWidth: 12, padding: 8,
+              filter: function(item) {{ return chart.isDatasetVisible(item.datasetIndex); }}
+            }}
           }},
           tooltip: {{
             callbacks: {{
@@ -610,16 +625,14 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       if (!btn) return;
       controlsDiv.querySelectorAll('.cat-btn').forEach(function(b) {{ b.classList.remove('active'); }});
       btn.classList.add('active');
-      var selectedCat = btn.getAttribute('data-category');
-      chart.data.datasets.forEach(function(ds, i) {{
-        if (selectedCat === 'all') {{
-          chart.setDatasetVisibility(i, true);
-        }} else {{
-          chart.setDatasetVisibility(i, ds._category === selectedCat);
-        }}
-      }});
-      chart.update();
+      applyFilter(btn.getAttribute('data-category'));
     }});
+    applyFilter('Ad Formats');
+    var defaultBtn = controlsDiv.querySelector('[data-category="Ad Formats"]');
+    if (defaultBtn) {{
+      controlsDiv.querySelector('.cat-btn.active').classList.remove('active');
+      defaultBtn.classList.add('active');
+    }}
   }})();
   </script>
 </body>
