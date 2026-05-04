@@ -1,9 +1,0 @@
-name: Weekly Ad Tech Market Research
-
-# Pipeline now runs locally (LiteLLM proxy is internal-only).
-# This workflow is kept for manual pushes of report data only.
-on:
-  workflow_dispatch:
-
-permissions:
-  contents: write
