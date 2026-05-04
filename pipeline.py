@@ -4,7 +4,7 @@ import json
 import time
 import html as html_lib
 import feedparser
-import anthropic
+import openai
 from datetime import datetime, timedelta, timezone
 from collections import defaultdict
 from pathlib import Path
@@ -33,7 +33,10 @@ TRENDS_HEADERS = [
     "Week Start", "Topic", "Category", "Count", "Prior Week Count", "% Change",
 ]
 
-client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+LITELLM_BASE_URL = os.environ.get("LITELLM_BASE_URL", "https://chatproxy.yelpcorp.com")
+LITELLM_API_KEY  = os.environ.get("LITELLM_API_KEY", "mromano/ad-tech-research")
+
+client = openai.OpenAI(base_url=LITELLM_BASE_URL, api_key=LITELLM_API_KEY)
 
 SYSTEM_PROMPT = """You are a digital advertising industry analyst specializing in programmatic advertising, retail media, ad tech platforms, attribution/measurement, and ad formats.
 
@@ -174,17 +177,15 @@ def analyze_article(title, publication, date, summary):
     prompt = ARTICLE_PROMPT.format(
         publication=publication, date=date, title=title, summary=summary,
     )
-    response = client.messages.create(
-        model="claude-opus-4-7",
+    response = client.chat.completions.create(
+        model="sonnet-latest",
         max_tokens=600,
-        system=[{
-            "type": "text",
-            "text": SYSTEM_PROMPT,
-            "cache_control": {"type": "ephemeral"},
-        }],
-        messages=[{"role": "user", "content": prompt}],
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": prompt},
+        ],
     )
-    raw = response.content[0].text.strip()
+    raw = response.choices[0].message.content.strip()
     if raw.startswith("```"):
         raw = raw.split("```")[1]
         if raw.startswith("json"):
@@ -302,16 +303,12 @@ FORMATTING RULES — follow these exactly:
 - Do not use ** for bold, do not use markdown, only HTML
 - Do not use bullet points; use flowing paragraphs only"""
 
-    response = client.messages.create(
-        model="claude-opus-4-7",
+    response = client.chat.completions.create(
+        model="opus-latest",
         max_tokens=1500,
-        thinking={"type": "adaptive"},
         messages=[{"role": "user", "content": prompt}],
     )
-    for block in response.content:
-        if block.type == "text":
-            return block.text.strip()
-    return ""
+    return response.choices[0].message.content.strip()
 
 
 def _score_class(score_str):
