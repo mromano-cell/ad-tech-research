@@ -558,24 +558,6 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       var note = document.querySelector('.chart-note');
       if (note) note.textContent = 'Only one week of data so far. The trend lines will appear as more weekly reports are generated.';
     }}
-    function applyFilter(selectedCat) {{
-      var colorIdx = 0;
-      chart.data.datasets.forEach(function(ds, i) {{
-        if (selectedCat === 'all') {{
-          ds.borderColor = distinctColors[i % distinctColors.length];
-          ds.backgroundColor = ds.borderColor + '33';
-          chart.setDatasetVisibility(i, true);
-        }} else if (ds._category === selectedCat) {{
-          ds.borderColor = distinctColors[colorIdx % distinctColors.length];
-          ds.backgroundColor = ds.borderColor + '33';
-          colorIdx++;
-          chart.setDatasetVisibility(i, true);
-        }} else {{
-          chart.setDatasetVisibility(i, false);
-        }}
-      }});
-      chart.update();
-    }}
     var ctx = document.getElementById('trendsChart').getContext('2d');
     var chart = new Chart(ctx, {{
       type: 'line',
@@ -589,7 +571,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             position: 'bottom',
             labels: {{
               font: {{ size: 11 }}, boxWidth: 12, padding: 8,
-              filter: function(item) {{ return chart.isDatasetVisible(item.datasetIndex); }}
+              filter: function(item, chartData) {{ return !chartData.datasets[item.datasetIndex].hidden; }}
             }}
           }},
           tooltip: {{
@@ -611,6 +593,27 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         }}
       }}
     }});
+    function applyFilter(selectedCat) {{
+      var colorIdx = 0;
+      chart.data.datasets.forEach(function(ds, i) {{
+        if (selectedCat === 'all') {{
+          ds.borderColor = distinctColors[i % distinctColors.length];
+          ds.backgroundColor = ds.borderColor + '33';
+          ds.hidden = false;
+          chart.setDatasetVisibility(i, true);
+        }} else if (ds._category === selectedCat) {{
+          ds.borderColor = distinctColors[colorIdx % distinctColors.length];
+          ds.backgroundColor = ds.borderColor + '33';
+          ds.hidden = false;
+          colorIdx++;
+          chart.setDatasetVisibility(i, true);
+        }} else {{
+          ds.hidden = true;
+          chart.setDatasetVisibility(i, false);
+        }}
+      }});
+      chart.update();
+    }}
     var controlsDiv = document.querySelector('.chart-controls');
     var categories = Object.keys(trendData).sort();
     categories.forEach(function(cat) {{
