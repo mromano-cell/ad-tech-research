@@ -633,7 +633,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     applyFilter('Ad Formats');
     var defaultBtn = controlsDiv.querySelector('[data-category="Ad Formats"]');
     if (defaultBtn) {{
-      controlsDiv.querySelector('.cat-btn.active').classList.remove('active');
+      controlsDiv.querySelectorAll('.cat-btn').forEach(function(b) {{ b.classList.remove('active'); }});
       defaultBtn.classList.add('active');
     }}
   }})();
