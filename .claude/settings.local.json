@@ -3,7 +3,109 @@
     "allow": [
       "WebFetch(domain:yelpwiki.yelpcorp.com)",
       "Skill(claude-api)",
-      "Skill(claude-api:*)"
+      "Skill(claude-api:*)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git pull *)",
+      "Bash(git stash *)",
+      "Bash(open /Users/mromano/Documents/Mike-Claude-Master-Folder/ad_mockups.html)",
+      "WebFetch(domain:www.thetradedesk.com)",
+      "WebFetch(domain:support.google.com)",
+      "WebFetch(domain:www.google.com)",
+      "WebFetch(domain:www.business.facebook.com)",
+      "WebFetch(domain:foursquare.com)",
+      "WebFetch(domain:ads.google.com)",
+      "WebFetch(domain:www.inmarket.com)",
+      "WebFetch(domain:www.cardlytics.com)",
+      "WebFetch(domain:liveramp.com)",
+      "WebFetch(domain:business.google.com)",
+      "WebFetch(domain:tripadvisor.mediaroom.com)",
+      "WebFetch(domain:www.tripadvisor.com)",
+      "WebFetch(domain:nextdoor.com)",
+      "WebFetch(domain:www.near.com)",
+      "WebFetch(domain:www.ninthdecimal.com)",
+      "WebFetch(domain:www.businessinsider.com)",
+      "WebFetch(domain:advertising.tripadvisor.com)",
+      "WebFetch(domain:www.near-gps.com)",
+      "WebFetch(domain:www.foursquare.com)",
+      "WebFetch(domain:www.nextdoor.com)",
+      "WebFetch(domain:ads.nextdoor.com)",
+      "WebFetch(domain:cardlytics.com)",
+      "WebFetch(domain:www.facebook.com)",
+      "mcp__google__get_doc_as_markdown",
+      "WebFetch(domain:business.meta.com)",
+      "WebFetch(domain:business.nextdoor.com)",
+      "WebFetch(domain:www.opentable.com)",
+      "WebFetch(domain:business.reddit.com)",
+      "WebFetch(domain:inmarket.com)",
+      "WebFetch(domain:business.foursquare.com)",
+      "WebFetch(domain:www.reddit.com)",
+      "WebFetch(domain:tripadvisormediagroup.com)",
+      "mcp__google__batch_update_doc",
+      "mcp__google__inspect_doc_structure",
+      "mcp__google__search_drive_files",
+      "mcp__google__get_events",
+      "mcp__google__list_drive_items",
+      "mcp__google__get_drive_file_content",
+      "WebFetch(domain:github.com)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "input=$(cat); fp=$(echo \"$input\" | jq -r '.tool_input.file_path'); if echo \"$fp\" | grep -q 'configs/legacy_api_keys'; then echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"BLOCKED: Canary trap file.\"}}'; fi",
+            "statusMessage": "Checking canary trap..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "input=$(cat); cmd=$(echo \"$input\" | jq -r '.tool_input.command'); if echo \"$cmd\" | grep -q 'git push'; then echo \"{\\\"hookSpecificOutput\\\":{\\\"hookEventName\\\":\\\"PreToolUse\\\",\\\"permissionDecision\\\":\\\"ask\\\",\\\"permissionDecisionReason\\\":\\\"git push requires HITL confirmation: $cmd\\\"}}\"; fi",
+            "statusMessage": "Checking git push..."
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreCompact\",\"additionalContext\":\"BEFORE COMPACTING: Preserve in your summary: (1) All decisions the user made this session, (2) Current task and its status, (3) Any files you modified and why, (4) Pending questions or blockers. These must survive compaction.\"}}'",
+            "statusMessage": "Injecting compaction guidance..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "input=$(cat); fp=$(echo \"$input\" | jq -r '.tool_input.file_path // .tool_response.filePath'); if echo \"$fp\" | grep -q 'tasks/active/'; then base=$(basename \"$fp\"); if ! echo \"$base\" | grep -qE '^[0-9]{4}-[0-9]{2}-[0-9]{2}-.*\\.md$'; then echo \"{\\\"hookSpecificOutput\\\":{\\\"hookEventName\\\":\\\"PostToolUse\\\",\\\"additionalContext\\\":\\\"WARNING: Task filename '$base' does not match convention. Must be YYYY-MM-DD-[category]-description.md. Rename the file.\\\"}}\"; fi; fi",
+            "statusMessage": "Checking task naming..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "input=$(cat); cmd=$(echo \"$input\" | jq -r '.tool_input.command'); if echo \"$cmd\" | grep -q 'tasks/completed'; then echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"A task was just moved to completed. Per your rules, ask the user if they want to log this to knowledge/private/WINS.md.\"}}'; fi",
+            "statusMessage": "Checking win detection..."
+          }
+        ]
+      }
     ]
   }
 }
