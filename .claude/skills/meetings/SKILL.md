@@ -36,6 +36,32 @@ Use `mcp__google__search_drive_files` with:
 ### 1c: Check Backlog for Manual Meeting Notes
 Read `backlog/BACKLOG.md` and scan for lines starting with `[MEETING]`.
 
+### 1d: Search Slack Messages
+Use `mcp__slack__slack_search_public_and_private` to find Mike's messages and messages directed at Mike for the relevant time period:
+- `query: "from:<@U02K11D88N5> after:YYYY-MM-DD before:YYYY-MM-DD"` (Mike's outbound messages: commitments he made, follow-ups he promised)
+- `query: "to:<@U02K11D88N5> after:YYYY-MM-DD before:YYYY-MM-DD"` (messages directed at Mike: requests, asks, items needing response)
+- Use `sort: "timestamp"`, `include_context: true`, `max_context_length: 300`
+- Focus on DMs and channels where action items are likely (skip #random, #social, etc.)
+
+Look for:
+- Commitments Mike made ("I'll send that", "let me check", "I can do that")
+- Requests from others ("can you", "could you", "when you get a chance", "need you to")
+- Unresolved threads where Mike said he'd follow up but hasn't yet
+- Escalation flags ("trying to figure out how to escalate", "who should I loop in")
+
+### 1e: Search Gmail
+Use `mcp__google__search_gmail_messages` to find relevant emails for the time period:
+- `query: "from:me after:YYYY/MM/DD before:YYYY/MM/DD"` (Mike's sent emails: commitments, follow-ups promised)
+- `query: "to:me after:YYYY/MM/DD before:YYYY/MM/DD is:starred OR is:important"` (important inbound emails needing action)
+
+Then use `mcp__google__get_gmail_messages_content_batch` to read the content of found messages.
+
+Look for:
+- Action items Mike committed to in replies ("I'll send this over", "will follow up", "let me check on that")
+- Inbound requests awaiting Mike's response
+- Emails Mike sent that are awaiting a reply from someone else (items to follow up on)
+- Client-facing communications with open loops
+
 ## Phase 2: Match and Identify Gaps
 
 - Cross-reference calendar events with found transcripts by matching titles and dates
@@ -65,15 +91,20 @@ Output varies by what the user asked.
 **Meetings Missing Transcripts:**
 - [Meeting name] at [time] — no transcript found. Want to add manual notes?
 
-**Action Items for Mike:**
-| # | From Meeting | Action Item | Assigned By | Due | Priority |
-|---|-------------|-------------|-------------|-----|----------|
-| 1 | [meeting]   | [item]      | [person]    | [date/ASAP/unclear] | [P0-P2] |
+**Action Items for Mike (from Meetings):**
+| # | Source | Action Item | Assigned By | Due | Priority |
+|---|--------|-------------|-------------|-----|----------|
+| 1 | [meeting name] | [item] | [person] | [date/ASAP/unclear] | [P0-P2] |
+
+**Action Items for Mike (from Slack & Email):**
+| # | Source | Action Item | From | Due | Priority |
+|---|--------|-------------|------|-----|----------|
+| 1 | Slack DM / Email thread | [item] | [person] | [date/ASAP/unclear] | [P0-P2] |
 
 **Action Items Mike Assigned to Others:**
-| # | From Meeting | Action Item | Assigned To | Due |
-|---|-------------|-------------|-------------|-----|
-| 1 | [meeting]   | [item]      | [person]    | [date] |
+| # | Source | Action Item | Assigned To | Due |
+|---|--------|-------------|-------------|-----|
+| 1 | [meeting/slack/email] | [item] | [person] | [date] |
 
 **Decisions Made:**
 - [Meeting]: [Decision and rationale]
@@ -83,9 +114,11 @@ Then ask: "Want me to create task files for these action items?"
 ### Mode B: Natural language query ("what did Joe want from me?")
 
 - Search transcripts for mentions of the queried person (use AGENTS.md to resolve names)
+- Also search Slack DMs and channels for messages from/about that person
+- Also search Gmail for email threads involving that person
 - Return a direct, concise answer (under 50 words unless user asks for more)
 - Quote or paraphrase the relevant portion
-- Include meeting name, date, and link to the Google Doc
+- Include source (meeting name, Slack channel, or email subject) and date
 
 ### Mode C: "Follow-ups for next week"
 
@@ -98,7 +131,7 @@ Then ask: "Want me to create task files for these action items?"
 
 On user confirmation, create task files in `tasks/active/`:
 
-**Naming:** `YYYY-MM-DD-meeting-action-[description].md`
+**Naming:** `YYYY-MM-DD-meeting-action-[description].md` (for meeting-sourced items) or `YYYY-MM-DD-comms-action-[description].md` (for Slack/email-sourced items)
 
 **Template:**
 ```markdown
@@ -143,6 +176,9 @@ For each meeting without a transcript, ask: "Want to add a quick summary for [me
 - Use AGENTS.md stakeholder list to resolve first names.
 - Never create duplicate tasks. Check `tasks/active/` before creating.
 - Always provide a link to the source transcript Google Doc when available.
+- For Slack: skip casual conversation, social messages, and emoji-only replies. Focus on threads with action language.
+- For Email: prioritize starred/important messages and threads where Mike made commitments in replies.
+- Deduplicate across sources: if the same action item appears in a meeting transcript AND a follow-up Slack message, only list it once (cite the meeting as primary source).
 
 ## Tips
 

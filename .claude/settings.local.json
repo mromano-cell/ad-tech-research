@@ -48,6 +48,9 @@
       "mcp__google__get_events",
       "mcp__google__list_drive_items",
       "mcp__google__get_drive_file_content",
+      "mcp__google__search_gmail_messages",
+      "mcp__google__get_gmail_messages_content_batch",
+      "mcp__slack__slack_search_public_and_private",
       "WebFetch(domain:github.com)"
     ]
   },
