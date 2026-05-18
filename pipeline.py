@@ -26,7 +26,7 @@ ARTICLES_HEADERS = [
     "Date", "Publication", "Headline", "URL",
     "Categories", "Topics", "Major Ad Tech Companies",
     "Retail Media Networks", "Attribution Topics", "Ad Formats",
-    "Relevance Score", "Summary",
+    "Agencies", "Relevance Score", "Summary",
 ]
 
 TRENDS_HEADERS = [
@@ -112,6 +112,7 @@ Return a JSON object with exactly these fields:
   "retail_media_networks": ["which retail media networks: Amazon Ads, Walmart Connect, Target Roundel, Kroger, Instacart, Albertsons, Other — only if substantively covered"],
   "attribution_topics": ["which attribution/measurement topics: Incrementality, Last-Click, View-Through, MMM, MTA, Clean Rooms, Cookieless, ID Solutions — only if substantively covered"],
   "ad_formats": ["which ad formats: CTV/OTT, Audio, DOOH, Display, Native, Video, Social, Search, Retail Media Ads — only if substantively covered"],
+  "agencies": ["which ad agency holding companies or major agencies: Publicis, Dentsu, WPP, Omnicom, IPG, Havas, Stagwell, GroupM, Horizon Media — only if substantively covered"],
   "relevance_score": <integer 1-10 where 10 = extremely relevant to digital ad tech professionals>,
   "one_sentence_summary": "one concise sentence describing what this article is about"
 }}
@@ -209,6 +210,7 @@ def build_article_row(article, analysis):
         fmt(analysis.get("retail_media_networks", [])),
         fmt(analysis.get("attribution_topics", [])),
         fmt(analysis.get("ad_formats", [])),
+        fmt(analysis.get("agencies", [])),
         str(analysis.get("relevance_score", "")),
         analysis.get("one_sentence_summary", ""),
     ]
@@ -234,6 +236,9 @@ def aggregate_trends(new_rows, week_start):
         for item in (row[col["Ad Formats"]] or "").split(", "):
             if item.strip():
                 counts["Ad Formats"][item.strip()] += 1
+        for item in (row[col["Agencies"]] or "").split(", "):
+            if item.strip():
+                counts["Agencies"][item.strip()] += 1
 
     prior_week_start = (
         datetime.strptime(week_start, "%Y-%m-%d") - timedelta(days=7)
