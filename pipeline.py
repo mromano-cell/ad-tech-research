@@ -307,7 +307,7 @@ FORMATTING RULES — follow these exactly:
 
     response = client.chat.completions.create(
         model="opus-latest",
-        max_tokens=1500,
+        max_tokens=3000,
         messages=[{"role": "user", "content": prompt}],
     )
     return response.choices[0].message.content.strip()
