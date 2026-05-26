@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ad Tech Digest &mdash; 2026-05-26</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f7fa;color:#222}
+    header{background:#0f172a;color:#fff;padding:2rem 2.5rem}
+    header h1{font-size:1.4rem;font-weight:700;letter-spacing:-0.01em}
+    header p{color:#94a3b8;margin-top:0.3rem;font-size:0.9rem}
+    .container{max-width:1280px;margin:0 auto;padding:2rem 2.5rem}
+    .card{background:#fff;border-radius:10px;padding:1.75rem;margin-bottom:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    h2{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:1.2rem}
+    .digest{line-height:1.8;font-size:0.95rem;color:#334155}
+    .digest p{margin-bottom:1rem}
+    .digest a{color:#4f46e5;text-decoration:underline}
+    .digest h3{font-size:0.88rem;font-weight:700;color:#0f172a;margin:1.4rem 0 0.5rem;padding-top:0.8rem;border-top:1px solid #e2e8f0}
+    .score-legend{font-size:.72rem;color:#94a3b8;cursor:help;position:relative;display:inline-block;border-bottom:1px dotted #94a3b8}
+    .score-legend:hover::after{content:'How relevant is this article to digital ad tech?\A\A8-10 (green) = Highly relevant\A5-7 (yellow) = Somewhat relevant\A1-4 (blue) = Low relevance';white-space:pre;position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;font-size:.72rem;padding:.6rem .8rem;border-radius:6px;width:220px;z-index:10;line-height:1.5;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+    .chart-controls{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+    .cat-btn{padding:.35rem .75rem;border:1px solid #e2e8f0;border-radius:6px;background:#fff;font-size:.78rem;cursor:pointer;color:#475569;transition:all .15s}
+    .cat-btn:hover{border-color:#6366f1;color:#4f46e5}
+    .cat-btn.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
+    .chart-container{position:relative;height:400px;width:100%}
+    .chart-note{font-size:.72rem;color:#94a3b8;margin-top:.75rem}
+    .trends-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}
+    .trend-category h3{font-size:0.72rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin-bottom:.6rem;font-weight:600}
+    .trend-item{display:flex;justify-content:space-between;align-items:center;padding:.3rem 0;border-bottom:1px solid #f1f5f9;font-size:.82rem}
+    .trend-count{font-weight:700;color:#0f172a;background:#f1f5f9;padding:.1rem .45rem;border-radius:999px;font-size:.75rem}
+    input#filter{width:100%;padding:.55rem .8rem;border:1px solid #e2e8f0;border-radius:6px;font-size:.875rem;margin-bottom:1rem;outline:none}
+    input#filter:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+    table{width:100%;border-collapse:collapse;font-size:.8rem}
+    th{background:#f8fafc;text-align:left;padding:.55rem .75rem;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;border-bottom:2px solid #e2e8f0;white-space:nowrap}
+    td{padding:.55rem .75rem;border-bottom:1px solid #f1f5f9;vertical-align:top}
+    tr:hover td{background:#fafbff}
+    a{color:#4f46e5;text-decoration:none}
+    a:hover{text-decoration:underline}
+    .score{display:inline-block;padding:.15rem .45rem;border-radius:999px;font-size:.72rem;font-weight:700;background:#dbeafe;color:#1e40af}
+    .score.high{background:#dcfce7;color:#166534}
+    .score.med{background:#fef9c3;color:#854d0e}
+    .tag{display:inline-block;background:#f1f5f9;border-radius:4px;padding:.1rem .35rem;font-size:.68rem;margin:.1rem;color:#475569}
+    .back{font-size:.85rem;margin-bottom:1.25rem;display:inline-block;color:#64748b}
+    .back:hover{color:#0f172a}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ad Tech Weekly Digest</h1>
+    <p>Week of 2026-05-26 &bull; 35 articles analyzed</p>
+  </header>
+  <div class="container">
+    <a href="index.html" class="back">&larr; All reports</a>
+    <div class="card">
+      <h2>Weekly Narrative</h2>
+      <div class="digest"><h3>Weekly Market Research Digest — Week of May 26, 2026</h3>
+
+<p>The dominant narrative this week is the rapid maturation—and growing pains—of <strong>AI in advertising</strong>, which appeared across 4 articles alongside the closely related themes of <strong>agentic AI</strong> (3 mentions) and <strong>AI agents</strong> (3 mentions). Agencies are scrambling to reposition themselves for an agentic future, with <a href="https://digiday.com/media-buying/ad-tech-briefing-agencies-reposition-for-the-agentic-era/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss" target="_blank">Digiday reporting that agencies are restructuring for the agentic era</a>, while <a href="https://digiday.com/media-buying/why-wpps-ai-boss-believes-agents-are-still-in-the-teenage-sex-stage-of-development/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss" target="_blank">WPP's AI boss cautioned that agents are still in the "teenage sex" stage</a>—everyone talks about them, but few are doing it well. Meanwhile, <a href="https://digiday.com/media-buying/future-of-marketing-briefing-agentic-advertising-is-closer-than-you-think-and-further-than-you-hope/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss" target="_blank">agentic advertising is described as "closer than you think and further than you hope,"</a> capturing the industry's ambivalent stance. The departure of <strong>Microsoft</strong> veteran <strong>Yusuf Mehdi</strong> amid the <a href="https://www.adweek.com/brand-marketing/ai-battle-microsoft-yusuf-mehdi/" target="_blank">intensifying AI battle</a> underscores how the competitive pressure is reshuffling leadership across major platforms.</p>
+
+<p><strong>Video</strong> dominated ad format discussions with <strong>9 mentions</strong> this week, followed by <strong>Social</strong> (5 mentions) and <strong>CTV/OTT</strong> (3 mentions). The sports advertising boom continues to anchor video and CTV narratives, with <a href="https://www.adweek.com/convergent-tv/sports-tv-ad-spend-20-billion-live-games/" target="_blank">sports TV ad spending projected to top $20 billion by 2027</a> even as cord-cutting accelerates. However, the integrity of these metrics faces challenges: <a href="https://www.adexchanger.com/marketers/pirated-sports-streams-are-warping-tvs-most-important-ratings/" target="_blank">pirated sports streams are warping TV's most important ratings</a>, while <a href="https://digiday.com/media/wtf-is-viewbotting/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss" target="_blank">viewbotting</a> remains a persistent fraud concern. Among major ad tech companies, <strong>Google</strong> led all mentions (7 articles), driven largely by its aggressive <a href="https://digiday.com/marketing/googles-latest-commerce-moves-deepen-the-battle-over-agentic-shopping/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss" target="_blank">push into agentic shopping and ecommerce</a>. <strong>OpenAI/ChatGPT</strong> appeared in 4 articles, with <a href="https://digiday.com/marketing/as-openais-chatgpt-ad-delivery-improves-the-doubts-it-created-arent-so-easily-fixed/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss" target="_blank">improving ad delivery still struggling to overcome advertiser trust issues</a>. <strong>Brand safety</strong> (4 mentions) and <strong>publisher monetization</strong> (4 mentions) remain persistent concerns, particularly as <a href="https://www.adexchanger.com/publishers/microsoft-to-publishers-dont-block-the-ai-bots/" target="_blank">Microsoft urges publishers not to block AI bots</a> and <a href="https://digiday.com/media/omnicoms-fewer-middlemen-push-is-reaching-publishers-just-not-their-pls/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss" target="_blank">Omnicom's supply-path optimization push reaches publishers without yet improving their P&Ls</a>. On attribution, mentions were light this week with single references to <strong>incrementality</strong>, <strong>cookieless</strong>, and <strong>MTA</strong>, though <a href="https://digiday.com/sponsored/how-mobiles-measurement-playbook-is-solving-the-webs-fragmentation-problem/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss" target="_blank">mobile's measurement playbook is being positioned as a solution to web fragmentation</a>. <strong>TikTok</strong> remained active in the social commerce space, with <a href="https://digiday.com/marketing/tiktok-shop-says-sales-from-u-s-small-businesses-climbed-66-in-2025/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss" target="_blank">TikTok Shop reporting a 66% sales increase from U.S. small businesses in 2025</a>.</p>
+
+<p><strong>What to watch:</strong> The convergence of agentic AI and commerce—particularly <strong>Google's</strong> deepening ecommerce plays and <strong>OpenAI's</strong> evolving ad product—suggests that within the next 1-2 quarters, AI agents may begin autonomously executing mid-funnel purchase decisions, fundamentally altering how advertisers bid on and measure consumer intent. Teams should also monitor how <a href="https://www.adexchanger.com/ctv-roundup/ai-is-redefining-premium-content-which-may-not-be-a-good-thing/" target="_blank">AI's redefinition of "premium content"</a> reshapes brand safety standards and CPM tiers across CTV and video inventory. The sustained pressure on publishers—caught between AI crawlers, SPO initiatives, and <a href="https://digiday.com/podcasts/inside-the-great-digital-media-reckoning/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss" target="_blank">a broader digital media reckoning</a>—will likely accelerate consolidation and force new monetization models in H2 2026.</p>
+
+<h3>Yelp Impact Analysis</h3>
+
+<p>While no articles this week directly addressed <strong>Google Local Services Ads</strong>, <strong>Meta local business ads</strong>, <strong>Nextdoor</strong>, or <strong>Apple Business Connect</strong>, several adjacent developments carry meaningful implications for <strong>Yelp's</strong> competitive position. Most notably, <a href="https://digiday.com/marketing/googles-latest-commerce-moves-deepen-the-battle-over-agentic-shopping/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss" target="_blank">Google's deepening agentic shopping capabilities</a> signal an expansion of AI-mediated commerce that could eventually extend to local services discovery—potentially intercepting high-intent consumers before they reach platforms like Yelp. Similarly, <strong>TikTok Shop's</strong> <a href="https://digiday.com/marketing/tiktok-shop-says-sales-from-u-s-small-businesses-climbed-66-in-2025/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss" target="_blank">66% small business sales growth</a> demonstrates that SMBs are increasingly diversifying their digital ad spend toward social commerce platforms, creating competitive pressure on traditional high-intent channels. The broader theme of <strong>agentic advertising</strong>—where AI agents autonomously discover, evaluate, and transact with businesses on behalf of consumers—represents both a threat and opportunity for Yelp: if agentic systems prioritize structured review data and verified business information in their decision-making, Yelp's rich intent signals and reputation data become valuable inputs to these AI workflows. However, if agents bypass discovery platforms entirely in favor of direct API integrations with booking and commerce systems, Yelp's role as an intermediary could be diminished. Multi-location businesses in restaurant, home services, and auto verticals should be monitored closely as <strong>Omnicom's</strong> <a href="https://digiday.com/media/omnicoms-fewer-middlemen-push-is-reaching-publishers-just-not-their-pls/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss" target="_blank">supply-path simplification push</a> may encourage franchise and chain advertisers to consolidate spending toward fewer, more measurable platforms—a dynamic that could benefit Yelp's managed-service offerings if positioned around incrementality and conversion attribution.</p></div>
+    </div>
+    <div class="card">
+      <h2>Topic Trends Over Time</h2>
+      <div class="chart-controls">
+        <button class="cat-btn" data-category="all">All</button>
+      </div>
+      <div class="chart-container">
+        <canvas id="trendsChart"></canvas>
+      </div>
+      <p class="chart-note">Click category buttons to filter. Click legend items to toggle individual topics.</p>
+    </div>
+    <div class="card">
+      <h2>Trending Topics This Week</h2>
+      <div class="trends-grid"><div class="trend-category"><h3>Ad Formats</h3><div class="trend-item"><span>Video</span><span class="trend-count">9</span></div>
+<div class="trend-item"><span>Social</span><span class="trend-count">5</span></div>
+<div class="trend-item"><span>CTV/OTT</span><span class="trend-count">3</span></div>
+<div class="trend-item"><span>Search</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>Retail Media Ads</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>Native</span><span class="trend-count">1</span></div>
+</div>
+<div class="trend-category"><h3>Agencies</h3><div class="trend-item"><span>Omnicom</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>WPP</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>Publicis</span><span class="trend-count">1</span></div>
+<div class="trend-item"><span>IPG</span><span class="trend-count">1</span></div>
+<div class="trend-item"><span>Dentsu</span><span class="trend-count">1</span></div>
+<div class="trend-item"><span>Havas</span><span class="trend-count">1</span></div>
+<div class="trend-item"><span>Stagwell</span><span class="trend-count">1</span></div>
+</div>
+<div class="trend-category"><h3>Attribution</h3><div class="trend-item"><span>Incrementality</span><span class="trend-count">1</span></div>
+<div class="trend-item"><span>Cookieless</span><span class="trend-count">1</span></div>
+<div class="trend-item"><span>MTA</span><span class="trend-count">1</span></div>
+</div>
+<div class="trend-category"><h3>Major Ad Tech Companies</h3><div class="trend-item"><span>Google</span><span class="trend-count">7</span></div>
+<div class="trend-item"><span>OpenAI/ChatGPT</span><span class="trend-count">4</span></div>
+<div class="trend-item"><span>Microsoft/LinkedIn</span><span class="trend-count">3</span></div>
+<div class="trend-item"><span>TikTok</span><span class="trend-count">3</span></div>
+<div class="trend-item"><span>Amazon</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>Netflix</span><span class="trend-count">1</span></div>
+<div class="trend-item"><span>Meta</span><span class="trend-count">1</span></div>
+</div>
+<div class="trend-category"><h3>Retail Media Networks</h3><div class="trend-item"><span>Amazon Ads</span><span class="trend-count">1</span></div>
+</div>
+<div class="trend-category"><h3>Topics</h3><div class="trend-item"><span>AI in advertising</span><span class="trend-count">4</span></div>
+<div class="trend-item"><span>brand safety</span><span class="trend-count">4</span></div>
+<div class="trend-item"><span>publisher monetization</span><span class="trend-count">4</span></div>
+<div class="trend-item"><span>agentic AI</span><span class="trend-count">3</span></div>
+<div class="trend-item"><span>AI agents</span><span class="trend-count">3</span></div>
+<div class="trend-item"><span>brand marketing</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>creative strategy</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>upfront advertising</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>CTV advertising</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>Cannes Lions</span><span class="trend-count">2</span></div>
+</div></div>
+    </div>
+    <div class="card">
+      <h2>Articles (35)</h2>
+      <input type="text" id="filter" placeholder="Filter by headline, topic, publication&hellip;">
+      <table id="tbl">
+        <thead>
+          <tr>
+            <th>Date</th><th>Publication</th><th>Headline</th>
+            <th>Categories</th><th>Companies</th><th>Ad Formats</th>
+            <th>Score <span class="score-legend">(?)</span></th>
+          </tr>
+        </thead>
+        <tbody><tr><td>2026-05-26</td><td>Adweek</td><td><a href="https://www.adweek.com/creativity/primark-takes-its-boldest-shot-yet-at-winning-over-american-shoppers/" target="_blank" rel="noopener">Primark Takes Its Boldest Shot Yet at Winning Over American Shoppers</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Primark launches its first global advertising campaign aimed at expanding its brand presence among U.S. consumers, following a high-profile Manhattan store opening.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Ad Formats</span></td><td></td><td><span class="tag">Video</span> <span class="tag">Social</span></td><td><span class="score ">2</span></td></tr>
+<tr><td>2026-05-26</td><td>Adweek</td><td><a href="https://www.adweek.com/creativity/etsy-bets-human-moments-still-matter-more-than-algorithms/" target="_blank" rel="noopener">Etsy Bets Human Moments Still Matter More Than Algorithms</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Etsy is positioning its brand marketing strategy around celebrating authentic human moments as a counterpoint to AI-driven, algorithm-focused advertising trends.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Major Ad Tech Companies</span> <span class="tag">Technology</span></td><td></td><td></td><td><span class="score ">3</span></td></tr>
+<tr><td>2026-05-26</td><td>Adweek</td><td><a href="https://www.adweek.com/convergent-tv/what-brands-are-actually-worried-about-behind-closed-doors-ad-leaders/" target="_blank" rel="noopener">What Brands Are Actually Worried About Behind Closed Doors, According to Ad Leaders</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Ad leaders from Netflix, Disney, Fox, and other major media companies share the top concerns marketers are privately grappling with during upfront season, including reach, ROI, and audience fragmentation in streaming.</div></td><td><span class="tag">Ad Formats</span> <span class="tag">Attribution/Measurement</span> <span class="tag">Industry/Business</span> <span class="tag">Major Ad Tech Companies</span></td><td><span class="tag">Netflix</span></td><td><span class="tag">CTV/OTT</span> <span class="tag">Video</span></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-05-26</td><td>Adweek</td><td><a href="https://www.adweek.com/brand-marketing/ben-jerrys-ben-cohen-says-selling-your-business-is-a-shitty-goal/" target="_blank" rel="noopener">Ben &amp;amp; Jerry’s Ben Cohen Says Selling Your Business Is &amp;#8216;A Shitty Goal&amp;#8217;</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Ben &amp; Jerry&#x27;s co-founder Ben Cohen discusses his activism, commitment to brand mission, and why selling a business is not a worthy goal.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">1</span></td></tr>
+<tr><td>2026-05-26</td><td>Adweek</td><td><a href="https://www.adweek.com/creativity/creative-leaders-place-their-bets-on-19-campaigns-to-win-at-cannes-lions-2026/" target="_blank" rel="noopener">Creative Leaders Place Their Bets on 19 Campaigns to Win at Cannes Lions 2026</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Adweek previews 19 creative campaigns predicted by industry leaders to win awards at the 2026 Cannes Lions festival, spanning formats like lo-fi video games, musicals, and meta movie marketing.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td><span class="tag">Video</span></td><td><span class="score ">1</span></td></tr>
+<tr><td>2026-05-22</td><td>Adweek</td><td><a href="https://www.adweek.com/brand-marketing/ai-battle-microsoft-yusuf-mehdi/" target="_blank" rel="noopener">As the AI Battle Rages, Yusuf Mehdi Becomes the Latest Microsoft Veteran to Walk</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Microsoft&#x27;s chief consumer marketing officer Yusuf Mehdi is leaving the company after 35 years, amid ongoing AI industry competition.</div></td><td><span class="tag">Major Ad Tech Companies</span> <span class="tag">Industry/Business</span></td><td><span class="tag">Microsoft/LinkedIn</span></td><td></td><td><span class="score ">3</span></td></tr>
+<tr><td>2026-05-22</td><td>Adweek</td><td><a href="https://www.adweek.com/convergent-tv/stephen-colbert-late-show-finale-ratings-viewership/" target="_blank" rel="noopener">Stephen Colbert’s Late Show Finale Is His Biggest Weeknight Episode Ever</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Stephen Colbert&#x27;s final Late Show episode drew 6.7 million viewers, making it his highest-rated weeknight broadcast ever.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">1</span></td></tr>
+<tr><td>2026-05-22</td><td>Adweek</td><td><a href="https://www.adweek.com/media/recurrent-ventures-rebuild/" target="_blank" rel="noopener">How Recurrent Ventures Rebuilt Itself</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Recurrent Ventures sold off a significant portion of its media portfolio to refocus its business around military and automotive content verticals.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">2</span></td></tr>
+<tr><td>2026-05-22</td><td>Adweek</td><td><a href="https://www.adweek.com/brand-marketing/if-you-can-sell-insurance-you-can-sell-anything-ft-tory-pachis-of-amica-insurance/" target="_blank" rel="noopener">If You Can Sell Insurance, You Can Sell Anything ft. Tory Pachis of Amica Insurance</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">An interview with Amica Insurance&#x27;s Tory Pachis exploring how the 119-year-old company uses a contrarian creative strategy to stand out in the competitive insurance advertising category.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">2</span></td></tr>
+<tr><td>2026-05-22</td><td>Adweek</td><td><a href="https://www.adweek.com/convergent-tv/sports-tv-ad-spend-20-billion-live-games/" target="_blank" rel="noopener">Sports TV Ad Spending to Top $20 Billion in 2027, As Live Games Defy Cord-Cutting</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">eMarketer data projects sports TV ad spending will exceed $20 billion by 2027, growing nearly four times faster than overall TV as live sports remain resilient against cord-cutting trends with linear TV retaining the majority of spend.</div></td><td><span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span></td><td></td><td><span class="tag">CTV/OTT</span> <span class="tag">Video</span></td><td><span class="score ">4</span></td></tr>
+<tr><td>2026-05-26</td><td>Digiday</td><td><a href="https://digiday.com/media/omnicoms-fewer-middlemen-push-is-reaching-publishers-just-not-their-pls/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Omnicom’s ‘fewer middlemen’ push is reaching publishers – just not their P&amp;Ls</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Omnicom&#x27;s push to eliminate programmatic middlemen is changing how its agencies negotiate with publishers, but publishers are not yet seeing meaningful financial gains from the shift.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score med">7</span></td></tr>
+<tr><td>2026-05-26</td><td>Digiday</td><td><a href="https://digiday.com/media/bleacher-report-launches-youtube-channel-for-its-sports-cartoon-fanbase-ahead-of-world-cup/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Bleacher Report launches YouTube channel for its sports cartoon fanbase ahead of World Cup</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Bleacher Report is launching a YouTube channel featuring animated sports content to attract young fans and capitalize on World Cup viewership.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Ad Formats</span></td><td><span class="tag">Google</span></td><td><span class="tag">Video</span> <span class="tag">Social</span></td><td><span class="score ">3</span></td></tr>
+<tr><td>2026-05-26</td><td>Digiday</td><td><a href="https://digiday.com/media/wtf-is-viewbotting/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">WTF is viewbotting?</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">The article explains viewbotting — the artificial inflation of livestream view counts — and explores why the practice poses concerns for brands and platforms investing in livestream advertising.</div></td><td><span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span> <span class="tag">Technology</span></td><td><span class="tag">TikTok</span></td><td><span class="tag">Video</span> <span class="tag">Social</span></td><td><span class="score med">5</span></td></tr>
+<tr><td>2026-05-26</td><td>Digiday</td><td><a href="https://digiday.com/podcasts/inside-the-great-digital-media-reckoning/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Inside the great digital media reckoning</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">The article examines the collapse of once-billion-dollar digital media companies like BuzzFeed and Vox Media, including Vox&#x27;s sale of New York Magazine and its podcast network, as a broader reckoning hits the digital publishing industry.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">3</span></td></tr>
+<tr><td>2026-05-26</td><td>Digiday</td><td><a href="https://digiday.com/media-buying/ad-tech-briefing-agencies-reposition-for-the-agentic-era/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Ad Tech Briefing: Agencies reposition for the agentic era</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Agencies are repositioning their strategies and infrastructure to compete in an emerging agentic AI era, with battles over interoperability and operational control reshaping the ad tech landscape.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Major Ad Tech Companies</span> <span class="tag">Technology</span> <span class="tag">Industry/Business</span></td><td><span class="tag">OpenAI/ChatGPT</span> <span class="tag">Google</span> <span class="tag">Microsoft/LinkedIn</span></td><td></td><td><span class="score med">7</span></td></tr>
+<tr><td>2026-05-26</td><td>Digiday</td><td><a href="https://digiday.com/marketing/as-openais-chatgpt-ad-delivery-improves-the-doubts-it-created-arent-so-easily-fixed/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">As OpenAI’s ChatGPT ad delivery improves, the doubts it created aren’t so easily fixed</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">OpenAI&#x27;s ChatGPT ad delivery has improved in recent weeks, but early technical issues have left some advertisers hesitant to fully commit until problems are entirely resolved.</div></td><td><span class="tag">Major Ad Tech Companies</span> <span class="tag">Industry/Business</span> <span class="tag">Technology</span></td><td><span class="tag">OpenAI/ChatGPT</span></td><td><span class="tag">Native</span></td><td><span class="score med">7</span></td></tr>
+<tr><td>2026-05-25</td><td>Digiday</td><td><a href="https://digiday.com/media/the-nbas-contract-with-youtuber-kenny-beecham-could-be-a-new-blueprint-for-sports-leagues/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">The NBA’s contract with YouTuber Kenny Beecham could be a new blueprint for sports leagues</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">The NBA has signed a partnership deal with YouTuber Kenny Beecham, potentially establishing a new model for how sports leagues collaborate with independent content creators.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td><span class="tag">Video</span> <span class="tag">Social</span></td><td><span class="score ">2</span></td></tr>
+<tr><td>2026-05-25</td><td>Digiday</td><td><a href="https://digiday.com/marketing/googles-latest-commerce-moves-deepen-the-battle-over-agentic-shopping/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Google’s latest commerce moves deepen the battle over agentic shopping</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Google is intensifying its push to control the full shopper journey through agentic AI commerce tools, escalating competition with Amazon Alexa and TikTok Shop for dominance in AI-driven shopping experiences.</div></td><td><span class="tag">Retail Media</span> <span class="tag">Major Ad Tech Companies</span> <span class="tag">Technology</span> <span class="tag">Industry/Business</span></td><td><span class="tag">Google</span> <span class="tag">Amazon</span> <span class="tag">TikTok</span></td><td><span class="tag">Search</span> <span class="tag">Retail Media Ads</span></td><td><span class="score med">7</span></td></tr>
+<tr><td>2026-05-25</td><td>Digiday</td><td><a href="https://digiday.com/media-buying/media-buying-briefing-production-and-media-squeeze-lead-brands-to-run-campaigns-for-longer/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Media Buying Briefing: Production and media squeeze lead brands to run campaigns for longer</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Brands are extending the run time of advertising campaigns due to pressure on both production and media budgets, with data suggesting cost constraints rather than strategic consistency are driving the trend.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">3</span></td></tr>
+<tr><td>2026-05-22</td><td>Digiday</td><td><a href="https://digiday.com/sponsored/unpacked-loyalty-programs-lifecycle-marketing-strategies/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Unpacked: How loyalty programs power lifecycle marketing strategies</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">A sponsored partner insight piece from SheerID exploring how loyalty programs and lifecycle marketing strategies leverage verified first-party data to personalize customer experiences and build long-term brand trust.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Technology</span></td><td></td><td></td><td><span class="score ">3</span></td></tr>
+<tr><td>2026-05-22</td><td>Digiday</td><td><a href="https://digiday.com/marketing/tiktok-shop-says-sales-from-u-s-small-businesses-climbed-66-in-2025/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">TikTok Shop says sales from U.S. small businesses climbed 66% in 2025</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">U.S. small businesses selling on TikTok Shop grew their sales by 66% in 2025 year-over-year, highlighting the platform&#x27;s expanding role as a social commerce destination.</div></td><td><span class="tag">Retail Media</span> <span class="tag">Major Ad Tech Companies</span> <span class="tag">Industry/Business</span></td><td><span class="tag">TikTok</span></td><td><span class="tag">Social</span></td><td><span class="score med">5</span></td></tr>
+<tr><td>2026-05-22</td><td>Digiday</td><td><a href="https://digiday.com/media-buying/why-wpps-ai-boss-believes-agents-are-still-in-the-teenage-sex-stage-of-development/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Why WPP’s AI boss believes agents are still in the ‘teenage sex’ stage of development</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">WPP&#x27;s AI leader argues that AI agents are still in an early, overhyped stage of development, drawing on a familiar industry metaphor to temper expectations about their current capabilities.</div></td><td><span class="tag">Technology</span> <span class="tag">Industry/Business</span> <span class="tag">Major Ad Tech Companies</span></td><td></td><td></td><td><span class="score ">4</span></td></tr>
+<tr><td>2026-05-22</td><td>Digiday</td><td><a href="https://digiday.com/marketing/walmart-warns-it-may-have-to-raise-prices/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Walmart warns it may have to raise prices due to fuel costs</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Walmart warns it may need to raise prices as higher fuel costs put pressure on household budgets and the retailer&#x27;s operations.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">1</span></td></tr>
+<tr><td>2026-05-22</td><td>Digiday</td><td><a href="https://digiday.com/media-buying/future-of-marketing-briefing-agentic-advertising-is-closer-than-you-think-and-further-than-you-hope/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Future of Marketing Briefing: Agentic advertising is closer than you think and further than you hope</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">The article examines the current gap between the promise and practical reality of agentic advertising, exploring how close — or far — the industry is from AI agents autonomously managing advertising decisions.</div></td><td><span class="tag">Major Ad Tech Companies</span> <span class="tag">Technology</span> <span class="tag">Industry/Business</span> <span class="tag">Programmatic</span></td><td><span class="tag">OpenAI/ChatGPT</span> <span class="tag">Google</span> <span class="tag">Meta</span> <span class="tag">Amazon</span></td><td></td><td><span class="score med">7</span></td></tr>
+<tr><td>2026-05-21</td><td>Digiday</td><td><a href="https://digiday.com/sponsored/how-mobiles-measurement-playbook-is-solving-the-webs-fragmentation-problem/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">How mobile’s measurement playbook is solving the web’s fragmentation problem</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">AppsFlyer&#x27;s CMO argues that mobile measurement methodologies can help solve the web&#x27;s growing performance measurement challenges caused by cookie deprecation, unreliable platform self-reporting, and AI-driven traffic fragmentation.</div></td><td><span class="tag">Attribution/Measurement</span> <span class="tag">Privacy/Regulation</span> <span class="tag">Technology</span> <span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score med">7</span></td></tr>
+<tr><td>2026-05-26</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/marketers/pirated-sports-streams-are-warping-tvs-most-important-ratings/" target="_blank" rel="noopener">Pirated Sports Streams Are Warping TV’s Most Important Ratings</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Illicit sports livestreaming piracy operations are distorting TV ratings for live sports events, undermining the audience measurement that advertisers rely on to make major ad spend decisions.</div></td><td><span class="tag">Attribution/Measurement</span> <span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span></td><td></td><td><span class="tag">CTV/OTT</span> <span class="tag">Video</span></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-05-26</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/publishers/microsoft-to-publishers-dont-block-the-ai-bots/" target="_blank" rel="noopener">Microsoft To Publishers: Don’t Block The AI Bots</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Microsoft&#x27;s VP of publisher product at AI urged publishers and retailers to allow AI bots to scrape their sites rather than blocking them, framing it as the strategic path forward in the AI era.</div></td><td><span class="tag">Major Ad Tech Companies</span> <span class="tag">Industry/Business</span> <span class="tag">Technology</span> <span class="tag">Privacy/Regulation</span></td><td><span class="tag">Microsoft/LinkedIn</span></td><td></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-05-26</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/daily-news-roundup/tuesday-26052026/" target="_blank" rel="noopener">Google Enters The Ecommerce Wars; Big Brother Is Listening (Maybe)</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Google is pursuing an ecommerce advertising push in the agentic AI era, while Cox Media Group and other marketing firms settle allegations over a controversial AI &#x27;Active Listening&#x27; ad product that allegedly used device microphones for targeting.</div></td><td><span class="tag">Major Ad Tech Companies</span> <span class="tag">Industry/Business</span> <span class="tag">Privacy/Regulation</span> <span class="tag">Technology</span></td><td><span class="tag">Google</span></td><td></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-05-22</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/ctv-roundup/ai-is-redefining-premium-content-which-may-not-be-a-good-thing/" target="_blank" rel="noopener">AI Is Redefining Premium Content – Which May Not Be A Good Thing</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">At AdExchanger&#x27;s Programmatic AI conference, media experts debated how the proliferation of AI-generated content is challenging and redefining traditional notions of &#x27;premium&#x27; content in the advertising industry.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Industry/Business</span> <span class="tag">Technology</span></td><td></td><td></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-05-22</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/content-studio/why-is-ad-intelligence-still-built-for-a-pre-ai-world/" target="_blank" rel="noopener">Why Is Ad Intelligence Still Built For A Pre-AI World?</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">The article argues that despite the abundance of real-time advertising data available today, ad intelligence tools have failed to evolve with AI capabilities, leaving a gap between data access and actionable decision-making for marketers.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Technology</span> <span class="tag">Attribution/Measurement</span></td><td></td><td></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-05-22</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/commerce-roundup/google-wants-to-do-your-shopping-for-you-at-gml-this-year/" target="_blank" rel="noopener">Google Wants To Do Your Shopping For You At GML This Year</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Google&#x27;s 2026 Google Marketing Live event focuses on AI-driven shopping features and advertising tools, with AdExchanger reporting virtually from the event.</div></td><td><span class="tag">Major Ad Tech Companies</span> <span class="tag">Retail Media</span> <span class="tag">Industry/Business</span></td><td><span class="tag">Google</span></td><td><span class="tag">Search</span> <span class="tag">Retail Media Ads</span></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-05-22</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/ai/jpmorgan-chase-programmatic-lead-says-ai-needs-humans-in-the-lead-not-just-in-the-loop/" target="_blank" rel="noopener">AI Needs Humans In The Lead, Not Just In The Loop, Says JPMorgan Chase Programmatic Lead</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">JPMorgan Chase&#x27;s head of programmatic, Melissa Bonnick, argues that AI in advertising requires humans to lead rather than merely oversee, with the bank&#x27;s strict regulatory guardrails actually enabling more effective automation.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Technology</span> <span class="tag">Industry/Business</span> <span class="tag">Privacy/Regulation</span></td><td></td><td></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-05-22</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/daily-news-roundup/friday-22052026/" target="_blank" rel="noopener">Is Hollywood Canning Cannes?; SpaceX’s Unimportant Ad Revenue</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">A Friday news roundup touching on the cultural relevance of Cannes Lions and Cannes Film Festival, plus a note on SpaceX&#x27;s minimal ad revenue, with AdExchanger taking a Memorial Day break.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">2</span></td></tr>
+<tr><td>2026-05-21</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/the-big-story/prog-ai-live-ais-slippery-slop/" target="_blank" rel="noopener">Prog AI Live: AI’s Slippery Slop</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">A podcast episode exploring how the rise of agentic AI is challenging traditional definitions of &#x27;premium&#x27; advertising inventory and what that means for brands and publishers in an AI-saturated media landscape.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Major Ad Tech Companies</span> <span class="tag">Technology</span> <span class="tag">Industry/Business</span></td><td><span class="tag">OpenAI/ChatGPT</span></td><td><span class="tag">Video</span></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-05-21</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/ai/ai-is-finally-doing-real-work-in-ad-ops-but-only-when-it-works-with-your-existing-tech/" target="_blank" rel="noopener">AI Is Finally Doing Real Work In Ad Ops (But Only When It Works With Your Existing Tech)</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">At the Programmatic AI conference, a former Mediavine product lead turned consultant argued that AI can meaningfully improve publisher ad operations workflows, but only when integrated effectively with existing tools like Google Ad Manager rather than deployed in isolation.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Technology</span> <span class="tag">Industry/Business</span></td><td><span class="tag">Google</span></td><td></td><td><span class="score med">7</span></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    document.getElementById('filter').addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      document.querySelectorAll('#tbl tbody tr').forEach(r => {
+        r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    });
+  </script>
+  <script>
+  (function() {
+    var trendData = {"Ad Formats": {"Video": [{"week": "2026-04-20", "count": 3}, {"week": "2026-04-27", "count": 5}, {"week": "2026-05-04", "count": 4}, {"week": "2026-05-18", "count": 28}, {"week": "2026-05-26", "count": 9}], "CTV/OTT": [{"week": "2026-04-20", "count": 4}, {"week": "2026-04-27", "count": 9}, {"week": "2026-05-04", "count": 4}, {"week": "2026-05-18", "count": 15}, {"week": "2026-05-26", "count": 3}], "Social": [{"week": "2026-04-20", "count": 5}, {"week": "2026-04-27", "count": 5}, {"week": "2026-05-04", "count": 5}, {"week": "2026-05-18", "count": 9}, {"week": "2026-05-26", "count": 5}], "Audio": [{"week": "2026-04-27", "count": 3}, {"week": "2026-05-18", "count": 4}], "Search": [{"week": "2026-04-20", "count": 1}, {"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 1}, {"week": "2026-05-18", "count": 3}, {"week": "2026-05-26", "count": 2}], "Native": [{"week": "2026-04-20", "count": 2}, {"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 1}, {"week": "2026-05-26", "count": 1}], "Retail Media Ads": [{"week": "2026-04-20", "count": 2}, {"week": "2026-05-04", "count": 1}, {"week": "2026-05-18", "count": 1}, {"week": "2026-05-26", "count": 2}], "Display": [{"week": "2026-04-27", "count": 2}, {"week": "2026-05-18", "count": 2}], "DOOH": [{"week": "2026-04-20", "count": 1}, {"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 1}]}, "Attribution": {"Cookieless": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 2}, {"week": "2026-05-18", "count": 12}, {"week": "2026-05-26", "count": 1}], "ID Solutions": [{"week": "2026-05-18", "count": 11}], "Clean Rooms": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-18", "count": 8}], "Incrementality": [{"week": "2026-05-04", "count": 3}, {"week": "2026-05-18", "count": 4}, {"week": "2026-05-26", "count": 1}], "MMM": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 3}, {"week": "2026-05-18", "count": 2}], "Last-Click": [{"week": "2026-04-20", "count": 1}], "View-Through": [{"week": "2026-04-20", "count": 1}], "MTA": [{"week": "2026-05-26", "count": 1}]}, "Major Ad Tech Companies": {"Google": [{"week": "2026-04-20", "count": 3}, {"week": "2026-04-27", "count": 4}, {"week": "2026-05-04", "count": 3}, {"week": "2026-05-18", "count": 9}, {"week": "2026-05-26", "count": 7}], "Amazon": [{"week": "2026-04-20", "count": 2}, {"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 1}, {"week": "2026-05-18", "count": 7}, {"week": "2026-05-26", "count": 2}], "OpenAI/ChatGPT": [{"week": "2026-05-04", "count": 5}, {"week": "2026-05-18", "count": 7}, {"week": "2026-05-26", "count": 4}], "The Trade Desk": [{"week": "2026-05-18", "count": 7}], "TikTok": [{"week": "2026-05-04", "count": 1}, {"week": "2026-05-18", "count": 3}, {"week": "2026-05-26", "count": 3}], "Microsoft/LinkedIn": [{"week": "2026-05-26", "count": 3}], "Netflix": [{"week": "2026-04-20", "count": 1}, {"week": "2026-05-18", "count": 2}, {"week": "2026-05-26", "count": 1}], "Meta": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-18", "count": 2}, {"week": "2026-05-26", "count": 1}], "DoorDash": [{"week": "2026-05-18", "count": 2}], "Roku": [{"week": "2026-05-18", "count": 2}], "Snapchat": [{"week": "2026-05-18", "count": 2}], "Pinterest": [{"week": "2026-05-18", "count": 2}], "X/Twitter": [{"week": "2026-05-04", "count": 1}], "Apple": [{"week": "2026-05-18", "count": 1}]}, "Retail Media Networks": {"Amazon Ads": [{"week": "2026-04-20", "count": 2}, {"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 1}, {"week": "2026-05-18", "count": 5}, {"week": "2026-05-26", "count": 1}], "Other": [{"week": "2026-05-04", "count": 3}], "Walmart Connect": [{"week": "2026-04-27", "count": 2}], "Albertsons": [{"week": "2026-05-18", "count": 2}]}, "Topics": {"CTV advertising": [{"week": "2026-04-20", "count": 1}, {"week": "2026-04-27", "count": 3}, {"week": "2026-05-04", "count": 4}, {"week": "2026-05-18", "count": 13}, {"week": "2026-05-26", "count": 2}], "AI agents": [{"week": "2026-04-20", "count": 1}, {"week": "2026-05-18", "count": 10}, {"week": "2026-05-26", "count": 3}], "data clean rooms": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-18", "count": 8}], "first-party data": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 2}, {"week": "2026-05-18", "count": 6}, {"week": "2026-05-26", "count": 1}], "audience targeting": [{"week": "2026-05-04", "count": 2}, {"week": "2026-05-18", "count": 6}], "ID solutions": [{"week": "2026-05-18", "count": 6}], "identity resolution": [{"week": "2026-05-18", "count": 6}], "upfronts": [{"week": "2026-04-20", "count": 1}, {"week": "2026-05-04", "count": 1}, {"week": "2026-05-18", "count": 5}], "brand safety": [{"week": "2026-04-20", "count": 1}, {"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 2}, {"week": "2026-05-26", "count": 4}], "AI in advertising": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 2}, {"week": "2026-05-18", "count": 3}, {"week": "2026-05-26", "count": 4}], "podcast advertising": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-18", "count": 4}], "publisher monetization": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 2}, {"week": "2026-05-26", "count": 4}], "data collaboration": [{"week": "2026-05-18", "count": 4}], "identity solutions": [{"week": "2026-05-18", "count": 4}], "M&A": [{"week": "2026-05-18", "count": 4}]}, "Agencies": {"Publicis": [{"week": "2026-05-18", "count": 12}, {"week": "2026-05-26", "count": 1}], "Omnicom": [{"week": "2026-05-18", "count": 9}, {"week": "2026-05-26", "count": 2}], "IPG": [{"week": "2026-05-18", "count": 9}, {"week": "2026-05-26", "count": 1}], "Dentsu": [{"week": "2026-05-18", "count": 7}, {"week": "2026-05-26", "count": 1}], "WPP": [{"week": "2026-05-18", "count": 7}, {"week": "2026-05-26", "count": 2}], "GroupM": [{"week": "2026-05-18", "count": 4}], "Havas": [{"week": "2026-05-18", "count": 3}, {"week": "2026-05-26", "count": 1}], "Stagwell": [{"week": "2026-05-26", "count": 1}]}};
+    var distinctColors = ['#4f46e5','#dc2626','#16a34a','#d97706','#0891b2','#7c3aed','#db2777','#059669','#ea580c','#2563eb','#4338ca','#e11d48','#65a30d','#0d9488','#c026d3'];
+    var allWeeks = [];
+    var weekSet = {};
+    for (var cat in trendData) {
+      for (var topic in trendData[cat]) {
+        trendData[cat][topic].forEach(function(p) {
+          if (!weekSet[p.week]) {
+            weekSet[p.week] = true;
+            allWeeks.push(p.week);
+          }
+        });
+      }
+    }
+    allWeeks.sort();
+    var datasets = [];
+    for (var cat in trendData) {
+      var topicEntries = [];
+      for (var topic in trendData[cat]) {
+        var maxCount = 0;
+        trendData[cat][topic].forEach(function(p) {
+          if (p.count > maxCount) maxCount = p.count;
+        });
+        topicEntries.push({topic: topic, points: trendData[cat][topic], maxCount: maxCount});
+      }
+      topicEntries.sort(function(a, b) { return b.maxCount - a.maxCount; });
+      topicEntries.slice(0, 10).forEach(function(entry, idx) {
+        var weekMap = {};
+        entry.points.forEach(function(p) { weekMap[p.week] = p.count; });
+        var color = distinctColors[idx % distinctColors.length];
+        datasets.push({
+          label: entry.topic,
+          data: allWeeks.map(function(w) { return weekMap[w] || 0; }),
+          borderColor: color,
+          backgroundColor: color + '33',
+          tension: 0.3,
+          pointRadius: 3,
+          borderWidth: 2,
+          _category: cat,
+          hidden: true
+        });
+      });
+    }
+    if (allWeeks.length < 2) {
+      var note = document.querySelector('.chart-note');
+      if (note) note.textContent = 'Only one week of data so far. The trend lines will appear as more weekly reports are generated.';
+    }
+    var ctx = document.getElementById('trendsChart').getContext('2d');
+    var chart = new Chart(ctx, {
+      type: 'line',
+      data: { labels: allWeeks, datasets: datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              font: { size: 11 }, boxWidth: 12, padding: 8,
+              filter: function(item, chartData) { return !chartData.datasets[item.datasetIndex].hidden; }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              title: function(items) { return 'Week of ' + items[0].label; }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: 'Week', font: { size: 12 } },
+            grid: { display: false }
+          },
+          y: {
+            title: { display: true, text: 'Mentions', font: { size: 12 } },
+            beginAtZero: true,
+            ticks: { stepSize: 1 }
+          }
+        }
+      }
+    });
+    function applyFilter(selectedCat) {
+      var colorIdx = 0;
+      chart.data.datasets.forEach(function(ds, i) {
+        if (selectedCat === 'all') {
+          ds.borderColor = distinctColors[i % distinctColors.length];
+          ds.backgroundColor = ds.borderColor + '33';
+          ds.hidden = false;
+          chart.setDatasetVisibility(i, true);
+        } else if (ds._category === selectedCat) {
+          ds.borderColor = distinctColors[colorIdx % distinctColors.length];
+          ds.backgroundColor = ds.borderColor + '33';
+          ds.hidden = false;
+          colorIdx++;
+          chart.setDatasetVisibility(i, true);
+        } else {
+          ds.hidden = true;
+          chart.setDatasetVisibility(i, false);
+        }
+      });
+      chart.update();
+    }
+    var controlsDiv = document.querySelector('.chart-controls');
+    var categories = Object.keys(trendData).sort();
+    categories.forEach(function(cat) {
+      var btn = document.createElement('button');
+      btn.className = 'cat-btn';
+      btn.setAttribute('data-category', cat);
+      btn.textContent = cat;
+      controlsDiv.appendChild(btn);
+    });
+    controlsDiv.addEventListener('click', function(e) {
+      var btn = e.target.closest('.cat-btn');
+      if (!btn) return;
+      controlsDiv.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      applyFilter(btn.getAttribute('data-category'));
+    });
+    applyFilter('Ad Formats');
+    var defaultBtn = controlsDiv.querySelector('[data-category="Ad Formats"]');
+    if (defaultBtn) {
+      controlsDiv.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('active'); });
+      defaultBtn.classList.add('active');
+    }
+  })();
+  </script>
+</body>
+</html>
