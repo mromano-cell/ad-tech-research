@@ -439,7 +439,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     .digest a{{color:#4f46e5;text-decoration:underline}}
     .digest h3{{font-size:0.88rem;font-weight:700;color:#0f172a;margin:1.4rem 0 0.5rem;padding-top:0.8rem;border-top:1px solid #e2e8f0}}
     .score-legend{{font-size:.72rem;color:#94a3b8;cursor:help;position:relative;display:inline-block;border-bottom:1px dotted #94a3b8}}
-    .score-legend:hover::after{{content:'How relevant is this article to digital ad tech?\\A\\A8-10 (green) = Highly relevant\\A5-7 (yellow) = Somewhat relevant\\A1-4 (blue) = Low relevance';white-space:pre;position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;font-size:.72rem;padding:.6rem .8rem;border-radius:6px;width:220px;z-index:10;line-height:1.5;box-shadow:0 4px 12px rgba(0,0,0,.15)}}
+    .score-legend:hover::after{{content:'Relevance to digital ad tech:\\A\\A8-10 (green) = Highly relevant\\A5-7 (yellow) = Somewhat relevant\\A1-4 (blue) = Low relevance';white-space:pre-wrap;position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;font-size:.7rem;padding:.5rem .7rem;border-radius:6px;width:240px;z-index:10;line-height:1.6;box-shadow:0 4px 12px rgba(0,0,0,.15);text-align:left}}
     .chart-controls{{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}}
     .cat-btn{{padding:.35rem .75rem;border:1px solid #e2e8f0;border-radius:6px;background:#fff;font-size:.78rem;cursor:pointer;color:#475569;transition:all .15s}}
     .cat-btn:hover{{border-color:#6366f1;color:#4f46e5}}
