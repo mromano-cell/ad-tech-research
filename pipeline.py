@@ -290,25 +290,37 @@ TOP TRENDING TOPICS BY CATEGORY:
 ARTICLES THIS WEEK (with URLs):
 {articles_list}
 
-Write a 3-4 paragraph narrative digest that:
-1. Opens with the most significant overarching theme or story of the week
-2. Covers what's trending across programmatic advertising, retail media networks, major ad tech company activity, attribution/measurement, and ad formats — with specific mention of topic frequency (e.g., "CTV was mentioned in 12 articles") and any notable week-over-week changes
-3. Closes with a brief "what to watch" forward-looking observation
-4. Write a final paragraph under the subheading <h3>Yelp Impact Analysis</h3> that specifically covers:
-   - News affecting restaurant, services, and local business verticals (Yelp's core business)
-   - Ad tech developments relevant to high-intent audience platforms (Yelp is a high-intent platform where consumers are actively searching for businesses and ready to convert)
-   - Competitive moves from Google Local Services Ads, Meta local business ads, Nextdoor, Apple Business Connect, and other local advertising products
-   - Implications for programmatic or managed-service ad products targeting multi-location businesses (restaurants, home services, auto, etc.)
-   If nothing this week is directly relevant to these areas, briefly note that and highlight the closest adjacent trend that could impact Yelp's competitive position.
+Write a weekly digest in HYBRID format: a short TL;DR, then categorized bullets, then a Yelp analysis paragraph.
+
+STRUCTURE — follow this exactly:
+
+1. <h3>This Week's TL;DR</h3>
+   Write 2-3 sentences capturing the single biggest theme of the week and why it matters. Wrap in <p> tags.
+
+2. CATEGORIZED BULLETS — use only the categories that have notable news this week (skip empty ones):
+   - <h3>AI & Search</h3>
+   - <h3>Programmatic & Data</h3>
+   - <h3>CTV & Video</h3>
+   - <h3>Retail Media</h3>
+   - <h3>Attribution & Measurement</h3>
+   - <h3>Agencies</h3>
+   For each category, write 3-5 bullet points as a <ul> list. Each <li> should be one key development (1-2 sentences max) with a hyperlinked source. Include topic frequency where relevant (e.g., "CTV appeared in 8 articles this week").
+
+3. <h3>Yelp Impact Analysis</h3>
+   Write one short paragraph (3-5 sentences) covering:
+   - News affecting restaurant, services, and local business verticals
+   - Ad tech developments relevant to high-intent audience platforms (Yelp is a high-intent platform where consumers actively search for businesses and are ready to convert)
+   - Competitive moves from Google Local Services Ads, Meta local business ads, Nextdoor, Apple Business Connect, OpenAI/ChatGPT ads, and other local advertising products
+   - Implications for programmatic or managed-service ad products targeting multi-location businesses
+   If nothing is directly relevant, note that and highlight the closest adjacent trend.
 
 FORMATTING RULES — follow these exactly:
 - Write in HTML, not markdown
-- When you reference a specific article or finding, hyperlink the relevant phrase using <a href="URL" target="_blank">linked text</a> — use the article URLs provided above
+- Hyperlink specific articles using <a href="URL" target="_blank">linked text</a> — use the article URLs provided above
 - Use <strong>bold</strong> for company names, key topics, and important figures
-- Wrap each paragraph in <p> tags
-- Use <h3> tags for section subheadings within the digest
-- Do not use ** for bold, do not use markdown, only HTML
-- Do not use bullet points; use flowing paragraphs only"""
+- Use <ul><li> for bullet lists, <p> for paragraphs
+- Use <h3> tags for section subheadings
+- Do not use ** for bold, do not use markdown, only HTML"""
 
     response = client.chat.completions.create(
         model="opus-latest",
@@ -438,6 +450,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     .digest p{{margin-bottom:1rem}}
     .digest a{{color:#4f46e5;text-decoration:underline}}
     .digest h3{{font-size:0.88rem;font-weight:700;color:#0f172a;margin:1.4rem 0 0.5rem;padding-top:0.8rem;border-top:1px solid #e2e8f0}}
+    .digest ul{{margin:0.4rem 0 1rem 1.2rem;padding:0}}
+    .digest li{{margin-bottom:0.5rem;line-height:1.6;font-size:0.93rem}}
     .score-legend{{font-size:.72rem;color:#94a3b8;cursor:help;position:relative;display:inline-block;border-bottom:1px dotted #94a3b8}}
     .score-legend:hover::after{{content:'Relevance to digital ad tech:\\A\\A8-10 (green) = Highly relevant\\A5-7 (yellow) = Somewhat relevant\\A1-4 (blue) = Low relevance';white-space:pre-wrap;position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;font-size:.7rem;padding:.5rem .7rem;border-radius:6px;width:240px;z-index:10;line-height:1.6;box-shadow:0 4px 12px rgba(0,0,0,.15);text-align:left}}
     .chart-controls{{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}}
