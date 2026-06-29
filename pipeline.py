@@ -454,10 +454,14 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     .digest li{{margin-bottom:0.5rem;line-height:1.6;font-size:0.93rem}}
     .score-legend{{font-size:.72rem;color:#94a3b8;cursor:help;position:relative;display:inline-block;border-bottom:1px dotted #94a3b8}}
     .score-legend:hover::after{{content:'Relevance to digital ad tech:\\A\\A8-10 (green) = Highly relevant\\A5-7 (yellow) = Somewhat relevant\\A1-4 (blue) = Low relevance';white-space:pre-wrap;position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;font-size:.7rem;padding:.5rem .7rem;border-radius:6px;width:240px;z-index:10;line-height:1.6;box-shadow:0 4px 12px rgba(0,0,0,.15);text-align:left}}
-    .chart-controls{{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}}
-    .cat-btn{{padding:.35rem .75rem;border:1px solid #e2e8f0;border-radius:6px;background:#fff;font-size:.78rem;cursor:pointer;color:#475569;transition:all .15s}}
-    .cat-btn:hover{{border-color:#6366f1;color:#4f46e5}}
-    .cat-btn.active{{background:#4f46e5;color:#fff;border-color:#4f46e5}}
+    .chart-controls{{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem}}
+    .chart-time-controls{{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem}}
+    .cat-btn,.time-btn{{padding:.35rem .75rem;border:1px solid #e2e8f0;border-radius:6px;background:#fff;font-size:.78rem;cursor:pointer;color:#475569;transition:all .15s}}
+    .cat-btn:hover,.time-btn:hover{{border-color:#6366f1;color:#4f46e5}}
+    .cat-btn.active,.time-btn.active{{background:#4f46e5;color:#fff;border-color:#4f46e5}}
+    .time-label{{font-size:.72rem;color:#94a3b8;font-weight:600;margin-right:.25rem}}
+    .week-select{{padding:.3rem .5rem;border:1px solid #e2e8f0;border-radius:6px;font-size:.75rem;color:#475569;background:#fff}}
+    .week-select:focus{{border-color:#6366f1;outline:none}}
     .chart-container{{position:relative;height:400px;width:100%}}
     .chart-note{{font-size:.72rem;color:#94a3b8;margin-top:.75rem}}
     .trends-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}}
@@ -496,10 +500,21 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       <div class="chart-controls">
         <button class="cat-btn" data-category="all">All</button>
       </div>
+      <div class="chart-time-controls">
+        <span class="time-label">Time:</span>
+        <button class="time-btn active" data-range="all">All Time</button>
+        <button class="time-btn" data-range="4">Last 4 Weeks</button>
+        <button class="time-btn" data-range="8">Last 8 Weeks</button>
+        <button class="time-btn" data-range="12">Last 12 Weeks</button>
+        <span class="time-label" style="margin-left:.75rem">Custom:</span>
+        <select class="week-select" id="weekFrom"><option value="">From</option></select>
+        <span style="font-size:.72rem;color:#94a3b8">to</span>
+        <select class="week-select" id="weekTo"><option value="">To</option></select>
+      </div>
       <div class="chart-container">
         <canvas id="trendsChart"></canvas>
       </div>
-      <p class="chart-note">Click category buttons to filter. Click legend items to toggle individual topics.</p>
+      <p class="chart-note">Click category buttons to filter. Click legend items to toggle individual topics. Use time controls to adjust the date range.</p>
     </div>
     <div class="card">
       <h2>Trending Topics This Week</h2>
@@ -654,6 +669,69 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     if (defaultBtn) {{
       controlsDiv.querySelectorAll('.cat-btn').forEach(function(b) {{ b.classList.remove('active'); }});
       defaultBtn.classList.add('active');
+    }}
+
+    // Time range filter
+    var weekFrom = document.getElementById('weekFrom');
+    var weekTo = document.getElementById('weekTo');
+    allWeeks.forEach(function(w) {{
+      var optF = document.createElement('option');
+      optF.value = w; optF.textContent = w;
+      weekFrom.appendChild(optF);
+      var optT = document.createElement('option');
+      optT.value = w; optT.textContent = w;
+      weekTo.appendChild(optT);
+    }});
+
+    function applyTimeRange(startIdx, endIdx) {{
+      var filteredWeeks = allWeeks.slice(startIdx, endIdx + 1);
+      chart.data.labels = filteredWeeks;
+      chart.data.datasets.forEach(function(ds) {{
+        var fullData = allWeeks.map(function(w) {{
+          var cat = ds._category;
+          var topic = ds.label;
+          if (trendData[cat] && trendData[cat][topic]) {{
+            var match = null;
+            trendData[cat][topic].forEach(function(p) {{ if (p.week === w) match = p.count; }});
+            return match || 0;
+          }}
+          return 0;
+        }});
+        ds.data = fullData.slice(startIdx, endIdx + 1);
+      }});
+      chart.update();
+    }}
+
+    var timeControlsDiv = document.querySelector('.chart-time-controls');
+    timeControlsDiv.addEventListener('click', function(e) {{
+      var btn = e.target.closest('.time-btn');
+      if (!btn) return;
+      timeControlsDiv.querySelectorAll('.time-btn').forEach(function(b) {{ b.classList.remove('active'); }});
+      btn.classList.add('active');
+      weekFrom.value = ''; weekTo.value = '';
+      var range = btn.getAttribute('data-range');
+      if (range === 'all') {{
+        applyTimeRange(0, allWeeks.length - 1);
+      }} else {{
+        var n = parseInt(range);
+        var startIdx = Math.max(0, allWeeks.length - n);
+        applyTimeRange(startIdx, allWeeks.length - 1);
+      }}
+    }});
+
+    weekFrom.addEventListener('change', applyCustomRange);
+    weekTo.addEventListener('change', applyCustomRange);
+    function applyCustomRange() {{
+      var from = weekFrom.value;
+      var to = weekTo.value;
+      if (!from && !to) return;
+      var startIdx = from ? allWeeks.indexOf(from) : 0;
+      var endIdx = to ? allWeeks.indexOf(to) : allWeeks.length - 1;
+      if (startIdx < 0) startIdx = 0;
+      if (endIdx < 0) endIdx = allWeeks.length - 1;
+      if (startIdx > endIdx) {{ var tmp = startIdx; startIdx = endIdx; endIdx = tmp; }}
+      timeControlsDiv.querySelectorAll('.time-btn').forEach(function(b) {{ b.classList.remove('active'); }});
+      applyTimeRange(startIdx, endIdx);
     }}
   }})();
   </script>

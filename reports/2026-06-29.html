@@ -22,10 +22,14 @@
     .digest li{margin-bottom:0.5rem;line-height:1.6;font-size:0.93rem}
     .score-legend{font-size:.72rem;color:#94a3b8;cursor:help;position:relative;display:inline-block;border-bottom:1px dotted #94a3b8}
     .score-legend:hover::after{content:'Relevance to digital ad tech:\A\A8-10 (green) = Highly relevant\A5-7 (yellow) = Somewhat relevant\A1-4 (blue) = Low relevance';white-space:pre-wrap;position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;font-size:.7rem;padding:.5rem .7rem;border-radius:6px;width:240px;z-index:10;line-height:1.6;box-shadow:0 4px 12px rgba(0,0,0,.15);text-align:left}
-    .chart-controls{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
-    .cat-btn{padding:.35rem .75rem;border:1px solid #e2e8f0;border-radius:6px;background:#fff;font-size:.78rem;cursor:pointer;color:#475569;transition:all .15s}
-    .cat-btn:hover{border-color:#6366f1;color:#4f46e5}
-    .cat-btn.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
+    .chart-controls{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem}
+    .chart-time-controls{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem}
+    .cat-btn,.time-btn{padding:.35rem .75rem;border:1px solid #e2e8f0;border-radius:6px;background:#fff;font-size:.78rem;cursor:pointer;color:#475569;transition:all .15s}
+    .cat-btn:hover,.time-btn:hover{border-color:#6366f1;color:#4f46e5}
+    .cat-btn.active,.time-btn.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
+    .time-label{font-size:.72rem;color:#94a3b8;font-weight:600;margin-right:.25rem}
+    .week-select{padding:.3rem .5rem;border:1px solid #e2e8f0;border-radius:6px;font-size:.75rem;color:#475569;background:#fff}
+    .week-select:focus{border-color:#6366f1;outline:none}
     .chart-container{position:relative;height:400px;width:100%}
     .chart-note{font-size:.72rem;color:#94a3b8;margin-top:.75rem}
     .trends-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}
@@ -51,7 +55,7 @@
 <body>
   <header>
     <h1>Ad Tech Weekly Digest</h1>
-    <p>Week of 2026-06-29 &bull; 35 articles analyzed</p>
+    <p>Week of 2026-06-29 &bull; 53 articles analyzed</p>
   </header>
   <div class="container">
     <a href="index.html" class="back">&larr; All reports</a>
@@ -116,10 +120,21 @@
       <div class="chart-controls">
         <button class="cat-btn" data-category="all">All</button>
       </div>
+      <div class="chart-time-controls">
+        <span class="time-label">Time:</span>
+        <button class="time-btn active" data-range="all">All Time</button>
+        <button class="time-btn" data-range="4">Last 4 Weeks</button>
+        <button class="time-btn" data-range="8">Last 8 Weeks</button>
+        <button class="time-btn" data-range="12">Last 12 Weeks</button>
+        <span class="time-label" style="margin-left:.75rem">Custom:</span>
+        <select class="week-select" id="weekFrom"><option value="">From</option></select>
+        <span style="font-size:.72rem;color:#94a3b8">to</span>
+        <select class="week-select" id="weekTo"><option value="">To</option></select>
+      </div>
       <div class="chart-container">
         <canvas id="trendsChart"></canvas>
       </div>
-      <p class="chart-note">Click category buttons to filter. Click legend items to toggle individual topics.</p>
+      <p class="chart-note">Click category buttons to filter. Click legend items to toggle individual topics. Use time controls to adjust the date range.</p>
     </div>
     <div class="card">
       <h2>Trending Topics This Week</h2>
@@ -172,7 +187,7 @@
 </div></div>
     </div>
     <div class="card">
-      <h2>Articles (35)</h2>
+      <h2>Articles (53)</h2>
       <input type="text" id="filter" placeholder="Filter by headline, topic, publication&hellip;">
       <table id="tbl">
         <thead>
@@ -182,7 +197,25 @@
             <th>Score <span class="score-legend">(?)</span></th>
           </tr>
         </thead>
-        <tbody><tr><td>2026-06-29</td><td>Adweek</td><td><a href="https://www.adweek.com/brand-marketing/the-chief-communications-officers-rise-as-a-strategic-advisor/" target="_blank" rel="noopener">The Chief Communications Officer&amp;#8217;s Rise as a Strategic Advisor</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">A sponsored post in partnership with Burson examines how the role of Chief Communications Officer has evolved into a more strategic advisory function over the past decade.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">1</span></td></tr>
+        <tbody><tr><td>2026-06-22</td><td>Adweek</td><td><a href="https://www.adweek.com/convergent-tv/nbcu-to-rock-brand-partnerships-with-new-unified-creative-offering/" target="_blank" rel="noopener">NBCU Looks to Rock Brand Partnerships With New Unified Creative Offering</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">NBCUniversal has launched Rock Studios, a unified creative offering designed to streamline brand partnerships and integrations across its media portfolio.</div></td><td><span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span></td><td></td><td><span class="tag">Video</span> <span class="tag">Native</span></td><td><span class="score ">3</span></td></tr>
+<tr><td>2026-06-22</td><td>Adweek</td><td><a href="https://www.adweek.com/media/black-publishers-knew-the-ad-commitments-wouldnt-hold-so-what/" target="_blank" rel="noopener">Black Publishers Knew the Ad Commitments Wouldn&amp;#8217;t Hold. So What?</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Black publishers in the BOMESI network describe how they anticipated and adapted to the rollback of brand diversity ad commitments made after 2020, rebuilding their business models accordingly.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">3</span></td></tr>
+<tr><td>2026-06-22</td><td>Adweek</td><td><a href="https://www.adweek.com/creativity/susan-credle-isnt-worried-about-the-future-of-creativity/" target="_blank" rel="noopener">Susan Credle Isn&amp;#8217;t Worried About the Future of Creativity</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Susan Credle, winner of the 2026 Cannes Lion of St. Mark, shares her perspective on industry upheaval and the resurgence of big creative ideas in advertising.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">2</span></td></tr>
+<tr><td>2026-06-22</td><td>Adweek</td><td><a href="https://www.adweek.com/commerce/exclusive-walmart-pulls-sams-club-deeper-into-its-ad-business/" target="_blank" rel="noopener">EXCLUSIVE: Walmart Pulls Sam’s Club Deeper Into Its Ad Business</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Walmart&#x27;s chief growth officer Seth Dallaire outlines the company&#x27;s strategy to integrate Sam&#x27;s Club more deeply into its retail media advertising business, expanding Walmart Connect&#x27;s footprint.</div></td><td><span class="tag">Retail Media</span> <span class="tag">Industry/Business</span></td><td></td><td><span class="tag">Retail Media Ads</span></td><td><span class="score med">7</span></td></tr>
+<tr><td>2026-06-22</td><td>Adweek</td><td><a href="https://www.adweek.com/commerce/amazon-pushes-conversational-ai-ads-onto-the-open-internet/" target="_blank" rel="noopener">Amazon Pushes Conversational AI Ads Onto the Open Internet</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Amazon is expanding its AI-powered Sponsored Prompts conversational ad format beyond its own properties to the broader open web, signaling a new frontier for AI-driven advertising inventory.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Retail Media</span> <span class="tag">Major Ad Tech Companies</span> <span class="tag">Ad Formats</span> <span class="tag">Technology</span></td><td><span class="tag">Amazon</span> <span class="tag">OpenAI/ChatGPT</span></td><td><span class="tag">Native</span> <span class="tag">Display</span> <span class="tag">Retail Media Ads</span></td><td><span class="score high">9</span></td></tr>
+<tr><td>2026-06-22</td><td>Adweek</td><td><a href="https://www.adweek.com/brand-marketing/embracing-the-spirit-of-cannes-without-actually-being-there/" target="_blank" rel="noopener">Embracing The Spirit of Cannes Without Actually Being There</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">The article reflects on the broader value and spirit of the Cannes Lions advertising festival beyond its physical location on the French Riviera.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">2</span></td></tr>
+<tr><td>2026-06-22</td><td>Digiday</td><td><a href="https://digiday.com/marketing/connect-dont-absorb-depts-ai-bet-on-orchestration-over-operating-systems/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Connect, don’t absorb: Dept’s AI bet on orchestration over operating systems</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Independent agency Dept is betting on AI orchestration rather than building a proprietary operating system, with its AI assistant already influencing 20% of revenue and a target of 80% within a year.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Technology</span> <span class="tag">Major Ad Tech Companies</span></td><td><span class="tag">OpenAI/ChatGPT</span></td><td></td><td><span class="score ">4</span></td></tr>
+<tr><td>2026-06-22</td><td>Digiday</td><td><a href="https://digiday.com/marketing/wtf-is-containerization/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">WTF is containerization?</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">This explainer article breaks down the concept of containerization in ad tech, examining how isolating code and data within containers is becoming an increasingly discussed infrastructure approach among publishers and ad tech platforms.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Technology</span> <span class="tag">Privacy/Regulation</span></td><td></td><td></td><td><span class="score med">7</span></td></tr>
+<tr><td>2026-06-22</td><td>Digiday</td><td><a href="https://digiday.com/media/how-lipton-is-using-local-creators-instead-of-building-in-house-social-teams/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">How Lipton is using local creators instead of building in-house social teams</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Lipton partnered with Billion Dollar Boy to activate local creators across six markets as an alternative to building in-house social media teams for its global marketing strategy.</div></td><td><span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span></td><td></td><td><span class="tag">Social</span></td><td><span class="score ">3</span></td></tr>
+<tr><td>2026-06-22</td><td>Digiday</td><td><a href="https://digiday.com/marketing/the-ai-search-boom-is-fueling-content-budgets-before-media-buys/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">The AI search boom is fueling content budgets before media buys</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Brands are prioritizing SEO, content, and creator spending to gain visibility in AI-powered search before committing budgets to paid AI search advertising products.</div></td><td><span class="tag">Major Ad Tech Companies</span> <span class="tag">Industry/Business</span> <span class="tag">Technology</span></td><td><span class="tag">OpenAI/ChatGPT</span> <span class="tag">Google</span></td><td><span class="tag">Search</span></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-06-22</td><td>Digiday</td><td><a href="https://digiday.com/media-buying/media-buying-briefing-how-sport-beach-became-a-big-cannes-lions-destination-and-a-business/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Media Buying Briefing: How Sport Beach became a big Cannes Lions destination — and a business</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Stagwell&#x27;s Sport Beach activation at Cannes Lions has evolved from a simple concept into a major festival destination and a standalone business unit for the holding company.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">2</span></td></tr>
+<tr><td>2026-06-22</td><td>Digiday</td><td><a href="https://digiday.com/media-buying/omnicom-media-kicks-off-a-series-of-partnerships-at-cannes-lions-with-a-first-time-netflix-deal/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Omnicom Media kicks off a series of partnerships at Cannes Lions with a first-time Netflix deal</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Omnicom Media has struck a first-of-its-kind deal with Netflix integrating Acxiom audience data into Netflix&#x27;s ad platform to deliver more relevant ads and potentially incorporate them into content.</div></td><td><span class="tag">Major Ad Tech Companies</span> <span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span></td><td><span class="tag">Netflix</span></td><td><span class="tag">CTV/OTT</span> <span class="tag">Video</span></td><td><span class="score med">7</span></td></tr>
+<tr><td>2026-06-22</td><td>Digiday</td><td><a href="https://digiday.com/marketing/cannes-briefing-the-ad-industrys-power-shifts-mapped-in-sand/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Cannes Briefing: The ad industry’s power shifts, mapped in sand</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">A Cannes Lions briefing examining the shifting power dynamics in the advertising industry, with investment banks gaining influence as traditional holding companies face consolidation pressure.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">4</span></td></tr>
+<tr><td>2026-06-22</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/marketers/monks-new-head-of-data-and-media-wants-to-help-clients-find-their-north-star/" target="_blank" rel="noopener">Monks Has A New Head Of Data And Media</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Gila Wilensky, formerly WPP&#x27;s chief solutions officer for North America, has joined Monks as its new head of data and media.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">3</span></td></tr>
+<tr><td>2026-06-22</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/tv/fire-tv-makes-a-play-for-its-share-of-home-screen-ad-dollars/" target="_blank" rel="noopener">Fire TV Makes A Play For Its Share Of Home Screen Ad Dollars</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Amazon is promoting Fire TV home screen interface upgrades at Cannes Lions 2026, positioning the platform as a premium ad destination by improving content discovery and capitalizing on FIFA World Cup viewership.</div></td><td><span class="tag">Major Ad Tech Companies</span> <span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span></td><td><span class="tag">Amazon</span></td><td><span class="tag">CTV/OTT</span></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-06-22</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/tv/omnicom-can-now-measure-ad-frequency-across-multiple-ctv-platforms/" target="_blank" rel="noopener">Omnicom Can Now Measure Ad Frequency Across Multiple CTV Platforms</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Omnicom Media has expanded its cross-platform clean room with new capabilities enabling post-campaign measurement of reach, frequency, and performance across multiple CTV platforms, addressing a long-standing frequency capping challenge in connected TV advertising.</div></td><td><span class="tag">Attribution/Measurement</span> <span class="tag">Ad Formats</span> <span class="tag">Programmatic</span> <span class="tag">Technology</span></td><td></td><td><span class="tag">CTV/OTT</span></td><td><span class="score high">8</span></td></tr>
+<tr><td>2026-06-22</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/on-tv-and-video/foxs-roku-deal-signals-the-next-phase-of-television/" target="_blank" rel="noopener">Fox’s Roku Deal Signals The Next Phase Of Television</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Fox has announced a $22 billion acquisition of Roku, combining Fox&#x27;s sports, news, and entertainment content with Tubi and Roku&#x27;s streaming platform to become the third-largest US television player by viewing share.</div></td><td><span class="tag">Major Ad Tech Companies</span> <span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span></td><td><span class="tag">Roku</span></td><td><span class="tag">CTV/OTT</span></td><td><span class="score med">7</span></td></tr>
+<tr><td>2026-06-22</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/daily-news-roundup/monday-22062026/" target="_blank" rel="noopener">Brother, DSPlease; The Short-Lived (We Hope) Fawning AI Listicle</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">The article examines the evolving DSP category, highlighting how platforms like Pontiac Intelligence, Comcast&#x27;s Universal Ads, and Viant differ from The Trade Desk through lower take rates, while also touching on AI-generated content trends in ad tech media.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Industry/Business</span> <span class="tag">Technology</span></td><td><span class="tag">The Trade Desk</span></td><td></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-06-29</td><td>Adweek</td><td><a href="https://www.adweek.com/brand-marketing/the-chief-communications-officers-rise-as-a-strategic-advisor/" target="_blank" rel="noopener">The Chief Communications Officer&amp;#8217;s Rise as a Strategic Advisor</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">A sponsored post in partnership with Burson examines how the role of Chief Communications Officer has evolved into a more strategic advisory function over the past decade.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">1</span></td></tr>
 <tr><td>2026-06-29</td><td>Adweek</td><td><a href="https://www.adweek.com/brand-marketing/why-desire-is-an-emerging-competitive-advantage/" target="_blank" rel="noopener">Why Desire Is an Emerging Competitive Advantage</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">A Havas-sponsored piece arguing that brand growth is driven by genuine consumer desire and active choice rather than mere visibility.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">2</span></td></tr>
 <tr><td>2026-06-29</td><td>Adweek</td><td><a href="https://www.adweek.com/commerce/ai-is-changing-how-consumers-discover-products/" target="_blank" rel="noopener">AI Is Changing How Consumers Discover Products</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">A sponsored fireside chat with InMobi at Cannes Lions explores how AI is transforming consumer product discovery by shifting the shopping journey to before the search even begins.</div></td><td><span class="tag">Major Ad Tech Companies</span> <span class="tag">Technology</span> <span class="tag">Industry/Business</span> <span class="tag">Ad Formats</span></td><td><span class="tag">OpenAI/ChatGPT</span></td><td><span class="tag">Native</span> <span class="tag">Search</span></td><td><span class="score med">5</span></td></tr>
 <tr><td>2026-06-29</td><td>Adweek</td><td><a href="https://www.adweek.com/convergent-tv/the-future-of-tv-is-connected/" target="_blank" rel="noopener">The Future of TV Is Connected</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">A sponsored post in partnership with Philo argues that the future of television is connected TV, amid streaming audience fragmentation and platform consolidation.</div></td><td><span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span></td><td></td><td><span class="tag">CTV/OTT</span></td><td><span class="score ">4</span></td></tr>
@@ -354,6 +387,69 @@
     if (defaultBtn) {
       controlsDiv.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('active'); });
       defaultBtn.classList.add('active');
+    }
+
+    // Time range filter
+    var weekFrom = document.getElementById('weekFrom');
+    var weekTo = document.getElementById('weekTo');
+    allWeeks.forEach(function(w) {
+      var optF = document.createElement('option');
+      optF.value = w; optF.textContent = w;
+      weekFrom.appendChild(optF);
+      var optT = document.createElement('option');
+      optT.value = w; optT.textContent = w;
+      weekTo.appendChild(optT);
+    });
+
+    function applyTimeRange(startIdx, endIdx) {
+      var filteredWeeks = allWeeks.slice(startIdx, endIdx + 1);
+      chart.data.labels = filteredWeeks;
+      chart.data.datasets.forEach(function(ds) {
+        var fullData = allWeeks.map(function(w) {
+          var cat = ds._category;
+          var topic = ds.label;
+          if (trendData[cat] && trendData[cat][topic]) {
+            var match = null;
+            trendData[cat][topic].forEach(function(p) { if (p.week === w) match = p.count; });
+            return match || 0;
+          }
+          return 0;
+        });
+        ds.data = fullData.slice(startIdx, endIdx + 1);
+      });
+      chart.update();
+    }
+
+    var timeControlsDiv = document.querySelector('.chart-time-controls');
+    timeControlsDiv.addEventListener('click', function(e) {
+      var btn = e.target.closest('.time-btn');
+      if (!btn) return;
+      timeControlsDiv.querySelectorAll('.time-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      weekFrom.value = ''; weekTo.value = '';
+      var range = btn.getAttribute('data-range');
+      if (range === 'all') {
+        applyTimeRange(0, allWeeks.length - 1);
+      } else {
+        var n = parseInt(range);
+        var startIdx = Math.max(0, allWeeks.length - n);
+        applyTimeRange(startIdx, allWeeks.length - 1);
+      }
+    });
+
+    weekFrom.addEventListener('change', applyCustomRange);
+    weekTo.addEventListener('change', applyCustomRange);
+    function applyCustomRange() {
+      var from = weekFrom.value;
+      var to = weekTo.value;
+      if (!from && !to) return;
+      var startIdx = from ? allWeeks.indexOf(from) : 0;
+      var endIdx = to ? allWeeks.indexOf(to) : allWeeks.length - 1;
+      if (startIdx < 0) startIdx = 0;
+      if (endIdx < 0) endIdx = allWeeks.length - 1;
+      if (startIdx > endIdx) { var tmp = startIdx; startIdx = endIdx; endIdx = tmp; }
+      timeControlsDiv.querySelectorAll('.time-btn').forEach(function(b) { b.classList.remove('active'); });
+      applyTimeRange(startIdx, endIdx);
     }
   })();
   </script>
