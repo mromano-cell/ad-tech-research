@@ -506,6 +506,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <button class="time-btn" data-range="4">Last 4 Weeks</button>
         <button class="time-btn" data-range="8">Last 8 Weeks</button>
         <button class="time-btn" data-range="12">Last 12 Weeks</button>
+        <button class="time-btn" data-range="monthly">Monthly</button>
         <span class="time-label" style="margin-left:.75rem">Custom:</span>
         <select class="week-select" id="weekFrom"><option value="">From</option></select>
         <span style="font-size:.72rem;color:#94a3b8">to</span>
@@ -683,22 +684,56 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       weekTo.appendChild(optT);
     }});
 
+    function getFullData(ds) {{
+      return allWeeks.map(function(w) {{
+        var cat = ds._category;
+        var topic = ds.label;
+        if (trendData[cat] && trendData[cat][topic]) {{
+          var match = 0;
+          trendData[cat][topic].forEach(function(p) {{ if (p.week === w) match = p.count; }});
+          return match;
+        }}
+        return 0;
+      }});
+    }}
+
     function applyTimeRange(startIdx, endIdx) {{
       var filteredWeeks = allWeeks.slice(startIdx, endIdx + 1);
       chart.data.labels = filteredWeeks;
       chart.data.datasets.forEach(function(ds) {{
-        var fullData = allWeeks.map(function(w) {{
-          var cat = ds._category;
-          var topic = ds.label;
-          if (trendData[cat] && trendData[cat][topic]) {{
-            var match = null;
-            trendData[cat][topic].forEach(function(p) {{ if (p.week === w) match = p.count; }});
-            return match || 0;
-          }}
-          return 0;
-        }});
-        ds.data = fullData.slice(startIdx, endIdx + 1);
+        ds.data = getFullData(ds).slice(startIdx, endIdx + 1);
       }});
+      chart.options.scales.x.title.text = 'Week';
+      chart.update();
+    }}
+
+    function applyMonthlyView() {{
+      var monthMap = {{}};
+      var monthOrder = [];
+      allWeeks.forEach(function(w) {{
+        var m = w.substring(0, 7);
+        if (!monthMap[m]) {{ monthMap[m] = []; monthOrder.push(m); }}
+        monthMap[m].push(w);
+      }});
+      var monthLabels = monthOrder.map(function(m) {{
+        var parts = m.split('-');
+        var names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        return names[parseInt(parts[1]) - 1] + ' ' + parts[0];
+      }});
+      chart.data.labels = monthLabels;
+      chart.data.datasets.forEach(function(ds) {{
+        var fullData = getFullData(ds);
+        var monthlyData = monthOrder.map(function(m) {{
+          var total = 0;
+          monthMap[m].forEach(function(w) {{
+            var idx = allWeeks.indexOf(w);
+            if (idx >= 0) total += fullData[idx];
+          }});
+          return total;
+        }});
+        ds.data = monthlyData;
+      }});
+      chart.options.scales.x.title.text = 'Month';
       chart.update();
     }}
 
@@ -710,7 +745,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       btn.classList.add('active');
       weekFrom.value = ''; weekTo.value = '';
       var range = btn.getAttribute('data-range');
-      if (range === 'all') {{
+      if (range === 'monthly') {{
+        applyMonthlyView();
+      }} else if (range === 'all') {{
         applyTimeRange(0, allWeeks.length - 1);
       }} else {{
         var n = parseInt(range);
