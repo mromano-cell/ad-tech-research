@@ -1436,6 +1436,18 @@ function renderB2BAudiences(app) {
     html += '</div>';
   });
   html += '</div>';
+  html += '<div style="margin-top:24px;padding:16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;">';
+  html += '<p style="font-size:14px;color:var(--gray-700);margin-bottom:8px;"><strong>\u{1F4D3} Size Your B2B Audience First</strong></p>';
+  html += '<p style="font-size:14px;color:var(--gray-700);margin-bottom:8px;">Before requesting a B2B audience, check available inventory using the <strong>Mission Control Business Owner Audience Inventory</strong> dashboard. It shows real-time counts of targetable business owners by category, location, and attribute filters.</p>';
+  html += '<p style="font-size:13px;color:var(--gray-700);margin-bottom:4px;"><strong>How to use it:</strong></p>';
+  html += '<ol style="font-size:13px;color:var(--gray-700);margin:0 0 8px 20px;padding:0;">';
+  html += '<li>Select your category and geo filters</li>';
+  html += '<li>Review the audience size estimate</li>';
+  html += '<li>If the count supports your campaign goals, submit a request through the Jira portal below</li>';
+  html += '</ol>';
+  html += '<a href="https://datascience.admin.yelp.com/Sales_and_CS/Building_Recommendations_Inventory/Business_Owner_Audience_Inventory" target="_blank" style="display:inline-block;margin-top:4px;padding:8px 16px;background:var(--yelp-red);color:#fff;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600;">Open Mission Control Dashboard →</a>';
+  html += '<p style="font-size:12px;color:var(--gray-500);margin-top:8px;">Data refreshes weekly on Mondays.</p>';
+  html += '</div>';
   html += '<div style="margin-top:24px;padding:16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;">';
   html += '<p style="font-size:14px;color:var(--gray-700);margin-bottom:8px;"><strong>\u{1F4CB} How to Request:</strong></p>';
   html += '<p style="font-size:14px;color:var(--gray-700);">Submit through YCM Jira portal: <a href="https://jira.yelpcorp.com/plugins/servlet/desk/portal/58/create/613" target="_blank" style="color:var(--yelp-red);">Create B2B Audience Request</a></p>';

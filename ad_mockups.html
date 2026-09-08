@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verizon Ad Mockups</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #1a1a1a;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .section-label {
+      color: #aaa;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      text-align: left;
+      width: 900px;
+    }
+
+    /* ─── SHARED BANNER STRUCTURE ─── */
+    .banner {
+      width: 900px;
+      height: 160px;
+      display: flex;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    .banner .left {
+      flex: 1.4;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 18px 24px;
+      position: relative;
+    }
+
+    .banner .right {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .verizon-logo {
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      opacity: 0.9;
+    }
+
+    .headline {
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      width: fit-content;
+    }
+
+    .cta-btn .arrow { font-size: 16px; }
+
+    .disclaimer {
+      position: absolute;
+      bottom: 6px;
+      left: 18px;
+      font-size: 8px;
+      opacity: 0.6;
+    }
+
+    /* ─── AD 1: RECENT MOVERS ─── */
+    .ad1 .left {
+      background: linear-gradient(135deg, #cd040b 0%, #a80008 100%);
+      color: white;
+    }
+    .ad1 .right {
+      background: #f5f5f0;
+    }
+    .ad1 .verizon-logo { color: white; }
+    .ad1 .eyebrow { color: #ffcdd0; font-size: 10.5px; }
+    .ad1 .headline { font-size: 30px; color: white; }
+    .ad1 .headline span { color: #ffe066; }
+    .ad1 .cta-btn {
+      background: white;
+      color: #cd040b;
+    }
+    /* Map illustration */
+    .map-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: #e8ede3;
+    }
+    .map-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(180,190,170,0.4) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(180,190,170,0.4) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .map-road-h {
+      position: absolute;
+      background: white;
+      height: 7px;
+      border-radius: 2px;
+    }
+    .map-road-v {
+      position: absolute;
+      background: white;
+      width: 7px;
+      border-radius: 2px;
+    }
+    .map-pin {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .map-pin .pin-body {
+      width: 20px; height: 20px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .map-pin .pin-body::after {
+      content: '';
+      width: 8px; height: 8px;
+      background: white;
+      border-radius: 50%;
+    }
+    .map-pin .pin-tail {
+      width: 2px; height: 6px;
+      background: rgba(0,0,0,0.3);
+    }
+    .yelp-badge {
+      position: absolute;
+      top: 8px; right: 8px;
+      background: white;
+      border-radius: 4px;
+      padding: 3px 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    .yelp-burst {
+      width: 16px; height: 16px;
+      background: #d32323;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      font-size: 9px;
+      font-weight: 900;
+    }
+    .yelp-text { font-size: 12px; font-weight: 900; color: #333; }
+    /* House icon for movers */
+    .house-icon {
+      position: absolute;
+      bottom: 14px;
+      right: 16px;
+      font-size: 38px;
+      opacity: 0.15;
+    }
+    .new-home-tag {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #cd040b;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      text-align: center;
+      white-space: nowrap;
+      box-shadow: 0 3px 10px rgba(205,4,11,0.4);
+    }
+    .coverage-dots {
+      position: absolute;
+    }
+    .cdot {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(205,4,11,0.15);
+      border: 1.5px solid rgba(205,4,11,0.3);
+    }
+
+    /* ─── AD 2: YOUNG ADULTS ─── */
+    .ad2 .left {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 60%, #16213e 100%);
+      color: white;
+    }
+    .ad2 .right {
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+    }
+    .ad2 .verizon-logo { color: #cd040b; font-size: 14px; }
+    .ad2 .eyebrow { color: #7c8dff; font-size: 10px; }
+    .ad2 .headline { font-size: 26px; color: white; }
+    .ad2 .headline .accent {
+      color: transparent;
+      background: linear-gradient(90deg, #cd040b, #ff6b6b);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .ad2 .sub { font-size: 11px; color: #aaa; margin-bottom: 10px; line-height: 1.4; }
+    .ad2 .cta-btn {
+      background: linear-gradient(90deg, #cd040b, #ff4444);
+      color: white;
+      box-shadow: 0 4px 12px rgba(205,4,11,0.4);
+    }
+    /* Phone/savings visual */
+    .savings-visual {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .phone-frame {
+      width: 70px;
+      height: 120px;
+      background: #111;
+      border-radius: 12px;
+      border: 2px solid #333;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(100,100,255,0.1);
+    }
+    .phone-screen {
+      width: 58px;
+      height: 102px;
+      background: linear-gradient(160deg, #1a1a2e, #16213e);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 8px;
+    }
+    .phone-screen .savings-amt {
+      font-size: 18px;
+      font-weight: 900;
+      color: #ff4444;
+      line-height: 1;
+    }
+    .phone-screen .savings-label {
+      font-size: 7px;
+      color: #aaa;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .phone-screen .bars {
+      display: flex;
+      gap: 2px;
+      align-items: flex-end;
+      height: 16px;
+    }
+    .bar {
+      width: 5px;
+      background: #cd040b;
+      border-radius: 2px 2px 0 0;
+    }
+    .glow-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(100,100,255,0.15);
+    }
+    .data-stream {
+      position: absolute;
+      font-size: 8px;
+      color: rgba(124,141,255,0.4);
+      font-family: monospace;
+      white-space: nowrap;
+    }
+
+    /* ─── AD 3: FAMILY PROVIDERS ─── */
+    .ad3 .left {
+      background: linear-gradient(135deg, #b80008 0%, #cd040b 50%, #e8050d 100%);
+      color: white;
+    }
+    .ad3 .right {
+      background: linear-gradient(135deg, #fafaf8 0%, #f0f0eb 100%);
+    }
+    .ad3 .verizon-logo { color: white; }
+    .ad3 .eyebrow { color: #ffcdd0; font-size: 10px; }
+    .ad3 .headline { font-size: 25px; color: white; }
+    .ad3 .headline span { color: #ffe066; }
+    .ad3 .sub { font-size: 10.5px; color: rgba(255,255,255,0.85); margin-bottom: 10px; line-height: 1.4; }
+    .ad3 .cta-btn {
+      background: white;
+      color: #cd040b;
+    }
+    /* Family savings visual */
+    .family-visual {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 14px;
+    }
+    .family-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%;
+    }
+    .line-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      border-radius: 6px;
+      padding: 5px 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .line-icon {
+      font-size: 14px;
+      width: 20px;
+      text-align: center;
+    }
+    .line-info {
+      flex: 1;
+    }
+    .line-name {
+      font-size: 9px;
+      font-weight: 700;
+      color: #333;
+    }
+    .line-plan {
+      font-size: 8px;
+      color: #888;
+    }
+    .line-price {
+      font-size: 11px;
+      font-weight: 900;
+      color: #cd040b;
+    }
+    .total-savings {
+      background: #cd040b;
+      color: white;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 10px;
+      font-weight: 800;
+      text-align: center;
+      width: 100%;
+    }
+    .total-savings span {
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─────────────── AD 1: RECENT MOVERS ─────────────── -->
+  <div class="section-label">Audience 1 — Recent Movers</div>
+  <div class="banner ad1">
+    <div class="left">
+      <div class="verizon-logo">verizon</div>
+      <div class="eyebrow">Just moved? Bring your AT&amp;T or T-Mobile bill.</div>
+      <div class="headline">New home.<br><span>Better coverage.</span><br>Better deal.</div>
+      <a class="cta-btn" href="#">Switch now <span class="arrow">›</span></a>
+      <div class="disclaimer">Must provide postpaid consumer bill dated within 45 days. Terms apply.</div>
+    </div>
+    <div class="right">
+      <div class="map-container">
+        <div class="map-grid"></div>
+        <!-- Roads -->
+        <div class="map-road-h" style="top:44px;left:0;right:0;"></div>
+        <div class="map-road-h" style="top:88px;left:0;right:0;"></div>
+        <div class="map-road-v" style="left:80px;top:0;bottom:0;"></div>
+        <div class="map-road-v" style="left:200px;top:0;bottom:0;"></div>
+        <div class="map-road-v" style="left:300px;top:0;bottom:0;"></div>
+        <!-- Coverage circles -->
+        <div class="cdot" style="width:60px;height:60px;top:14px;left:50px;"></div>
+        <div class="cdot" style="width:80px;height:80px;top:55px;left:160px;"></div>
+        <div class="cdot" style="width:50px;height:50px;top:20px;left:260px;"></div>
+        <!-- Pins -->
+        <div class="map-pin" style="top:22px;left:68px;">
+          <div class="pin-body" style="background:#cd040b;"></div>
+          <div class="pin-tail"></div>
+        </div>
+        <div class="map-pin" style="top:62px;left:188px;">
+          <div class="pin-body" style="background:#cd040b;"></div>
+          <div class="pin-tail"></div>
+        </div>
+        <div class="map-pin" style="top:28px;left:278px;">
+          <div class="pin-body" style="background:#cd040b;"></div>
+          <div class="pin-tail"></div>
+        </div>
+        <!-- Center callout -->
+        <div class="new-home-tag">📍 Coverage at<br>your new address</div>
+        <!-- Yelp badge -->
+        <div class="yelp-badge">
+          <div class="yelp-burst">y</div>
+          <div class="yelp-text">yelp</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────── AD 2: YOUNG ADULTS ─────────────── -->
+  <div class="section-label">Audience 2 — Young Adults</div>
+  <div class="banner ad2">
+    <div class="left">
+      <div class="verizon-logo">verizon</div>
+      <div class="eyebrow">Switch from AT&amp;T or T-Mobile</div>
+      <div class="headline">Stop overpaying.<br><span class="accent">We'll top their deal.</span></div>
+      <div class="sub">Bring your bill — we'll match it and beat it. No contract required.</div>
+      <a class="cta-btn" href="#">Switch now <span class="arrow">›</span></a>
+      <div class="disclaimer" style="color:#666;">Must provide postpaid bill dated within 45 days. Terms apply.</div>
+    </div>
+    <div class="right">
+      <div class="savings-visual">
+        <!-- Background rings -->
+        <div class="glow-ring" style="width:200px;height:200px;top:-20px;left:-20px;"></div>
+        <div class="glow-ring" style="width:140px;height:140px;top:10px;left:10px;"></div>
+        <!-- Data stream text -->
+        <div class="data-stream" style="top:18px;left:10px;">5G ••• LTE ••• 5G •••</div>
+        <div class="data-stream" style="bottom:20px;right:5px;">STREAM ••• PLAY ••• SAVE</div>
+        <!-- Phone mockup -->
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="savings-amt">$0</div>
+            <div class="savings-label">switch fee</div>
+            <div style="width:100%;height:1px;background:rgba(255,255,255,0.1);margin:3px 0;"></div>
+            <div class="bars">
+              <div class="bar" style="height:5px;"></div>
+              <div class="bar" style="height:8px;"></div>
+              <div class="bar" style="height:11px;"></div>
+              <div class="bar" style="height:14px;"></div>
+              <div class="bar" style="height:16px;"></div>
+            </div>
+            <div class="savings-label" style="color:#7c8dff;">Full 5G signal</div>
+          </div>
+        </div>
+        <!-- Side label -->
+        <div style="position:absolute;right:14px;top:50%;transform:translateY(-50%);text-align:right;">
+          <div style="font-size:20px;font-weight:900;color:#ff4444;line-height:1;">Better</div>
+          <div style="font-size:20px;font-weight:900;color:white;line-height:1;">Deal.</div>
+          <div style="font-size:8px;color:#666;margin-top:4px;">guaranteed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────── AD 3: FAMILY PROVIDERS ─────────────── -->
+  <div class="section-label">Audience 3 — Family Providers / Breadwinners</div>
+  <div class="banner ad3">
+    <div class="left">
+      <div class="verizon-logo">verizon</div>
+      <div class="eyebrow">Bring your family's AT&amp;T or T-Mobile bill.</div>
+      <div class="headline">One switch.<br><span>Big savings</span> for<br>the whole family.</div>
+      <div class="sub">We'll beat your current plan — on every single line.</div>
+      <a class="cta-btn" href="#">See family deals <span class="arrow">›</span></a>
+      <div class="disclaimer">Must provide postpaid consumer bill dated within 45 days. Terms apply.</div>
+    </div>
+    <div class="right">
+      <div class="family-visual">
+        <div class="family-lines">
+          <div class="line-item">
+            <div class="line-icon">👨</div>
+            <div class="line-info">
+              <div class="line-name">Dad's Line</div>
+              <div class="line-plan">Unlimited Plus</div>
+            </div>
+            <div class="line-price">$35<span style="font-size:8px;font-weight:400;color:#888;">/mo</span></div>
+          </div>
+          <div class="line-item">
+            <div class="line-icon">👩</div>
+            <div class="line-info">
+              <div class="line-name">Mom's Line</div>
+              <div class="line-plan">Unlimited Plus</div>
+            </div>
+            <div class="line-price">$35<span style="font-size:8px;font-weight:400;color:#888;">/mo</span></div>
+          </div>
+          <div class="line-item">
+            <div class="line-icon">👧</div>
+            <div class="line-info">
+              <div class="line-name">Kid's Line</div>
+              <div class="line-plan">Unlimited Start</div>
+            </div>
+            <div class="line-price">$20<span style="font-size:8px;font-weight:400;color:#888;">/mo</span></div>
+          </div>
+        </div>
+        <div class="total-savings">Save <span>$840+</span> vs. AT&amp;T / year</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

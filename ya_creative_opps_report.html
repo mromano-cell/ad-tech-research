@@ -1,0 +1,956 @@
+<title>YA Creative Opportunities</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #FAFAF8;
+    --surface: #FFFFFF;
+    --surface-alt: #F3F2EE;
+    --border: #E2E0DA;
+    --text: #1A1917;
+    --text-muted: #6B6860;
+    --text-faint: #9C998F;
+    --accent: #B8432F;
+    --accent-bg: #FDF0ED;
+    --accent-muted: #D4826F;
+    --tag-cd: #2D6A4F;
+    --tag-cd-bg: #E9F5EF;
+    --tag-crm: #5A4B8A;
+    --tag-crm-bg: #F0ECF7;
+    --tag-dyca: #1D5C83;
+    --tag-dyca-bg: #E8F2F8;
+    --stage-won: #2D6A4F;
+    --stage-won-bg: #E9F5EF;
+    --stage-lost: #8B3A3A;
+    --stage-lost-bg: #FCEAEA;
+    --stage-active: #6B6860;
+    --stage-active-bg: #F3F2EE;
+    --ibcc-stripe: #B8432F;
+    --stat-value: #1A1917;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141412;
+      --surface: #1E1D1A;
+      --surface-alt: #252420;
+      --border: #3A3832;
+      --text: #E8E6E0;
+      --text-muted: #9C998F;
+      --text-faint: #6B6860;
+      --accent: #D4826F;
+      --accent-bg: #2E1D18;
+      --accent-muted: #B8432F;
+      --tag-cd: #6FCF97;
+      --tag-cd-bg: #1A2E22;
+      --tag-crm: #B0A0D4;
+      --tag-crm-bg: #221E30;
+      --tag-dyca: #6FB8D4;
+      --tag-dyca-bg: #16283A;
+      --stage-won: #6FCF97;
+      --stage-won-bg: #1A2E22;
+      --stage-lost: #D48080;
+      --stage-lost-bg: #2E1A1A;
+      --stage-active: #9C998F;
+      --stage-active-bg: #252420;
+      --ibcc-stripe: #D4826F;
+      --stat-value: #E8E6E0;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141412;
+    --surface: #1E1D1A;
+    --surface-alt: #252420;
+    --border: #3A3832;
+    --text: #E8E6E0;
+    --text-muted: #9C998F;
+    --text-faint: #6B6860;
+    --accent: #D4826F;
+    --accent-bg: #2E1D18;
+    --accent-muted: #B8432F;
+    --tag-cd: #6FCF97;
+    --tag-cd-bg: #1A2E22;
+    --tag-crm: #B0A0D4;
+    --tag-crm-bg: #221E30;
+    --tag-dyca: #6FB8D4;
+    --tag-dyca-bg: #16283A;
+    --stage-won: #6FCF97;
+    --stage-won-bg: #1A2E22;
+    --stage-lost: #D48080;
+    --stage-lost-bg: #2E1A1A;
+    --stage-active: #9C998F;
+    --stage-active-bg: #252420;
+    --ibcc-stripe: #D4826F;
+    --stat-value: #E8E6E0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 2rem 1.5rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .header { margin-bottom: 2.5rem; }
+  .header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.35rem;
+  }
+  .header .meta {
+    font-size: 0.8rem;
+    color: var(--text-faint);
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  /* Stats row */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+  }
+  .stat {
+    background: var(--surface);
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .stat-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--stat-value);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .stat-value .unit {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-left: 0.1em;
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* Section */
+  .section { margin-bottom: 2.5rem; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0.5rem;
+  }
+  .section-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .section-count {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-faint);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .section-note {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    line-height: 1.55;
+  }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+  thead th {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    background: var(--surface-alt);
+    padding: 0.6rem 0.85rem;
+    text-align: left;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+  }
+  thead th:last-child,
+  tbody td:last-child { text-align: right; }
+  tbody tr { border-top: 1px solid var(--border); }
+  tbody tr:hover { background: var(--surface-alt); }
+  tbody td {
+    padding: 0.6rem 0.85rem;
+    background: var(--surface);
+    vertical-align: top;
+  }
+  tbody tr:hover td { background: transparent; }
+  .acct-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.85rem;
+  }
+  .opp-name {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.1rem;
+  }
+  .date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .amount {
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .tag-cd { color: var(--tag-cd); background: var(--tag-cd-bg); }
+  .tag-crm { color: var(--tag-crm); background: var(--tag-crm-bg); }
+  .tag-dyca { color: var(--tag-dyca); background: var(--tag-dyca-bg); }
+  .tag-ibcc {
+    color: var(--accent);
+    background: var(--accent-bg);
+    font-size: 0.6rem;
+    margin-left: 0.35rem;
+  }
+
+  .stage {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.12rem 0.45rem;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .stage-won { color: var(--stage-won); background: var(--stage-won-bg); }
+  .stage-lost { color: var(--stage-lost); background: var(--stage-lost-bg); }
+  .stage-active { color: var(--stage-active); background: var(--stage-active-bg); }
+
+  /* IBCC stripe */
+  tr.ibcc td:first-child {
+    border-left: 3px solid var(--ibcc-stripe);
+    padding-left: calc(0.85rem - 3px);
+  }
+
+  /* Callout */
+  .callout {
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+    padding: 0.85rem 1rem;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 2rem;
+  }
+  .callout-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.25rem;
+  }
+  .callout p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .footer-note {
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 1.25rem 1rem 3rem; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .header h1 { font-size: 1.25rem; }
+  }
+</style>
+
+<div class="header">
+  <h1>YA Custom Creative Opportunities</h1>
+  <div class="meta">
+    <span>July 14 – September 4, 2026</span>
+    <span>Source: Salesforce (Enterprise opps)</span>
+    <span>Pulled Sep 4, 2026</span>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <span class="stat-value">19</span>
+    <span class="stat-label">Custom Display Opps</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value">3</span>
+    <span class="stat-label">Custom Rich Media</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value">19</span>
+    <span class="stat-label">DYCA Opps</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value">8</span>
+    <span class="stat-label">IBCC in Opp Name</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value">$5.4<span class="unit">M</span></span>
+    <span class="stat-label">Total Pipeline (All Creative)</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value">3</span>
+    <span class="stat-label">Closed Won</span>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="callout-title">Intent-Based Custom Creative flag</div>
+  <p>Rows with a red left border and <span class="tag tag-ibcc" style="margin:0">IBCC</span> tag have "Intent Based Custom Creative" in the opportunity name. 8 opps use this language; 5 of those also carry Custom Display or DYCA line items, while 3 have only generic YA Display or Enhanced Profile products attached (likely early-stage, products not yet specified).</p>
+</div>
+
+<!-- CUSTOM DISPLAY -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-title">YA – Custom Display</span>
+    <span class="section-count">19 opps · $2.82M pipeline</span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Account / Opportunity</th>
+          <th>Created</th>
+          <th>Stage</th>
+          <th>YA Type</th>
+          <th>Owner</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="acct-name">ESPN</div>
+            <div class="opp-name">Super Bowl – Valentines Day</div>
+          </td>
+          <td class="date">Aug 3</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Katie Lovato</td>
+          <td class="amount">$500,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Tommy Bahama</div>
+            <div class="opp-name">Retail Spring 2027 Pilot</div>
+          </td>
+          <td class="date">Aug 21</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Lori Low</td>
+          <td class="amount">$187,530</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">TransUnion</div>
+            <div class="opp-name">Acquisition Campaign</div>
+          </td>
+          <td class="date">Aug 24</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Brian Nichols</td>
+          <td class="amount">$150,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Aspen Dental <span style="font-weight:400;font-size:0.72rem;color:var(--text-faint)">(via Dentsu)</span></div>
+            <div class="opp-name">YA – Q4</div>
+          </td>
+          <td class="date">Jul 21</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Jill Forsythe</td>
+          <td class="amount">$150,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">See's Candies</div>
+            <div class="opp-name">Program Change – Seasonal YACD H2 2026</div>
+          </td>
+          <td class="date">Jul 23</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Derek Marshall</td>
+          <td class="amount">$110,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">MasterCard</div>
+            <div class="opp-name">B2B Credit Card Sign Ups</div>
+          </td>
+          <td class="date">Jul 23</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-cd">B2B</span></td>
+          <td>Brian Nichols</td>
+          <td class="amount">$100,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">DEKRA North America</div>
+            <div class="opp-name">Renewal 2027</div>
+          </td>
+          <td class="date">Sep 1</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Shri Lildharrie</td>
+          <td class="amount">$81,022</td>
+        </tr>
+        <tr class="ibcc">
+          <td>
+            <div class="acct-name">Wegman's Food Markets <span class="tag tag-ibcc">IBCC</span></div>
+            <div class="opp-name">Intent Based Custom Creative Q4'26</div>
+          </td>
+          <td class="date">Aug 25</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Brad Musante</td>
+          <td class="amount">$76,500</td>
+        </tr>
+        <tr class="ibcc">
+          <td>
+            <div class="acct-name">Batteries Plus <span class="tag tag-ibcc">IBCC</span></div>
+            <div class="opp-name">YA – Intent Based Custom Creative Q4'2026</div>
+          </td>
+          <td class="date">Aug 25</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Brad Musante</td>
+          <td class="amount">$75,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">H&M (North America)</div>
+            <div class="opp-name">YA Custom Display</div>
+          </td>
+          <td class="date">Aug 3</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Alexis DeFalco</td>
+          <td class="amount">$50,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Olive Garden (Darden)</div>
+            <div class="opp-name">YA Display</div>
+          </td>
+          <td class="date">Aug 25</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Angela Pacheco</td>
+          <td class="amount">$50,000</td>
+        </tr>
+        <tr class="ibcc">
+          <td>
+            <div class="acct-name">True Food Kitchen <span class="tag tag-ibcc">IBCC</span></div>
+            <div class="opp-name">YA Intent Based</div>
+          </td>
+          <td class="date">Jul 31</td>
+          <td><span class="stage stage-active">Detect</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Heather Vaccarello</td>
+          <td class="amount">$50,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">FGF – Stonefire Pizza</div>
+            <div class="opp-name">Q3/Q4 Campaign</div>
+          </td>
+          <td class="date">Aug 5</td>
+          <td><span class="stage stage-won">Closed Won</span></td>
+          <td><span class="tag tag-cd">B2B</span></td>
+          <td>Brian Nichols</td>
+          <td class="amount">$30,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">FGF – Ace Bakery</div>
+            <div class="opp-name">Q3/Q4 Campaign</div>
+          </td>
+          <td class="date">Aug 5</td>
+          <td><span class="stage stage-won">Closed Won</span></td>
+          <td><span class="tag tag-cd">B2B</span></td>
+          <td>Brian Nichols</td>
+          <td class="amount">$30,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Nuvia Dental Implant Center</div>
+            <div class="opp-name">PC – YA – CAPI Launch</div>
+          </td>
+          <td class="date">Jul 29</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Heather Vaccarello</td>
+          <td class="amount">$25,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Kabuki Japanese Restaurant</div>
+            <div class="opp-name">YA</div>
+          </td>
+          <td class="date">Jul 22</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Heather Vaccarello</td>
+          <td class="amount">$18,750</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">FGF – Ace Bakery</div>
+            <div class="opp-name">Program Change – Q3/Q4</div>
+          </td>
+          <td class="date">Aug 19</td>
+          <td><span class="stage stage-won">Closed Won</span></td>
+          <td><span class="tag tag-cd">B2B</span></td>
+          <td>Brian Nichols</td>
+          <td class="amount">$0 <span style="font-weight:400;font-size:0.7rem;color:var(--text-faint)">(PC)</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Albertsons</div>
+            <div class="opp-name">Funded Pilot P8</div>
+          </td>
+          <td class="date">Aug 25</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Jordan Grossman</td>
+          <td class="amount">$0 <span style="font-weight:400;font-size:0.7rem;color:var(--text-faint)">(funded)</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Grifols / Biomat / Plasmacare</div>
+            <div class="opp-name">YA Custom Display</div>
+          </td>
+          <td class="date">Jul 27</td>
+          <td><span class="stage stage-lost">Closed Lost</span></td>
+          <td><span class="tag tag-cd">B2C</span></td>
+          <td>Lori Low</td>
+          <td class="amount">$87,000</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- CUSTOM RICH MEDIA -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-title">YA – Custom Rich Media</span>
+    <span class="section-count">3 opps · $710K pipeline</span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Account / Opportunity</th>
+          <th>Created</th>
+          <th>Stage</th>
+          <th>YA Type</th>
+          <th>Owner</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="acct-name">Lenovo (IDG – eComm)</div>
+            <div class="opp-name">FY27 Q3</div>
+          </td>
+          <td class="date">Jul 24</td>
+          <td><span class="stage stage-active">Clarify</span></td>
+          <td><span class="tag tag-crm">B2B</span></td>
+          <td>Brian Nichols</td>
+          <td class="amount">$410,047</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Lenovo (Aura SMB)</div>
+            <div class="opp-name">Yelp x LEN FY27 Q3</div>
+          </td>
+          <td class="date">Aug 12</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-crm">B2B</span></td>
+          <td>Brian Nichols</td>
+          <td class="amount">$300,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Smoothie King</div>
+            <div class="opp-name">Q4 Added Value</div>
+          </td>
+          <td class="date">Aug 18</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-crm">B2C</span></td>
+          <td>Stephen Killion</td>
+          <td class="amount">$0 <span style="font-weight:400;font-size:0.7rem;color:var(--text-faint)">(AV)</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- DYCA -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-title">YA – DYCA (Dynamic Yelp Content Ads)</span>
+    <span class="section-count">19 opps · $3.84M pipeline</span>
+  </div>
+  <div class="section-note">Included for completeness. DYCA is the standard (non-custom) creative product; these are not Custom Display or Rich Media but show overall YA creative volume.</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Account / Opportunity</th>
+          <th>Created</th>
+          <th>Stage</th>
+          <th>YA Type</th>
+          <th>Owner</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="acct-name">Block / Square</div>
+            <div class="opp-name">See You in The Neighborhood</div>
+          </td>
+          <td class="date">Sep 1</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-dyca">B2B</span></td>
+          <td>Stephanie Allen</td>
+          <td class="amount">$675,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">H&R Block</div>
+            <div class="opp-name">TS27 Consumer Tax – YA, DYCA + Spotlight</div>
+          </td>
+          <td class="date">Jul 17</td>
+          <td><span class="stage stage-active">Clarify</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Kathryn Foster</td>
+          <td class="amount">$450,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Uber Mobility</div>
+            <div class="opp-name">Q4 '26</div>
+          </td>
+          <td class="date">Aug 11</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Katie Lovato</td>
+          <td class="amount">$400,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Subway</div>
+            <div class="opp-name">Renewal – Feed Your Subconscious Brand Campaign</div>
+          </td>
+          <td class="date">Aug 25</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Julie Jakoubek</td>
+          <td class="amount">$400,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Mattress Firm</div>
+            <div class="opp-name">Pilot Q4 '26</div>
+          </td>
+          <td class="date">Aug 21</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Alex Jonas</td>
+          <td class="amount">$300,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Sephora</div>
+            <div class="opp-name">Brand Media – Holiday Gifting '26</div>
+          </td>
+          <td class="date">Aug 13</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Michelle Paul</td>
+          <td class="amount">$300,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Discover Financial</div>
+            <div class="opp-name">2027</div>
+          </td>
+          <td class="date">Aug 26</td>
+          <td><span class="stage stage-active">Clarify</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Freedom Shannon</td>
+          <td class="amount">$250,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Mitsubishi Motors</div>
+            <div class="opp-name">Q4 Awareness Campaign</div>
+          </td>
+          <td class="date">Sep 1</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Sam Montes</td>
+          <td class="amount">$240,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Verizon – Cellular Sales</div>
+            <div class="opp-name">YA DYCA</div>
+          </td>
+          <td class="date">Aug 18</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Bryan Peaco</td>
+          <td class="amount">$200,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Eternal Water</div>
+            <div class="opp-name">100K CPG Match Offer</div>
+          </td>
+          <td class="date">Jul 24</td>
+          <td><span class="stage stage-active">Detect</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Andrew Pickell</td>
+          <td class="amount">$100,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Diamond Foods</div>
+            <div class="opp-name">DYCA</div>
+          </td>
+          <td class="date">Aug 14</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Ashley Grillot</td>
+          <td class="amount">$40,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">The Honest Company</div>
+            <div class="opp-name">DYCA Q4 Test</div>
+          </td>
+          <td class="date">Aug 31</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Shauna Fitzmorris</td>
+          <td class="amount">$25,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">First Watch Daytime Cafe</div>
+            <div class="opp-name">Q3/Q4 Test</div>
+          </td>
+          <td class="date">Aug 5</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Freedom Shannon</td>
+          <td class="amount">$25,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">PetSmart</div>
+            <div class="opp-name">PC – Extend End Date to 9/30</div>
+          </td>
+          <td class="date">Aug 5</td>
+          <td><span class="stage stage-won">Closed Won</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Jamie Baine</td>
+          <td class="amount">$0 <span style="font-weight:400;font-size:0.7rem;color:var(--text-faint)">(PC)</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Asahi Beer</div>
+            <div class="opp-name">2026 Pilot – DYCA AV Aug</div>
+          </td>
+          <td class="date">Aug 6</td>
+          <td><span class="stage stage-active">Clarify</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Jay Spaleta</td>
+          <td class="amount">$0 <span style="font-weight:400;font-size:0.7rem;color:var(--text-faint)">(AV)</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Capital One</div>
+            <div class="opp-name">Credit Cards</div>
+          </td>
+          <td class="date">Aug 25</td>
+          <td><span class="stage stage-lost">Closed Lost</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Freedom Shannon</td>
+          <td class="amount">$250,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Navy Federal Credit Union</div>
+            <div class="opp-name">DYCA</div>
+          </td>
+          <td class="date">Aug 14</td>
+          <td><span class="stage stage-lost">Closed Lost</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Busayo Ajewole</td>
+          <td class="amount">$99,999</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Scheels All Sports</div>
+            <div class="opp-name">DYCA</div>
+          </td>
+          <td class="date">Jul 20</td>
+          <td><span class="stage stage-lost">Closed Lost</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Zane Wold</td>
+          <td class="amount">$25,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Asahi Beer</div>
+            <div class="opp-name">2026 Pilot – DYCA AV (duplicate/lost)</div>
+          </td>
+          <td class="date">Aug 6</td>
+          <td><span class="stage stage-lost">Closed Lost</span></td>
+          <td><span class="tag tag-dyca">B2C</span></td>
+          <td>Jay Spaleta</td>
+          <td class="amount">$0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- IBCC NAME-ONLY -->
+<div class="section">
+  <div class="section-head">
+    <span class="section-title">"Intent Based Custom Creative" in Opp Name — No CD/CRM Product Attached</span>
+    <span class="section-count">3 additional opps</span>
+  </div>
+  <div class="section-note">These opportunities reference IBCC in the name but carry only generic YA Display or Enhanced Profile line items. Likely early-stage or products not yet specified on the quote.</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Account / Opportunity</th>
+          <th>Created</th>
+          <th>Stage</th>
+          <th>Line Item Product</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="acct-name">Sun & Ski Sports</div>
+            <div class="opp-name">YA Intent Based Creative</div>
+          </td>
+          <td class="date">Aug 5</td>
+          <td><span class="stage stage-active">Detect</span></td>
+          <td>YA – Display</td>
+          <td class="amount">$300,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Merritt Clubs</div>
+            <div class="opp-name">Intent Based Custom Creative YA Proposal</div>
+          </td>
+          <td class="date">Aug 31</td>
+          <td><span class="stage stage-active">Identify</span></td>
+          <td>YA – Display</td>
+          <td class="amount">$25,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Asbury Automotive Group</div>
+            <div class="opp-name">Intent Based Custom Creative YA Q4'2026</div>
+          </td>
+          <td class="date">Aug 25</td>
+          <td><span class="stage stage-active">Detect</span></td>
+          <td>Enhanced Profile</td>
+          <td class="amount">$0</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">SeaWorld / Busch Gardens</div>
+            <div class="opp-name">YA Intent Based Custom Creative Q4'26</div>
+          </td>
+          <td class="date">Aug 25</td>
+          <td><span class="stage stage-active">Detect</span></td>
+          <td>Enhanced Profile</td>
+          <td class="amount">$0</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="acct-name">Stoneside Blinds & Shades</div>
+            <div class="opp-name">YA + Intent-based Creative</div>
+          </td>
+          <td class="date">Jul 17</td>
+          <td><span class="stage stage-active">Detect</span></td>
+          <td><span style="color:var(--text-faint);font-style:italic">No line items</span></td>
+          <td class="amount">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="footer-note">
+  <strong>Methodology:</strong> Queried Salesforce OpportunityLineItem joined to Product2 for products "Yelp Audiences – Custom Display" (01tQq00000HiBu1), "Yelp Audiences – Custom Rich Media" (01tQq00000HiBh7), and "Yelp Audiences – DYCA" (01tQq00000D3ZcrI), filtered to Enterprise/Multi-Loc record types with CreatedDate ≥ 2026-07-14. IBCC mentions found via SOSL search on "intent based" in opportunity name fields. Notes__c is not SOQL-filterable, so IBCC references in opportunity notes could not be searched; only opportunity names were checked.
+</div>
