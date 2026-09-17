@@ -11,8 +11,7 @@ A log of strategic choices. Useful for remembering why you decided what you deci
 
 | Date | Decision | Rationale | Alternatives Considered |
 |------|----------|-----------|------------------------|
-| [DATE] | [What you decided] | [Why you chose this] | [What you didn't choose and why] |
-| [DATE] | [What you decided] | [Why you chose this] | [What you didn't choose and why] |
+| 2026-09-15 | Passed on Hatch partner marketing / director of growth role | Want a senior PMM role, not a pivot into partner/channel marketing. Partner marketing is a different muscle and not the career path I want. | Could have pursued the partner marketing role as a foot in the door at Hatch, but it's the wrong role. Will stay on Katie Eck's radar for the next PMM opening. |
 
 ---
 

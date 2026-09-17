@@ -97,7 +97,11 @@
       "mcp__Google-Workspace__get_spreadsheet_info",
       "WebFetch(domain:novalabs.ai)",
       "WebFetch(domain:www.createwithnova.com)",
-      "mcp__Google-Workspace__inspect_doc_structure"
+      "mcp__Google-Workspace__inspect_doc_structure",
+      "WebFetch(domain:www.businesswire.com)",
+      "WebFetch(domain:www.prnewswire.com)",
+      "Bash(npx @google/clasp push)",
+      "Bash(npx @google/clasp deploy -d \"v33: Overhaul AI Builder - targeting strategies, personas, demographics, scale requirements\")"
     ],
     "additionalDirectories": [
       "/Users/mromano/.claude/skills",

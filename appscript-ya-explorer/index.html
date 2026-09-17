@@ -140,6 +140,20 @@
     .results-btn--outline { background: none; border: 2px solid var(--gray-300); color: var(--gray-700); }
     .results-btn--outline:hover { border-color: var(--yelp-red); color: var(--yelp-red); }
 
+    /* STRATEGY COMPONENTS */
+    .strategy-components { margin-bottom: 14px; }
+    .component-group { margin-bottom: 10px; }
+    .component-label { font-size: 12px; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 6px; }
+    .component-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+    .component-chip { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-family: monospace; }
+    .component-chip--cat { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .component-chip--brand { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .component-chip--price { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .component-chip--attr { background: #fefce8; color: #854d0e; border: 1px solid #fef08a; }
+    .component-chip--persona { background: #faf5ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+    .component-chip--demo { background: #fdf4ff; color: #86198f; border: 1px solid #f0abfc; }
+    .component-chip--geo { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+
     /* BUILDER ERROR */
     .builder-error { text-align: center; padding: 80px 24px; }
     .builder-error-icon { font-size: 48px; margin-bottom: 16px; }
@@ -280,15 +294,16 @@ var LITELLM_API_KEY = 'mromano/claudecode';
 var LITELLM_MODEL = 'sonnet-latest';
 
 // ===== AGENT 1: AUDIENCE STRATEGIST =====
-var STRATEGIST_PROMPT = 'You are an expert Yelp Audiences Strategist. Your job is to analyze an advertiser account and produce a strategic brief that a Segment Builder agent will use to create audience recommendations.\n\n' +
+var STRATEGIST_PROMPT = 'You are an expert Yelp Audiences Strategist. Your job is to analyze an advertiser account and produce a strategic brief that a Targeting Strategy Builder agent will use to create audience targeting recommendations.\n\n' +
   '## Your Role\n' +
   'Given information about an advertiser, think deeply about:\n' +
   '1. Their competitive landscape (who are their top 3-5 competitors?)\n' +
   '2. Their ideal customer profile (who shops/searches for this type of business?)\n' +
   '3. Adjacent categories that reveal intent (what else do their customers search for?)\n' +
   '4. Price positioning (are they budget, mid-range, or premium?)\n' +
-  '5. Seasonal and geographic considerations\n' +
-  '6. The business challenge and what audience signals best support it\n\n' +
+  '5. Demographic relevance (are specific age ranges or genders important for this advertiser?)\n' +
+  '6. The business challenge and what audience signals best support it\n' +
+  '7. Whether location/travel targeting is genuinely relevant (only for travel, hospitality, tourism, or destination-oriented advertisers)\n\n' +
   '## Website Research\n' +
   'If the advertiser\'s website content is provided, analyze it to understand:\n' +
   '- Their products/services and how they describe them\n' +
@@ -306,7 +321,9 @@ var STRATEGIST_PROMPT = 'You are an expert Yelp Audiences Strategist. Your job i
   '  "idealCustomerSignals": ["signal1", "signal2", "signal3"],\n' +
   '  "adjacentCategories": ["category1", "category2", "category3"],\n' +
   '  "pricePosition": "budget|mid-range|premium|luxury",\n' +
-  '  "geoConsiderations": "One sentence about location/travel relevance",\n' +
+  '  "demographicRelevance": "Which demographics matter for this advertiser and why, or \'none\' if demographics are not a meaningful differentiator",\n' +
+  '  "geoRelevant": true or false,\n' +
+  '  "geoConsiderations": "If geoRelevant is true, explain the travel/location angle. If false, omit or leave empty.",\n' +
   '  "websiteInsights": "Key takeaways from the advertiser website (products, messaging, value props). Omit if no website provided.",\n' +
   '  "strategicAngle": "2-3 sentences on the best overall targeting approach given their challenge"\n' +
   '}\n\n' +
@@ -314,96 +331,96 @@ var STRATEGIST_PROMPT = 'You are an expert Yelp Audiences Strategist. Your job i
   '- Be SPECIFIC. Use real competitor names, real adjacent categories from Yelp.\n' +
   '- Think like a media strategist, not a data analyst.\n' +
   '- If the user provided competitors, prioritize those. Otherwise, infer the top competitors.\n' +
+  '- Only set geoRelevant to true for travel, hospitality, tourism, airlines, hotel chains, or destination-oriented businesses.\n' +
   '- Return ONLY the JSON. No preamble, no markdown fences.';
 
-// ===== AGENT 2: SEGMENT BUILDER =====
-var BUILDER_PROMPT = 'You are a Yelp Audiences Segment Builder. You receive a strategic brief from an Audience Strategist and your job is to translate it into 5 specific, activatable audience segment recommendations across Yelp\'s 5 Evergreen Audience Buckets.\n\n' +
-  '## Product Knowledge: The 5 Evergreen Audience Buckets\n\n' +
-  '### 1. Category Audiences\n' +
-  'Built from users who engaged with a specific category on Yelp (searched, viewed, or clicked on a CTA on a relevant business page). Yelp has 1,500+ granular categories organized into parent > child > grandchild hierarchy.\n' +
-  '- Segment naming convention: segment_<category_alias> (e.g., segment_pizza, segment_autorepair, segment_hair)\n' +
-  '- The signal is declared intent: the user actively engaged with this category through search, page views, or actions\n' +
-  '- Example segments: pizza intenders, hair salon engagers, auto repair seekers\n\n' +
-  '### 2. Budget Filter / Price Range Audiences\n' +
+// ===== AGENT 2: TARGETING STRATEGY BUILDER =====
+var BUILDER_PROMPT = 'You are a Yelp Audiences Targeting Strategy Builder. You receive a strategic brief from an Audience Strategist and your job is to create 3-10 distinct targeting strategies that an advertiser could activate as separate ad groups.\n\n' +
+  '## How Targeting Strategies Work\n' +
+  'Each targeting strategy is a distinct audience angle. Unlike a one-segment-per-bucket approach, each strategy can freely combine categories, price filters, brand targets, business attributes, personas, and demographics to build a cohesive, scalable audience. Think of each strategy as a separate ad group in a campaign.\n\n' +
+  '## Product Knowledge: Yelp Audience Building Blocks\n\n' +
+  '### Category Audiences (Primary building block)\n' +
+  'Built from users who engaged with a specific category on Yelp (searched, viewed, or clicked). Yelp has 1,500+ granular categories organized into parent > child > grandchild hierarchy.\n' +
+  '- Segment naming: segment_<category_alias> (e.g., segment_pizza, segment_autorepair, segment_hair)\n' +
+  '- The signal is declared intent: the user actively engaged with this category\n' +
+  '- IMPORTANT: Always group related categories together. A single category (e.g., "botanical gardens") alone is too narrow for a scalable campaign. Combine sibling and adjacent categories to build audience size.\n\n' +
+  '### Budget Filter / Price Range Audiences\n' +
   'Built from users who searched with $, $$, $$$, $$$$ price filters OR visited businesses at those price tiers.\n' +
-  '- Segment naming: segment_price_1_searchpage ($ searchers), segment_price_2_searchpage ($$ searchers), segment_price_3_searchpage ($$$), segment_price_4_searchpage ($$$$)\n' +
+  '- Segment naming: segment_price_1_searchpage ($), segment_price_2_searchpage ($$), segment_price_3_searchpage ($$$), segment_price_4_searchpage ($$$$)\n' +
   '- Also available as bizpage variants: segment_price_1_bizpage through segment_price_4_bizpage\n' +
   '- Key insight: Someone filtering by $$$$ is showing REAL spending intent, not just income demographics\n' +
-  '- Use searchpage variants for people actively filtering; bizpage variants for people engaging with businesses at that price point\n' +
-  '- Can combine price + category for powerful segments (e.g., $$$$ restaurant searchers = high-spend diners)\n\n' +
-  '### 3. Competitor Conquesting / Brand Targeting\n' +
-  'Built from users who engaged with a specific competitor brand on Yelp (searched for them, viewed their business page, or clicked a CTA on their page).\n' +
-  '- Segment naming: segment_brand_<brand_name> (e.g., segment_brand_chipotle, segment_brand_orangetheory)\n' +
-  '- This is the most powerful signal: users actively engaging with a competitor brand on Yelp\n' +
+  '- Layer these on top of category groups for precision (e.g., $$$$ + restaurant categories = high-spend diners)\n\n' +
+  '### Competitor Conquesting / Brand Targeting\n' +
+  'Built from users who engaged with a specific competitor brand on Yelp.\n' +
+  '- Segment naming: segment_brand_<brand_name> (e.g., segment_brand_chipotle)\n' +
   '- Available for any business with a Yelp page\n' +
-  '- Best used for direct competitors and aspirational competitors\n\n' +
-  '### 4. Business Attributes / Biz Highlight & Biz Attribute Audiences\n' +
-  'Two sub-types of attribute-based audiences:\n\n' +
-  '**Biz Highlight audiences** - Users who searched or viewed businesses with specific highlights:\n' +
-  '- Segment naming: segment_biz_highlight_<highlight> (e.g., segment_biz_highlight_online_classes)\n' +
-  '- Examples: outdoor_seating, offers_delivery, good_for_kids, wheelchair_accessible, open_late, take_out, reservations\n\n' +
-  '**Biz Attribute audiences** - Users who searched or viewed businesses with specific attributes:\n' +
-  '- Segment naming: segment_biz_attribute_<attribute> (e.g., segment_biz_attribute_accept_credit_cards)\n' +
-  '- Examples: accept_credit_cards, has_wifi, has_parking, pet_friendly\n\n' +
-  '**Leads-based audiences** - Users who performed lead actions on Yelp:\n' +
-  '- LEAD_TYPE_CALL (phone calls), LEAD_TYPE_SITE_VISIT (website visits), LEAD_TYPE_DIRECTION (directions/map views), LEAD_TYPE_CALL_TO_ACTION (CTA clicks)\n' +
-  '- Use as complementary segments to category audiences with partial budget allocation\n' +
-  '- Audience sizes can be limited, ensure minimum 50k users\n\n' +
-  '### Spotlight Retargeting Audiences (Bonus signal, not a standalone bucket)\n' +
-  'Retargeting segments built from users exposed to or engaged with a brand\'s Yelp Spotlight ads.\n' +
-  '- Exposed: segment_connect/spotlight_exposed_<brand> (users who saw the brand\'s Spotlight units in last 90 days)\n' +
-  '- Action-based: segment_connect/spotlight_action_<brand> (users who clicked/engaged with the brand\'s Spotlight units in last 90 days)\n' +
-  '- Scale: 100k-900k users, $5k-$30k/mo\n' +
-  '- Must NOT be used standalone; always pair with category or other segments\n' +
-  '- Need 2+ weeks post-Spotlight launch to build; expire after 90 days\n' +
-  '- Best for: advertisers already running Spotlight who want to extend reach off-platform via YA\n' +
-  '- If the advertiser mentions Spotlight or retargeting, include this as an additional recommendation in the relevant bucket\n\n' +
-  '### 5. Travel & Geo / Search Location Audiences\n' +
-  'Built from users who searched/viewed businesses with a specific location, revealing travel intent.\n' +
-  '- Segment naming:\n' +
-  '  - City: segment_location_<city>_<state> (e.g., segment_location_san_francisco_ca)\n' +
-  '  - State: segment_location_<state>_<country> (e.g., segment_location_ca_us for California)\n' +
-  '  - Country: segment_location_<country> (e.g., segment_location_fr for France)\n' +
-  '- Use case: Target users in location A who are searching for things in location B (travel intent signal)\n' +
-  '- Overlay with geo filter rails on TTD for users\' physical locations\n' +
-  '- Best used in conjunction with category audiences (segment sizes can be small alone)\n' +
-  '- International travel: US/Canada users searching in other countries\n\n' +
+  '- Can target multiple competitor brands in one strategy\n\n' +
+  '### Business Attributes & Highlights\n' +
+  '**Biz Highlights**: segment_biz_highlight_<highlight> (e.g., outdoor_seating, offers_delivery, good_for_kids, open_late, take_out, reservations)\n' +
+  '**Biz Attributes**: segment_biz_attribute_<attribute> (e.g., accept_credit_cards, has_wifi, pet_friendly)\n' +
+  '**Leads-based**: LEAD_TYPE_CALL, LEAD_TYPE_SITE_VISIT, LEAD_TYPE_DIRECTION, LEAD_TYPE_CALL_TO_ACTION\n' +
+  '- Use as layers on top of category groups, not standalone\n\n' +
+  '### Yelpy Personas (Supporting building block)\n' +
+  'Pre-built audience bundles that group users by lifestyle theme. Each persona contains 15-100 category aliases already grouped for scale.\n' +
+  'Available personas include: Foodies, Health & Wellness Enthusiasts, Pet Parents, Moms/Parents, Travelers, Tech Savvy, Outdoor Adventurers, Nightlife & Social, Home Improvers, Auto Enthusiasts, Beauty & Fashion, Eco Conscious, Fitness Fanatics, Students & Young Adults, Luxury Seekers, Budget Savvy, Young Professionals, Digital Nomads, Hygge Seekers, and more.\n' +
+  '- Use personas to supplement category targeting or as a starting point for lifestyle-oriented strategies\n' +
+  '- Personas are helpful but NOT a unique differentiator vs. competitor DSPs. Lead with category and signal-based targeting, then layer personas where they add value.\n' +
+  '- When recommending a persona, name it and explain how its categories connect to the advertiser\'s audience\n\n' +
+  '### Demographic Overlays (Optional)\n' +
+  'Available as additional targeting layers:\n' +
+  '- Gender: Women, Men\n' +
+  '- Age: 20s, 30s, 40s, 50s, 60+\n' +
+  '- Only include demographics when they are genuinely relevant to the advertiser\'s target customer. Do NOT add demographics just to add them.\n' +
+  '- When included, explain WHY this demographic matters for the strategy\n\n' +
+  '### Travel & Geo / Search Location Audiences\n' +
+  'Built from users who searched for businesses in a specific location, revealing travel intent.\n' +
+  '- Segment naming: segment_location_<city>_<state>, segment_location_<state>_<country>, segment_location_<country>\n' +
+  '- IMPORTANT: Only include location-based targeting when genuinely relevant. This means travel, hospitality, tourism, airlines, hotel chains, or destination-oriented businesses ONLY.\n' +
+  '- For most advertisers (restaurants, retail, services, etc.), location targeting does NOT add value and should be OMITTED entirely.\n\n' +
+  '### Spotlight Retargeting (Bonus, not standalone)\n' +
+  'Retargeting users exposed to a brand\'s Yelp Spotlight ads. Only mention if the advertiser is running or mentions Spotlight.\n' +
+  '- segment_connect/spotlight_exposed_<brand> or segment_connect/spotlight_action_<brand>\n' +
+  '- Must pair with other segments, never standalone\n\n' +
   '## Yelp\'s Key Data Signals\n' +
   '1. Declared Intent via Search - User typed a search query (deterministic, not inferred)\n' +
   '2. Competitive Conquesting - Searched a competitor by name\n' +
   '3. Price-Point Signaling - Engaged with price filters ($-$$$$)\n' +
   '4. Cross-Category Combos - Searched multiple categories (reveals lifestyle)\n' +
   '5. Timing + Intent + Location - Daypart + proximity + intent stacked\n\n' +
+  '## Scale Requirements\n' +
+  '- Each targeting strategy MUST include at least 20 category aliases or be anchored in a major persona or parent category to ensure scalable audience size.\n' +
+  '- Never recommend a strategy built around a single narrow category. Always group related categories.\n' +
+  '- If a strategy uses brand targeting or price filters, it should still be paired with a category group for reach.\n\n' +
   '## Output Format\n' +
   'Return a JSON object with this exact structure:\n' +
   '{\n' +
   '  "advertiserSummary": "One sentence about the advertiser and their goal",\n' +
-  '  "buckets": [\n' +
+  '  "strategies": [\n' +
   '    {\n' +
-  '      "bucketId": 1,\n' +
-  '      "bucketName": "Category Audiences",\n' +
-  '      "segmentName": "A short, specific, pitch-ready audience name (5-8 words max)",\n' +
-  '      "segmentId": "The technical segment ID (e.g., segment_pizza, segment_brand_chipotle)",\n' +
-  '      "oneLiner": "One sentence (max 15 words) explaining what this audience is in plain language",\n' +
-  '      "rationale": "2-3 sentences explaining why this segment fits this specific advertiser",\n' +
-  '      "activationTip": "One sentence on how to position this to the advertiser"\n' +
-  '    },\n' +
-  '    { "bucketId": 2, "bucketName": "Budget Filter Audiences", ... },\n' +
-  '    { "bucketId": 3, "bucketName": "Competitor Conquesting", ... },\n' +
-  '    { "bucketId": 4, "bucketName": "Business Attributes", ... },\n' +
-  '    { "bucketId": 5, "bucketName": "Travel & Geo", ... }\n' +
+  '      "name": "A short, pitch-ready name using the ADVERTISER\'S language, not Yelp jargon (5-8 words max)",\n' +
+  '      "oneLiner": "One sentence (max 15 words) explaining this strategy in the advertiser\'s own terms",\n' +
+  '      "categories": ["category_alias_1", "category_alias_2", "...at least 20 aliases when using categories"],\n' +
+  '      "brands": ["brand_name_1", "brand_name_2"] or [],\n' +
+  '      "priceFilters": ["$$", "$$$"] or [],\n' +
+  '      "bizAttributes": ["outdoor_seating", "offers_delivery"] or [],\n' +
+  '      "personas": ["Foodies", "Health & Wellness Enthusiasts"] or [],\n' +
+  '      "demographics": {"gender": "Women" or null, "ageRange": "30s-50s" or null} or null,\n' +
+  '      "locationTargeting": {"type": "city|state|country", "value": "location name"} or null,\n' +
+  '      "rationale": "2-3 sentences explaining why this targeting strategy fits this advertiser. Reference their specific business, competitors, and goals.",\n' +
+  '      "activationTip": "One sentence on how to position this to the advertiser on a sales call"\n' +
+  '    }\n' +
   '  ]\n' +
   '}\n\n' +
   '## Guidelines\n' +
-  '- Use the strategic brief to inform every recommendation. Reference the competitors, adjacent categories, and price position identified by the Strategist.\n' +
-  '- Include real segment IDs where possible (segment_brand_<name>, segment_price_X_searchpage, segment_location_<city>_<state>).\n' +
-  '- Make segment names concise and pitch-ready (something a sales rep could say on a call).\n' +
-  '- The oneLiner must be plain language a non-technical salesperson would understand. No jargon.\n' +
-  '- Each bucket must feel distinct. Do not repeat targeting logic.\n' +
-  '- For Travel & Geo, think about where the advertiser\'s customers travel FROM or TO.\n' +
-  '- Keep language professional but accessible.\n' +
-  '- All audiences use a 90-day rolling lookback window. New users are added in near real-time as they engage on Yelp. Do NOT suggest configurable recency windows or time-based targeting tiers (7-day, 30-day, etc.) since those are not available.\n' +
-  '- Always return exactly 5 buckets in order.\n' +
+  '- Generate 3-10 targeting strategies depending on the complexity of the advertiser. Most advertisers need 4-6.\n' +
+  '- Use the strategic brief to inform every recommendation.\n' +
+  '- NAME STRATEGIES IN THE ADVERTISER\'S LANGUAGE. Use their terminology, their brand voice, and their way of describing their customers. NOT Yelp internal terms like "Category Audiences" or "Biz Highlight Segments."\n' +
+  '- Each strategy must feel distinct. Do not repeat the same targeting logic across multiple strategies.\n' +
+  '- Mix building blocks freely within each strategy. A strategy can combine categories + price filters + demographics + a persona if that makes the audience stronger.\n' +
+  '- Prioritize strategies that use Yelp\'s unique signals (declared intent, brand search, price filters) over generic demographic targeting.\n' +
+  '- All audiences use a 90-day rolling lookback window. New users are added in near real-time as they engage on Yelp. Do NOT suggest configurable recency windows or time-based targeting tiers.\n' +
+  '- Only include locationTargeting if the strategic brief flagged geoRelevant as true. For most advertisers, omit it entirely.\n' +
+  '- Keep language professional but accessible. A non-technical salesperson should be able to read each strategy name and oneLiner and immediately understand the pitch.\n' +
   '- Return ONLY the JSON. No preamble, no explanation, no markdown fences.';
 
 // ===== STATE =====
@@ -793,8 +810,7 @@ var YELPY_PERSONAS = {
   'iHomeowners': {icon:'🏠',aliases:['airport_shuttles','antiques','baby_gear','blinds','childcloth','computers','countryclubs','dog_parks','electronics','fondue','gourmet','homecleaning','hometheatreinstallation','investing','kids_activities','maternity','mobilephonerepair','mobilephones','playgrounds','skiresorts','specialed','summer_camps','swimmingpools','toys']},
 };
 
-var BUCKET_COLORS = ['var(--signal-1)', 'var(--signal-5)', 'var(--signal-4)', 'var(--signal-3)', 'var(--signal-7)'];
-var BUCKET_ICONS = ['\u{1F50D}', '\u{1F4B0}', '\u{1F3AF}', '\u{2699}\u{FE0F}', '\u{1F30D}'];
+var STRATEGY_COLORS = ['var(--signal-1)', 'var(--signal-5)', 'var(--signal-4)', 'var(--signal-3)', 'var(--signal-7)', '#8b5cf6', '#0891b2', '#ea580c', '#65a30d', '#be185d'];
 
 // ===== RENDER ROUTER =====
 function render() {
@@ -962,7 +978,7 @@ function renderBuilderLoading(app) {
   var html = '<div class="builder-loading fade-in">';
   html += '<div class="spinner"></div>';
   html += '<h3 id="loadingTitle">Step 1 of 2: Audience Strategist</h3>';
-  html += '<p id="loadingDesc">Analyzing your advertiser\'s competitive landscape and ideal customer profile...</p>';
+  html += '<p id="loadingDesc">Analyzing competitive landscape, customer profile, and targeting angles...</p>';
   html += '<div style="margin-top:20px;display:flex;gap:8px;justify-content:center;">';
   html += '<div id="step1dot" style="width:10px;height:10px;border-radius:50%;background:var(--yelp-red);"></div>';
   html += '<div id="step2dot" style="width:10px;height:10px;border-radius:50%;background:var(--gray-300);"></div>';
@@ -973,30 +989,88 @@ function renderBuilderLoading(app) {
 
 function renderBuilderResults(app) {
   var data = state.builderResults;
+  var strategies = data.strategies || [];
   var html = '<div class="results-container fade-in">';
   html += '<div class="results-header">';
-  html += '<h2>Audience Strategy</h2>';
+  html += '<h2>Targeting Strategies</h2>';
   html += '<p>' + (data.advertiserSummary || '') + '</p>';
+  html += '<p style="font-size:13px;color:var(--gray-500);margin-top:6px;">' + strategies.length + ' targeting strategies generated. Each can be activated as a separate ad group.</p>';
   if (state.builderInput && state.builderInput.websiteError) {
     html += '<p style="font-size:12px;color:var(--gray-500);margin-top:8px;font-style:italic;">Note: Advertiser website research was limited (' + state.builderInput.websiteError + ')</p>';
   }
   html += '</div>';
 
-  data.buckets.forEach(function(b, i) {
-    var color = BUCKET_COLORS[i] || BUCKET_COLORS[0];
-    var oneLiner = b.oneLiner || b.segmentName;
+  strategies.forEach(function(s, i) {
+    var color = STRATEGY_COLORS[i % STRATEGY_COLORS.length];
+    var oneLiner = s.oneLiner || s.name;
     html += '<div class="bucket-card" data-action="toggle-bucket" style="border-left-color:' + color + '">';
     html += '<div class="bucket-summary">';
     html += '<div class="bucket-num" style="background:' + color + '">' + (i + 1) + '</div>';
-    html += '<div class="bucket-name">' + b.bucketName + '</div>';
-    html += '<div class="bucket-oneliner">' + oneLiner + '</div>';
+    html += '<div class="bucket-oneliner" style="flex:1;">' + s.name + '</div>';
     html += '<div class="bucket-expand">&#9662;</div>';
     html += '</div>';
     html += '<div class="bucket-detail">';
-    html += '<div class="bucket-segment">' + b.segmentName + '</div>';
-    if (b.segmentId) html += '<div class="bucket-segment-id">' + b.segmentId + '</div>';
-    html += '<div class="bucket-rationale">' + b.rationale + '</div>';
-    if (b.activationTip) html += '<div class="bucket-tip">' + b.activationTip + '</div>';
+    html += '<p style="font-size:14px;color:var(--gray-700);margin-bottom:12px;font-style:italic;">' + oneLiner + '</p>';
+
+    // Targeting components chips
+    var hasComponents = (s.categories && s.categories.length) || (s.brands && s.brands.length) || (s.priceFilters && s.priceFilters.length) || (s.bizAttributes && s.bizAttributes.length) || (s.personas && s.personas.length) || s.demographics || s.locationTargeting;
+    if (hasComponents) {
+      html += '<div class="strategy-components">';
+      if (s.categories && s.categories.length) {
+        html += '<div class="component-group">';
+        html += '<span class="component-label">\u{1F50D} Categories (' + s.categories.length + ')</span>';
+        html += '<div class="component-chips">';
+        s.categories.forEach(function(c) { html += '<span class="component-chip component-chip--cat">' + c + '</span>'; });
+        html += '</div></div>';
+      }
+      if (s.brands && s.brands.length) {
+        html += '<div class="component-group">';
+        html += '<span class="component-label">\u{1F3AF} Brand Targets</span>';
+        html += '<div class="component-chips">';
+        s.brands.forEach(function(b) { html += '<span class="component-chip component-chip--brand">' + b + '</span>'; });
+        html += '</div></div>';
+      }
+      if (s.priceFilters && s.priceFilters.length) {
+        html += '<div class="component-group">';
+        html += '<span class="component-label">\u{1F4B0} Price Filters</span>';
+        html += '<div class="component-chips">';
+        s.priceFilters.forEach(function(p) { html += '<span class="component-chip component-chip--price">' + p + '</span>'; });
+        html += '</div></div>';
+      }
+      if (s.bizAttributes && s.bizAttributes.length) {
+        html += '<div class="component-group">';
+        html += '<span class="component-label">\u{2699}\u{FE0F} Attributes</span>';
+        html += '<div class="component-chips">';
+        s.bizAttributes.forEach(function(a) { html += '<span class="component-chip component-chip--attr">' + a + '</span>'; });
+        html += '</div></div>';
+      }
+      if (s.personas && s.personas.length) {
+        html += '<div class="component-group">';
+        html += '<span class="component-label">\u{1F465} Personas</span>';
+        html += '<div class="component-chips">';
+        s.personas.forEach(function(p) { html += '<span class="component-chip component-chip--persona">' + p + '</span>'; });
+        html += '</div></div>';
+      }
+      if (s.demographics && (s.demographics.gender || s.demographics.ageRange)) {
+        html += '<div class="component-group">';
+        html += '<span class="component-label">\u{1F4CA} Demographics</span>';
+        html += '<div class="component-chips">';
+        if (s.demographics.gender) html += '<span class="component-chip component-chip--demo">' + s.demographics.gender + '</span>';
+        if (s.demographics.ageRange) html += '<span class="component-chip component-chip--demo">' + s.demographics.ageRange + '</span>';
+        html += '</div></div>';
+      }
+      if (s.locationTargeting && s.locationTargeting.value) {
+        html += '<div class="component-group">';
+        html += '<span class="component-label">\u{1F30D} Location</span>';
+        html += '<div class="component-chips">';
+        html += '<span class="component-chip component-chip--geo">' + s.locationTargeting.value + '</span>';
+        html += '</div></div>';
+      }
+      html += '</div>';
+    }
+
+    html += '<div class="bucket-rationale">' + s.rationale + '</div>';
+    if (s.activationTip) html += '<div class="bucket-tip">\u{1F4AC} ' + s.activationTip + '</div>';
     html += '</div>';
     html += '</div>';
   });
@@ -1128,24 +1202,28 @@ function callChatProxy(input) {
     var desc = document.getElementById('loadingDesc');
     var dot1 = document.getElementById('step1dot');
     var dot2 = document.getElementById('step2dot');
-    if (title) title.textContent = 'Step 2 of 2: Segment Builder';
-    if (desc) desc.textContent = 'Building specific audience segments based on strategic analysis...';
+    if (title) title.textContent = 'Step 2 of 2: Targeting Strategy Builder';
+    if (desc) desc.textContent = 'Building targeting strategies with category groups, signals, and audience layers...';
     if (dot1) dot1.style.background = 'var(--signal-5)';
     if (dot2) dot2.style.background = 'var(--yelp-red)';
 
-    // Step 2: Segment Builder receives the strategic brief
+    // Step 2: Targeting Strategy Builder receives the strategic brief
     var briefText = strategy.rawAnalysis ? strategy.rawAnalysis : JSON.stringify(strategy, null, 2);
     var builderUserPrompt = 'STRATEGIC BRIEF FROM AUDIENCE STRATEGIST:\n' +
       briefText + '\n\n' +
       'ORIGINAL REQUEST:\n' + userPrompt + '\n\n' +
-      'Using the strategic brief above, generate 5 audience segment recommendations, one per evergreen bucket.';
+      'Using the strategic brief above, generate 3-10 distinct targeting strategies. Each strategy should combine multiple audience building blocks (categories, brands, price filters, attributes, personas, demographics) as appropriate. Anchor each strategy in a group of 20+ related categories or a major persona for scale.';
 
-    return callLLM(BUILDER_PROMPT, builderUserPrompt, 3000);
+    return callLLM(BUILDER_PROMPT, builderUserPrompt, 5000);
   })
   .then(function(builderRaw) {
     var data = JSON.parse(builderRaw);
-    if (data && data.buckets && data.buckets.length > 0) {
+    if (data && data.strategies && data.strategies.length > 0) {
       state.builderResults = data;
+      state.builderStep = 'results';
+    } else if (data && data.buckets && data.buckets.length > 0) {
+      // Backwards compatibility: convert old bucket format
+      state.builderResults = { advertiserSummary: data.advertiserSummary, strategies: data.buckets.map(function(b) { return { name: b.segmentName || b.bucketName, oneLiner: b.oneLiner || '', categories: [], brands: [], priceFilters: [], bizAttributes: [], personas: [], demographics: null, locationTargeting: null, rationale: b.rationale || '', activationTip: b.activationTip || '' }; }) };
       state.builderStep = 'results';
     } else {
       state.builderError = 'The AI returned an unexpected format. Please try again.';
@@ -1163,19 +1241,34 @@ function callChatProxy(input) {
 function copyResults() {
   var data = state.builderResults;
   if (!data) return;
+  var strategies = data.strategies || [];
 
-  var text = 'YELP AUDIENCES STRATEGY: ' + (state.builderInput ? state.builderInput.advertiserName : '') + '\n';
-  text += data.advertiserSummary + '\n\n';
+  var text = 'YELP AUDIENCES TARGETING STRATEGIES: ' + (state.builderInput ? state.builderInput.advertiserName : '') + '\n';
+  text += data.advertiserSummary + '\n';
+  text += strategies.length + ' targeting strategies\n\n';
 
-  data.buckets.forEach(function(b, i) {
-    text += (i + 1) + '. ' + b.bucketName.toUpperCase() + '\n';
-    text += '   Segment: ' + b.segmentName + '\n';
-    if (b.segmentId) text += '   Segment ID: ' + b.segmentId + '\n';
-    text += '   Rationale: ' + b.rationale + '\n';
-    text += '   Signal: ' + b.signal + '\n';
-    text += '   Tip: ' + b.activationTip + '\n\n';
+  strategies.forEach(function(s, i) {
+    text += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+    text += 'STRATEGY ' + (i + 1) + ': ' + s.name.toUpperCase() + '\n';
+    text += s.oneLiner + '\n\n';
+    if (s.categories && s.categories.length) text += '   Categories (' + s.categories.length + '): ' + s.categories.join(', ') + '\n';
+    if (s.brands && s.brands.length) text += '   Brand Targets: ' + s.brands.join(', ') + '\n';
+    if (s.priceFilters && s.priceFilters.length) text += '   Price Filters: ' + s.priceFilters.join(', ') + '\n';
+    if (s.bizAttributes && s.bizAttributes.length) text += '   Attributes: ' + s.bizAttributes.join(', ') + '\n';
+    if (s.personas && s.personas.length) text += '   Personas: ' + s.personas.join(', ') + '\n';
+    if (s.demographics && (s.demographics.gender || s.demographics.ageRange)) {
+      var demo = [];
+      if (s.demographics.gender) demo.push(s.demographics.gender);
+      if (s.demographics.ageRange) demo.push(s.demographics.ageRange);
+      text += '   Demographics: ' + demo.join(', ') + '\n';
+    }
+    if (s.locationTargeting && s.locationTargeting.value) text += '   Location: ' + s.locationTargeting.value + '\n';
+    text += '\n   Rationale: ' + s.rationale + '\n';
+    if (s.activationTip) text += '   Activation Tip: ' + s.activationTip + '\n';
+    text += '\n';
   });
 
+  text += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
   text += 'Source: Yelp Audiences Explorer | AI Audience Builder';
 
   navigator.clipboard.writeText(text).then(function() {
