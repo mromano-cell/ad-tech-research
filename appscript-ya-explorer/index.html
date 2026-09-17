@@ -1708,45 +1708,54 @@ function getSiblingCategories(cat, verticalName, max) {
 
 function renderLevel3(app) {
   var cat = state.category;
-  var vName = state.vertical ? state.vertical.name : '';
-  var siblings = getSiblingCategories(cat, vName, 6);
   var html = '<div class="container fade-in">';
   html += '<div class="section-subtitle">\u{1F50D} ' + cat + '<\/div>';
-  html += '<p style="color:var(--gray-500);margin-bottom:8px;font-size:15px;">5 deterministic data signals that make this audience unique to Yelp<\/p>';
   html += '<div class="count-badge">Declared intent, not inferred<\/div>';
-  html += '<div style="margin-bottom:20px;padding:14px 16px;background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;font-size:14px;color:var(--gray-700);line-height:1.5;">';
-  html += '<strong>\u{1F4A1} Scale tip:</strong> Single categories like "' + cat + '" are building blocks, not standalone campaigns. ';
-  html += 'For campaign-ready scale, group 3-5 related categories into an ad group. ';
-  if (siblings.length > 0) {
-    html += 'Consider pairing with: <strong>' + siblings.slice(0,4).join(', ') + '<\/strong>';
-  }
-  html += '<\/div>';
-  html += '<div class="tabs"><button class="tab active" data-action="tab" data-tab="signals">5 Signals<\/button><button class="tab" data-action="tab" data-tab="pairWith">Pair With<\/button><button class="tab" data-action="tab" data-tab="conquesting">Conquesting<\/button><button class="tab" data-action="tab" data-tab="activate">Activate<\/button><\/div>';
+  html += '<div class="tabs"><button class="tab active" data-action="tab" data-tab="signals">Overview<\/button><button class="tab" data-action="tab" data-tab="pairWith">Pair With<\/button><button class="tab" data-action="tab" data-tab="conquesting">Conquesting<\/button><\/div>';
   html += '<div id="tabContent">';
-  html += renderSignalsTab(cat);
+  html += renderOverviewTab(cat);
   html += '<\/div><\/div>';
   app.innerHTML = html;
 }
 
-function renderSignalsTab(cat) {
+function renderOverviewTab(cat) {
+  var vName = state.vertical ? state.vertical.name : '';
+  var siblings = getSiblingCategories(cat, vName, 5);
+  var lowerCat = cat.toLowerCase();
   var html = '';
-  SIGNALS.forEach(function(s) {
-    html += '<div class="signal-card" style="border-left-color:' + s.color + '">';
-    html += '<div class="signal-num" style="background:' + s.color + '">' + s.num + '<\/div>';
-    html += '<h3>' + s.title + '<\/h3>';
-    html += '<div class="example">' + s.exFn(cat) + '<\/div>';
-    html += '<div class="vs-dsp"><strong>Marketplace context:<\/strong> ' + s.vsDsp + '<\/div>';
-    html += '<div class="signal-avail">';
-    html += '<div class="signal-avail-title">Yelp Audiences vs. Marketplace<\/div>';
-    html += '<div class="signal-avail-grid">';
-    html += availCell("Yelp Audiences", s.avail.yelp, "");
-    html += availCell("Scale Platforms", s.avail.scale, "(Google, Meta)");
-    html += availCell("Data Providers", s.avail.data, "(Experian, Oracle)");
-    html += availCell("Category Platforms", s.avail.vertical, "(OpenTable, TripAdvisor)");
-    html += '<\/div><\/div>';
+  html += '<div class="signal-card" style="border-left-color:var(--signal-1);">';
+  html += '<h3>What This Audience Is<\/h3>';
+  html += '<p style="font-size:14px;color:var(--gray-700);line-height:1.6;margin-bottom:12px;">';
+  html += 'People who actively searched for, viewed, or engaged with <strong>' + cat + '<\/strong> businesses on Yelp. ';
+  html += 'This is first-party, deterministic data built from real search and engagement behavior, not modeled or inferred interest.<\/p>';
+  html += '<p style="font-size:14px;color:var(--gray-700);line-height:1.6;">';
+  html += 'Audiences are continuously refreshed: new users are added in near real-time as they engage, with a 90-day rolling lookback window.<\/p>';
+  html += '<\/div>';
+
+  html += '<div class="signal-card" style="border-left-color:var(--signal-4);">';
+  html += '<h3>How Users Enter This Audience<\/h3>';
+  html += '<p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;">A user qualifies by taking any of these actions on Yelp:<\/p>';
+  html += '<div class="example">\u{1F50D} Searched <strong>"best ' + lowerCat + ' near me"<\/strong> on Yelp<\/div>';
+  html += '<div class="example" style="margin-top:8px;">\u{1F4F1} Viewed a <strong>' + cat + '<\/strong> business page and checked hours, photos, or reviews<\/div>';
+  html += '<div class="example" style="margin-top:8px;">\u{1F4DE} Clicked a CTA on a ' + cat + ' business page (called, requested a quote, booked, etc.)<\/div>';
+  html += '<\/div>';
+
+  if (siblings.length > 0) {
+    html += '<div class="signal-card" style="border-left-color:var(--signal-6);">';
+    html += '<h3>Scale Tip<\/h3>';
+    html += '<p style="font-size:14px;color:var(--gray-700);line-height:1.6;margin-bottom:12px;">';
+    html += 'A single category like "' + cat + '" is a building block, not a standalone campaign. For campaign-ready reach, group with related categories:<\/p>';
+    html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+    html += '<span style="display:inline-block;padding:5px 12px;background:var(--yelp-red-light);border:1px solid var(--yelp-red);border-radius:16px;font-size:12px;font-weight:600;color:var(--yelp-red-dark);">' + cat + '<\/span>';
+    siblings.forEach(function(s) {
+      html += '<span style="display:inline-block;padding:5px 12px;background:var(--white);border:1px solid var(--gray-300);border-radius:16px;font-size:12px;color:var(--gray-700);">' + s + '<\/span>';
+    });
     html += '<\/div>';
-  });
-  html += '<div style="text-align:center;margin-top:24px"><button class="copy-btn" data-action="tab" data-tab="activate" style="background:var(--dark)">Ready to activate this audience? →<\/button><\/div>';
+    html += '<p style="font-size:12px;color:var(--gray-500);margin-top:10px;">We recommend 3-5 categories per ad group for optimal reach.<\/p>';
+    html += '<\/div>';
+  }
+
+  html += '<div style="text-align:center;margin-top:24px"><button class="copy-btn" data-action="copy">Copy Audience Description<\/button><\/div>';
   return html;
 }
 
@@ -1760,26 +1769,106 @@ function availCell(label, status, examples) {
 function renderPairWithTab(cat) {
   var vertical = state.vertical.name;
   var pairs = PAIRINGS[vertical] || PAIRINGS["Restaurants"];
-  var html = '<p style="color:var(--gray-500);margin-bottom:20px;font-size:14px;">Combine <strong>' + cat + '<\/strong> seekers with another category to create lifestyle segments no DSP can replicate.<\/p>';
-  pairs.forEach(function(p) {
+  // Filter to pairs that include the current category, or rewrite the first 3 to include it
+  var catPairs = pairs.filter(function(p) { return p.a === cat || p.b === cat; });
+  if (catPairs.length === 0) {
+    // Rewrite pairings to include the current category
+    catPairs = pairs.slice(0, 2).map(function(p) {
+      return { a: cat, b: p.b === cat ? p.a : p.b, result: cat + ' + ' + (p.b === cat ? p.a : p.b) + ' Audience', why: p.why };
+    });
+  }
+  catPairs = catPairs.slice(0, 2);
+  var html = '<p style="color:var(--gray-500);margin-bottom:20px;font-size:14px;">Combine <strong>' + cat + '<\/strong> with other targeting dimensions to build richer audience strategies.<\/p>';
+  html += '<div style="font-size:13px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Category Combinations<\/div>';
+  catPairs.forEach(function(p) {
     html += '<div class="pair-card">';
     html += '<div class="pair-formula">' + p.a + ' + ' + p.b + ' = <span style="color:var(--yelp-red)">' + p.result + '<\/span><\/div>';
     html += '<div class="pair-result">' + p.why + '<\/div>';
-    html += '<div class="pair-tag">Unique to Yelp<\/div>';
     html += '<\/div>';
   });
-  html += '<div style="margin-top:16px;padding:16px;background:var(--yelp-red-light);border-radius:8px;font-size:13px;color:var(--gray-700)"><strong>Why this matters:<\/strong> These behavioral combinations only exist because Yelp sees the full search journey across unrelated categories in a single session. DSPs can\'t stack these signals.<\/div>';
+
+  // Price filter pairing
+  html += '<div style="font-size:13px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;margin:20px 0 12px;">Price Filter Overlay<\/div>';
+  html += '<div class="pair-card">';
+  html += '<div class="pair-formula">' + cat + ' + <span style="color:var(--signal-5)">$$$$ Price Filter<\/span> = <span style="color:var(--yelp-red)">Premium ' + cat + ' Seekers<\/span><\/div>';
+  html += '<div class="pair-result">Users who searched for ' + cat + ' AND engaged with premium-priced businesses. Real spending intent, not demographic guesswork.<\/div>';
+  html += '<\/div>';
+
+  // Biz attribute pairing
+  html += '<div style="font-size:13px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px;margin:20px 0 12px;">Business Attribute Overlay<\/div>';
+  html += '<div class="pair-card">';
+  var attrExamples = {
+    "Restaurants": { attr: "Outdoor Seating", result: "Al Fresco " + cat + " Diners" },
+    "Food": { attr: "Offers Delivery", result: cat + " Delivery Seekers" },
+    "Beauty & Spas": { attr: "By Appointment Only", result: "Booked " + cat + " Clients" },
+    "Health & Medical": { attr: "Accepts Insurance", result: "Insured " + cat + " Patients" },
+    "Home Services": { attr: "Free Estimates", result: cat + " Comparison Shoppers" },
+    "Automotive": { attr: "Free Estimates", result: cat + " Comparison Shoppers" },
+    "Active Life": { attr: "Good for Kids", result: "Family " + cat + " Seekers" },
+    "Nightlife": { attr: "Happy Hour", result: "Happy Hour " + cat + " Goers" }
+  };
+  var attrEx = attrExamples[vertical] || { attr: "Good for Kids", result: "Family-Friendly " + cat + " Seekers" };
+  html += '<div class="pair-formula">' + cat + ' + <span style="color:var(--signal-3)">' + attrEx.attr + '<\/span> = <span style="color:var(--yelp-red)">' + attrEx.result + '<\/span><\/div>';
+  html += '<div class="pair-result">Layer business attributes on top of category audiences to target specific service preferences and behaviors.<\/div>';
+  html += '<\/div>';
+
+  html += '<div style="margin-top:16px;padding:16px;background:var(--yelp-red-light);border-radius:8px;font-size:13px;color:var(--gray-700)"><strong>Why this matters:<\/strong> These combinations use Yelp\'s first-party search and engagement data. DSPs can\'t stack declared intent with price behavior and business attributes from a single user session.<\/div>';
   return html;
 }
 
+var BRAND_SEGMENTS = {
+  "Active Life":["Orangetheory Fitness","Planet Fitness","LA Fitness","CrossFit","SoulCycle","Barry's","F45 Training","Pure Barre","Lifetime Fitness","Gold's Gym","Crunch Fitness","Blink Fitness","Equinox","Club Pilates","YMCA","TopGolf","Sky Zone","Dave & Buster's","Main Event"],
+  "Arts & Entertainment":["AMC Theatres","Regal Cinemas","IMAX","Alamo Drafthouse","Cinemark","Dave & Buster's","Topgolf","Bowlero","Main Event"],
+  "Automotive":["Jiffy Lube","Midas","Pep Boys","Firestone","Maaco","Safelite","AutoZone","O'Reilly Auto Parts","CarMax","Carvana","Caliber Collision","Take 5 Oil Change","Valvoline"],
+  "Beauty & Spas":["Great Clips","Supercuts","Sport Clips","Ulta","Sephora","European Wax Center","Massage Envy","Hand & Stone","Drybar","Madison Reed"],
+  "Education":["Kumon","Mathnasium","Sylvan Learning","Huntington Learning","Club Z","Tutor Doctor"],
+  "Event Planning & Services":["Party City","David's Bridal","The Knot","WeddingWire","Zola"],
+  "Financial Services":["H&R Block","TurboTax","Jackson Hewitt","Edward Jones","Charles Schwab","Fidelity","State Farm","Allstate","Progressive"],
+  "Food":["Chipotle","Subway","Panera Bread","Chick-fil-A","McDonald's","Starbucks","Dunkin'","Panda Express","Wingstop","Sweetgreen","Domino's","Pizza Hut","Papa John's","Taco Bell","Wendy's","Popeyes","Five Guys","Shake Shack","In-N-Out","Jersey Mike's","Jimmy John's","Firehouse Subs"],
+  "Health & Medical":["Aspen Dental","Comfort Dental","Heartland Dental","Zenni","Warby Parker","CVS MinuteClinic","One Medical","CityMD","MedExpress","Concentra","Kaiser Permanente"],
+  "Home Services":["Roto-Rooter","Stanley Steemer","Servpro","Mr. Rooter","Benjamin Moore","Sherwin-Williams","The Home Depot","Lowe's","Mr. Handyman","Two Maids","Molly Maid","Merry Maids"],
+  "Hotels & Travel":["Hilton","Marriott","Hyatt","Best Western","Holiday Inn","Airbnb","Hampton Inn","Courtyard","Residence Inn","La Quinta","Wyndham"],
+  "Local Flavor":[],
+  "Local Services":["The UPS Store","FedEx Office","U-Haul","PODS","Public Storage","Extra Space Storage","CubeSmart","Life Storage"],
+  "Mass Media":[],
+  "Nightlife":["Dave & Buster's","TopGolf","Bowlero","Main Event","Alamo Drafthouse","BrewDog","Yard House"],
+  "Pets":["PetSmart","Petco","BarkBox","Rover","Wag!","Camp Bow Wow","Banfield Pet Hospital","VCA Animal Hospitals"],
+  "Professional Services":["LegalZoom","Regus","WeWork","Robert Half","Kforce"],
+  "Public Services & Government":[],
+  "Real Estate":["Zillow","Redfin","Realtor.com","RE/MAX","Coldwell Banker","Keller Williams","Century 21","Compass"],
+  "Restaurants":["Chipotle","Olive Garden","Applebee's","Chili's","Outback Steakhouse","Red Lobster","Cheesecake Factory","Texas Roadhouse","Denny's","IHOP","Buffalo Wild Wings","Cracker Barrel","TGI Friday's","Benihana","Ruth's Chris","Morton's","Capital Grille","Nobu","STK","Fleming's"],
+  "Shopping":["Target","Walmart","Costco","Best Buy","IKEA","HomeGoods","TJ Maxx","Marshalls","Nordstrom","REI","Dick's Sporting Goods","Home Depot","Lowe's","Hobby Lobby","Michaels"]
+};
+
 function renderConquestingTab(cat) {
-  var html = '<p style="color:var(--gray-500);margin-bottom:20px;font-size:14px;">Enter a competitor\'s name to see what happens when you narrow this audience to people who searched for them.<\/p>';
-  html += '<input class="conquest-input" type="text" placeholder="Enter a competitor name (e.g. Chipotle, Nobu, OrangeTheory...)" id="conquestInput">';
+  var vertical = state.vertical ? state.vertical.name : '';
+  var brands = BRAND_SEGMENTS[vertical] || [];
+  var html = '<p style="color:var(--gray-500);margin-bottom:20px;font-size:14px;">Target users who searched for a competitor by name on Yelp. These users typed the competitor\'s name into search, showing deterministic competitive intent.<\/p>';
+
+  if (brands.length > 0) {
+    html += '<div class="signal-card" style="border-left-color:var(--signal-4);">';
+    html += '<h3>Available Brand Segments for ' + vertical + '<\/h3>';
+    html += '<p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;">These are existing conquesting segments relevant to <strong>' + cat + '<\/strong>. Each targets users who searched for that brand on Yelp.<\/p>';
+    html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+    brands.forEach(function(b) {
+      html += '<span style="display:inline-block;padding:6px 12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:16px;font-size:12px;color:#1e40af;cursor:default;">\u{1F3AF} ' + b + '<\/span>';
+    });
+    html += '<\/div>';
+    html += '<p style="font-size:12px;color:var(--gray-500);margin-top:12px;">Segment format: <code style="background:var(--gray-100);padding:2px 6px;border-radius:3px;">segment_brand_[name]<\/code><\/p>';
+    html += '<\/div>';
+  }
+
+  html += '<div class="signal-card" style="border-left-color:var(--signal-1);margin-top:16px;">';
+  html += '<h3>Custom Brand Target<\/h3>';
+  html += '<p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;">Any business with a Yelp page can be targeted. Enter a competitor name to preview the audience:<\/p>';
+  html += '<input class="conquest-input" type="text" placeholder="Enter a competitor name..." id="conquestInput">';
   html += '<div class="conquest-preview" id="conquestPreview">';
   html += '<h4>Your Conquesting Audience<\/h4>';
   html += '<p>Type a competitor name above to see the audience definition.<\/p>';
   html += '<\/div>';
-  html += '<div style="margin-top:16px;padding:16px;background:var(--yelp-red-light);border-radius:8px;font-size:13px;color:var(--gray-700)"><strong>Why this is powerful:<\/strong> You\'re not guessing who might be interested. You\'re reaching someone who <em>typed your competitor\'s name<\/em> into Yelp. That\'s deterministic competitive intent.<\/div>';
+  html += '<\/div>';
+
+  html += '<div style="margin-top:16px;padding:16px;background:var(--yelp-red-light);border-radius:8px;font-size:13px;color:var(--gray-700)"><strong>Why this is powerful:<\/strong> You\'re reaching someone who <em>typed a competitor\'s name<\/em> into Yelp. That\'s deterministic competitive intent, not inferred interest.<\/div>';
   return html;
 }
 
@@ -1798,65 +1887,20 @@ function updateConquest(name) {
     '<p style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1);font-size:13px;color:var(--signal-2);">⚡ This is someone who searched YOUR competitor by name and is actively looking for ' + cat + ' right now. No DSP sees this.<\/p>';
 }
 
-function renderActivateTab(cat) {
-  var vName = state.vertical ? state.vertical.name : '';
-  var siblings = getSiblingCategories(cat, vName, 8);
-  var html = '<div class="activate-card">';
-  html += '<h4>Audience Building Block<\/h4>';
-  html += '<div class="audience-name">' + cat + ' Seekers on Yelp<\/div>';
-  html += '<div class="signal-tags">';
-  SIGNALS.forEach(function(s) {
-    html += '<span class="signal-tag" style="background:' + s.color + '">' + s.short + '<\/span>';
-  });
-  html += '<\/div>';
-  html += '<div class="description">People who engaged with (searched, viewed, or clicked on a CTA on) <strong>' + cat + '<\/strong> businesses on Yelp. ';
-  html += 'These are deterministic, first-party signals from declared search intent, not modeled or inferred behavior. ';
-  html += 'Audiences are continuously refreshed: new users are added in near real-time as they engage, with a 90-day rolling lookback window. ';
-  html += 'The audience can be further refined by price-point engagement ($-$$$$), ';
-  html += 'competitive conquesting (people searching a specific competitor), cross-category combinations, and time/location layering.<\/div>';
-  if (siblings.length > 0) {
-    html += '<div style="margin:16px 0;padding:16px;background:var(--gray-100);border-radius:8px;">';
-    html += '<div style="font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:10px;">RECOMMENDED GROUPINGS FOR SCALE</div>';
-    html += '<p style="font-size:13px;color:var(--gray-500);margin-bottom:10px;">Group ' + cat + ' with related categories to build a campaign-ready ad group:</p>';
-    html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
-    html += '<span style="display:inline-block;padding:5px 12px;background:var(--yelp-red-light);border:1px solid var(--yelp-red);border-radius:16px;font-size:12px;font-weight:600;color:var(--yelp-red-dark);">' + cat + '<\/span>';
-    siblings.forEach(function(s) {
-      html += '<span style="display:inline-block;padding:5px 12px;background:var(--white);border:1px solid var(--gray-300);border-radius:16px;font-size:12px;color:var(--gray-700);">' + s + '<\/span>';
-    });
-    html += '<\/div>';
-    html += '<p style="font-size:12px;color:var(--gray-500);margin-top:10px;">Tip: We recommend 3-5 categories per ad group for optimal reach and scale.<\/p>';
-    html += '<\/div>';
-  }
-  html += '<div class="unique-badge">✓ Unique to Yelp<\/div>';
-  html += '<p style="font-size:13px;color:var(--gray-500);margin-bottom:20px;">This audience cannot be replicated on any DSP because it relies on Yelp\'s proprietary search data: declared intent, 1,500+ category granularity, price-point signals, and behavioral combinations from a single user session.<\/p>';
-  html += '<button class="copy-btn" data-action="copy">Copy Audience Description<\/button>';
-  html += '<\/div>';
-  return html;
-}
-
 function copyAudience() {
   var cat = state.category;
   var vertical = state.vertical.name;
-  var siblings = getSiblingCategories(cat, vertical, 6);
+  var siblings = getSiblingCategories(cat, vertical, 5);
   var text = "YELP AUDIENCES SEGMENT: " + cat + "\n\n";
   text += "Vertical: " + vertical + "\n";
-  text += "Audience: People who engaged with (searched, viewed, or clicked on) \"" + cat + "\" businesses on Yelp\n\n";
-  text += "AVAILABLE SIGNALS:\n";
-  text += "1. Declared Intent - Searched \"" + cat + "\" (not inferred, deterministic)\n";
-  text += "2. Competitive Conquesting - Also searched a specific competitor by name\n";
-  text += "3. Price-Point - Engaged with $, $$, $$$, or $$$$ filters\n";
-  text += "4. Cross-Category Combos - Combined with other search behavior for lifestyle targeting\n";
-  text += "5. Timing + Location - Daypart, proximity, and intent layered together\n\n";
+  text += "Audience: People who searched for, viewed, or engaged with \"" + cat + "\" businesses on Yelp\n";
+  text += "Data type: First-party, deterministic (declared intent, not inferred)\n";
+  text += "Freshness: New users added in near real-time. 90-day rolling lookback window.\n\n";
   if (siblings.length > 0) {
     text += "RECOMMENDED GROUPINGS FOR SCALE:\n";
-    text += "For campaign-ready reach, group " + cat + " with 3-5 related categories:\n";
-    text += "→ " + cat + " + " + siblings.slice(0,5).join(", ") + "\n\n";
+    text += "→ " + cat + " + " + siblings.join(", ") + "\n\n";
   }
-  text += "AUDIENCE FRESHNESS:\n";
-  text += "New users are added in near real-time as they engage. 90-day rolling lookback window keeps the audience current.\n\n";
-  text += "WHY THIS IS UNIQUE TO YELP:\n";
-  text += "This audience is built from first-party, deterministic search data. No other platform combines declared intent, price-point behavior, competitive signals, and cross-category combinations from a single user session.\n\n";
-  text += "Source: Yelp Audiences | " + getTotalCount().toLocaleString() + "+ audience segments available";
+  text += "Source: Yelp Audiences Explorer | " + getTotalCount().toLocaleString() + "+ segments available";
 
   navigator.clipboard.writeText(text).then(function() {
     var btn = document.querySelector('.copy-btn');
@@ -1887,13 +1931,12 @@ function setTab(tab) {
   state.tab = tab;
   var tabs = document.querySelectorAll('.tab');
   tabs.forEach(function(t) { t.classList.remove('active'); });
-  var idx = tab === 'signals' ? 0 : tab === 'pairWith' ? 1 : tab === 'conquesting' ? 2 : 3;
+  var idx = tab === 'signals' ? 0 : tab === 'pairWith' ? 1 : 2;
   tabs[idx].classList.add('active');
   var content = document.getElementById('tabContent');
-  if (tab === 'signals') content.innerHTML = renderSignalsTab(state.category);
+  if (tab === 'signals') content.innerHTML = renderOverviewTab(state.category);
   else if (tab === 'pairWith') content.innerHTML = renderPairWithTab(state.category);
-  else if (tab === 'conquesting') content.innerHTML = renderConquestingTab(state.category);
-  else content.innerHTML = renderActivateTab(state.category);
+  else content.innerHTML = renderConquestingTab(state.category);
 }
 
 function selectVertical(id) {
