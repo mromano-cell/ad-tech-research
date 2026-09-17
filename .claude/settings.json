@@ -101,7 +101,8 @@
       "WebFetch(domain:www.businesswire.com)",
       "WebFetch(domain:www.prnewswire.com)",
       "Bash(npx @google/clasp push)",
-      "Bash(npx @google/clasp deploy -d \"v33: Overhaul AI Builder - targeting strategies, personas, demographics, scale requirements\")"
+      "Bash(npx @google/clasp deploy -d \"v33: Overhaul AI Builder - targeting strategies, personas, demographics, scale requirements\")",
+      "Bash(npx @google/clasp deploy -d \"v34: Two-column Segment Library layout - category audiences primary, signal audiences secondary\")"
     ],
     "additionalDirectories": [
       "/Users/mromano/.claude/skills",

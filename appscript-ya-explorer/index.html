@@ -190,6 +190,21 @@
     .popular-label { display: inline-block; background: #059669; color: white; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 12px; margin-left: 8px; }
     .section-divider { font-size: 12px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 1px; margin: 24px 0 12px; padding-top: 16px; border-top: 1px solid var(--gray-300); }
 
+    /* LIBRARY TWO-COLUMN LAYOUT */
+    .library-columns { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: start; }
+    .library-col-header { padding: 16px 20px; border-radius: var(--radius); margin-bottom: 16px; }
+    .library-col-header--primary { background: linear-gradient(135deg, #fef2f2, #fff1f2); border: 1px solid #fecaca; }
+    .library-col-header--secondary { background: linear-gradient(135deg, #eff6ff, #eef2ff); border: 1px solid #bfdbfe; }
+    .library-col-label { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 15px; color: var(--gray-900); margin-bottom: 4px; }
+    .library-col-desc { font-size: 13px; color: var(--gray-600); line-height: 1.5; }
+    .library-col-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+    .library-col--secondary .library-col-grid { grid-template-columns: 1fr; }
+    .tile--compact { padding: 14px 16px; }
+    .tile--compact .tile-icon { font-size: 22px; margin-bottom: 6px; }
+    .tile--compact .tile-name { font-size: 14px; margin-bottom: 2px; }
+    .tile--compact .tile-count { font-size: 12px; }
+    .tile--compact .tile-chevron { margin-top: -22px; }
+
     .signal-card { background: var(--white); border-radius: var(--radius); padding: 24px; border-left: 4px solid var(--yelp-red); box-shadow: var(--shadow); margin-bottom: 16px; }
     .signal-card .signal-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 13px; color: var(--white); margin-bottom: 12px; }
     .signal-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
@@ -269,6 +284,8 @@
       .landing-grid { grid-template-columns: 1fr; }
       .landing-hero h1 { font-size: 28px; }
       .results-actions { flex-direction: column; }
+      .library-columns { grid-template-columns: 1fr; }
+      .library-col-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -1330,66 +1347,90 @@ function renderLevel1(app) {
   html += '<div class="stat">' + getTotalCount().toLocaleString() + '+ granular audience segments across ' + VERTICALS.length + ' verticals<\/div><\/div>';
   html += '<div class="container fade-in">';
 
-  // Non-Category Audiences section
-  html += '<div class="section-title">Non-Category Audiences<\/div>';
-  html += '<div class="grid grid-lg" style="margin-bottom:32px;">';
-  html += '<div class="tile" data-action="special-section" data-section="biz-highlights" style="border-left:4px solid var(--signal-3);">';
+  // Two-column layout
+  html += '<div class="library-columns">';
+
+  // LEFT COLUMN: Category Audiences
+  html += '<div class="library-col library-col--primary">';
+  html += '<div class="library-col-header library-col-header--primary">';
+  html += '<div class="library-col-label">\u{1F50D} Category Audiences<\/div>';
+  html += '<div class="library-col-desc">The foundational building blocks of every YA strategy. Scalable, first-party segments built from real user search and engagement on Yelp.<\/div>';
+  html += '<\/div>';
+  html += '<div class="library-col-grid">';
+  VERTICALS.forEach(function(v) {
+    var count = CATEGORIES[v.name] ? CATEGORIES[v.name].length : 0;
+    html += '<div class="tile tile--compact" data-action="vertical" data-id="' + v.id + '">';
+    html += '<div class="tile-icon">' + v.icon + '<\/div>';
+    html += '<div class="tile-name">' + v.name + '<\/div>';
+    html += '<div class="tile-count">' + count + ' segments<\/div>';
+    html += '<div class="tile-chevron">›<\/div>';
+    html += '<\/div>';
+  });
+  html += '<\/div>';
+  html += '<\/div>';
+
+  // RIGHT COLUMN: Signal & Differentiator Audiences
+  html += '<div class="library-col library-col--secondary">';
+  html += '<div class="library-col-header library-col-header--secondary">';
+  html += '<div class="library-col-label">\u{26A1} Signal & Differentiator Audiences<\/div>';
+  html += '<div class="library-col-desc">What sets Yelp apart from competitor ad partners and generic 3rd-party DSP audiences. Layer these on top of category audiences for precision.<\/div>';
+  html += '<\/div>';
+  html += '<div class="library-col-grid">';
+
+  html += '<div class="tile tile--compact" data-action="special-section" data-section="biz-highlights" style="border-left:4px solid var(--signal-3);">';
   html += '<div class="tile-icon">\u{2728}<\/div>';
   html += '<div class="tile-name">Business Highlights<\/div>';
-  html += '<div class="tile-count">' + Object.keys(BIZ_HIGHLIGHTS).reduce(function(t,k){return t+BIZ_HIGHLIGHTS[k].length},0) + ' segments across ' + Object.keys(BIZ_HIGHLIGHTS).length + ' categories<\/div>';
+  html += '<div class="tile-count">' + Object.keys(BIZ_HIGHLIGHTS).reduce(function(t,k){return t+BIZ_HIGHLIGHTS[k].length},0) + ' segments<\/div>';
   html += '<div class="tile-chevron">›<\/div>';
   html += '<\/div>';
-  html += '<div class="tile" data-action="special-section" data-section="biz-attributes" style="border-left:4px solid var(--signal-6);">';
+
+  html += '<div class="tile tile--compact" data-action="special-section" data-section="biz-attributes" style="border-left:4px solid var(--signal-6);">';
   html += '<div class="tile-icon">\u{2699}\u{FE0F}<\/div>';
   html += '<div class="tile-name">Business Attributes<\/div>';
-  html += '<div class="tile-count">' + Object.keys(BIZ_ATTRIBUTES).reduce(function(t,k){return t+BIZ_ATTRIBUTES[k].length},0) + ' segments across ' + Object.keys(BIZ_ATTRIBUTES).length + ' categories<\/div>';
+  html += '<div class="tile-count">' + Object.keys(BIZ_ATTRIBUTES).reduce(function(t,k){return t+BIZ_ATTRIBUTES[k].length},0) + ' segments<\/div>';
   html += '<div class="tile-chevron">›<\/div>';
   html += '<\/div>';
-  html += '<div class="tile" data-action="special-section" data-section="price-filters" style="border-left:4px solid var(--signal-5);">';
+
+  html += '<div class="tile tile--compact" data-action="special-section" data-section="price-filters" style="border-left:4px solid var(--signal-5);">';
   html += '<div class="tile-icon">\u{1F4B0}<\/div>';
   html += '<div class="tile-name">Price Filter Targeting<\/div>';
-  html += '<div class="tile-count">8 segments (Search Page + Business Page)<\/div>';
+  html += '<div class="tile-count">8 segments<\/div>';
   html += '<div class="tile-chevron">›<\/div>';
   html += '<\/div>';
-  html += '<div class="tile" data-action="special-section" data-section="search-locations" style="border-left:4px solid var(--signal-4);">';
+
+  html += '<div class="tile tile--compact" data-action="special-section" data-section="search-locations" style="border-left:4px solid var(--signal-4);">';
   html += '<div class="tile-icon">\u{1F30D}<\/div>';
   html += '<div class="tile-name">Search Location Targeting<\/div>';
-  html += '<div class="tile-count">Traveller audiences (city, state, country)<\/div>';
+  html += '<div class="tile-count">City, state, country<\/div>';
   html += '<div class="tile-chevron">›<\/div>';
   html += '<\/div>';
-  html += '<div class="tile" data-action="special-section" data-section="leads-based" style="border-left:4px solid var(--signal-2);">';
+
+  html += '<div class="tile tile--compact" data-action="special-section" data-section="leads-based" style="border-left:4px solid var(--signal-2);">';
   html += '<div class="tile-icon">\u{1F4DE}<\/div>';
   html += '<div class="tile-name">Leads-Based Audiences<\/div>';
   html += '<div class="tile-count">4 lead action types<\/div>';
   html += '<div class="tile-chevron">›<\/div>';
   html += '<\/div>';
-  html += '<div class="tile" data-action="special-section" data-section="b2b-audiences" style="border-left:4px solid var(--signal-7);">';
+
+  html += '<div class="tile tile--compact" data-action="special-section" data-section="b2b-audiences" style="border-left:4px solid var(--signal-7);">';
   html += '<div class="tile-icon">\u{1F3E2}<\/div>';
   html += '<div class="tile-name">B2B Audiences<\/div>';
-  html += '<div class="tile-count">Business owners on Yelp (custom filters)<\/div>';
+  html += '<div class="tile-count">Business owners (custom)<\/div>';
   html += '<div class="tile-chevron">›<\/div>';
   html += '<\/div>';
-  html += '<div class="tile" data-action="special-section" data-section="yelpy-personas" style="border-left:4px solid #e11d48;">';
+
+  html += '<div class="tile tile--compact" data-action="special-section" data-section="yelpy-personas" style="border-left:4px solid #e11d48;">';
   html += '<div class="tile-icon">\u{1F3AD}<\/div>';
   html += '<div class="tile-name">Yelpy Personas<\/div>';
-  html += '<div class="tile-count">' + Object.keys(YELPY_PERSONAS).length + ' themed audience bundles<\/div>';
+  html += '<div class="tile-count">' + Object.keys(YELPY_PERSONAS).length + ' themed bundles<\/div>';
   html += '<div class="tile-chevron">›<\/div>';
+  html += '<\/div>';
+
   html += '<\/div>';
   html += '<\/div>';
 
-  // Category Audiences section
-  html += '<div class="section-title">Category Audiences (by Parent Category)<\/div>';
-  html += '<div class="grid grid-lg">';
-  VERTICALS.forEach(function(v) {
-    var count = CATEGORIES[v.name] ? CATEGORIES[v.name].length : 0;
-    html += '<div class="tile" data-action="vertical" data-id="' + v.id + '">';
-    html += '<div class="tile-icon">' + v.icon + '<\/div>';
-    html += '<div class="tile-name">' + v.name + '<\/div>';
-    html += '<div class="tile-count">' + count + ' audience segments<\/div>';
-    html += '<div class="tile-chevron">›<\/div>';
-    html += '<\/div>';
-  });
-  html += '<\/div><\/div>';
+  html += '<\/div>'; // close library-columns
+  html += '<\/div>'; // close container
   app.innerHTML = html;
 }
 
