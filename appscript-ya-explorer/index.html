@@ -827,7 +827,7 @@ var YELPY_PERSONAS = {
   'iHomeowners': {icon:'🏠',aliases:['airport_shuttles','antiques','baby_gear','blinds','childcloth','computers','countryclubs','dog_parks','electronics','fondue','gourmet','homecleaning','hometheatreinstallation','investing','kids_activities','maternity','mobilephonerepair','mobilephones','playgrounds','skiresorts','specialed','summer_camps','swimmingpools','toys']},
 };
 
-var STRATEGY_COLORS = ['var(--signal-1)', 'var(--signal-5)', 'var(--signal-4)', 'var(--signal-3)', 'var(--signal-7)', '#8b5cf6', '#0891b2', '#ea580c', '#65a30d', '#be185d'];
+var STRATEGY_COLORS = ['#d32323', '#0d9488', '#2563eb', '#c026d3', '#ea580c', '#059669', '#7c3aed', '#0284c7', '#b91c1c', '#4f46e5'];
 
 // ===== RENDER ROUTER =====
 function render() {
@@ -1011,7 +1011,11 @@ function renderBuilderResults(app) {
   html += '<div class="results-header">';
   html += '<h2>Targeting Strategies</h2>';
   html += '<p>' + (data.advertiserSummary || '') + '</p>';
-  html += '<p style="font-size:13px;color:var(--gray-500);margin-top:6px;">' + strategies.length + ' targeting strategies generated. Each can be activated as a separate ad group.</p>';
+  html += '<div style="margin-top:10px;padding:12px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;color:var(--gray-600);line-height:1.6;">';
+  html += '<strong>' + strategies.length + ' targeting strategies generated.</strong> These are not in any particular order. ';
+  html += 'Review with your CD team to confirm viability and audience scale for your campaign. ';
+  html += 'Each strategy also works as a tailored ad creative idea for Intent-Based Custom Creative strategies.';
+  html += '</div>';
   if (state.builderInput && state.builderInput.websiteError) {
     html += '<p style="font-size:12px;color:var(--gray-500);margin-top:8px;font-style:italic;">Note: Advertiser website research was limited (' + state.builderInput.websiteError + ')</p>';
   }

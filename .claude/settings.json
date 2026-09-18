@@ -102,7 +102,9 @@
       "WebFetch(domain:www.prnewswire.com)",
       "Bash(npx @google/clasp push)",
       "Bash(npx @google/clasp deploy -d \"v33: Overhaul AI Builder - targeting strategies, personas, demographics, scale requirements\")",
-      "Bash(npx @google/clasp deploy -d \"v34: Two-column Segment Library layout - category audiences primary, signal audiences secondary\")"
+      "Bash(npx @google/clasp deploy -d \"v34: Two-column Segment Library layout - category audiences primary, signal audiences secondary\")",
+      "Bash(npx @google/clasp undeploy AKfycbxkZvLS2k1YRX-0iMNGZVYdRCedB6xCykUDm2v_0oW233o0yOAJgMruTBM5euMzbedh)",
+      "Bash(npx @google/clasp deploy -d \"v36: Distinct strategy colors, prescriptive instructions with CD review + creative callout\")"
     ],
     "additionalDirectories": [
       "/Users/mromano/.claude/skills",
