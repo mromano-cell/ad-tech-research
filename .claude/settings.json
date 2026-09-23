@@ -104,7 +104,20 @@
       "Bash(npx @google/clasp deploy -d \"v33: Overhaul AI Builder - targeting strategies, personas, demographics, scale requirements\")",
       "Bash(npx @google/clasp deploy -d \"v34: Two-column Segment Library layout - category audiences primary, signal audiences secondary\")",
       "Bash(npx @google/clasp undeploy AKfycbxkZvLS2k1YRX-0iMNGZVYdRCedB6xCykUDm2v_0oW233o0yOAJgMruTBM5euMzbedh)",
-      "Bash(npx @google/clasp deploy -d \"v36: Distinct strategy colors, prescriptive instructions with CD review + creative callout\")"
+      "Bash(npx @google/clasp deploy -d \"v36: Distinct strategy colors, prescriptive instructions with CD review + creative callout\")",
+      "mcp__google__create_presentation",
+      "Bash(find /Users/mromano/Documents -maxdepth 5 -type f -name \"*.md\" -newer /dev/null -mtime -5 2>/dev/null | grep -iv \"node_modules\\\\|\\\\.git\" | head -30)",
+      "Read(//dev/**)",
+      "mcp__google__search_drive_files",
+      "mcp__google__get_doc_as_markdown",
+      "mcp__Google-Workspace__search_docs",
+      "Bash(git -C /Users/mromano/Documents/Mike-Claude-Master-Folder log --all --oneline --grep=\"celtra\" --grep=\"Celtra\")",
+      "Bash(git -C /Users/mromano/Documents/Mike-Claude-Master-Folder log --all --oneline --grep=\"IBCC\")",
+      "Bash(git -C /Users/mromano/Documents/Mike-Claude-Master-Folder log --all --oneline --grep=\"DCO\")",
+      "Bash(git -C /Users/mromano/Documents/Mike-Claude-Master-Folder log --all --oneline --diff-filter=A -- '*celtra*' '*Celtra*')",
+      "Bash(git -C /Users/mromano/Documents/Mike-Claude-Master-Folder log --all -p -S \"Celtra\" --oneline)",
+      "mcp__Google-Workspace__get_gmail_threads_content_batch",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d['result']['analysis']\\)\")"
     ],
     "additionalDirectories": [
       "/Users/mromano/.claude/skills",

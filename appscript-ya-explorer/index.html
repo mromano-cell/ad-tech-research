@@ -429,7 +429,7 @@ var BUILDER_PROMPT = 'You are a Yelp Audiences Targeting Strategy Builder. You r
   '  ]\n' +
   '}\n\n' +
   '## Guidelines\n' +
-  '- Generate 3-10 targeting strategies depending on the complexity of the advertiser. Most advertisers need 4-6.\n' +
+  '- Generate 3-10 targeting strategies depending on the complexity of the advertiser. Most advertisers need 4-8.\n' +
   '- Use the strategic brief to inform every recommendation.\n' +
   '- NAME STRATEGIES IN THE ADVERTISER\'S LANGUAGE. Use their terminology, their brand voice, and their way of describing their customers. NOT Yelp internal terms like "Category Audiences" or "Biz Highlight Segments."\n' +
   '- Each strategy must feel distinct. Do not repeat the same targeting logic across multiple strategies.\n' +
@@ -1715,7 +1715,11 @@ function renderLevel3(app) {
   var html = '<div class="container fade-in">';
   html += '<div class="section-subtitle">\u{1F50D} ' + cat + '<\/div>';
   html += '<div class="count-badge">Declared intent, not inferred<\/div>';
-  html += '<div class="tabs"><button class="tab active" data-action="tab" data-tab="signals">Overview<\/button><button class="tab" data-action="tab" data-tab="pairWith">Pair With<\/button><button class="tab" data-action="tab" data-tab="conquesting">Conquesting<\/button><\/div>';
+  var vName = state.vertical ? state.vertical.name : '';
+  var hasBrands = (BRAND_SEGMENTS[vName] || []).length > 0;
+  html += '<div class="tabs"><button class="tab active" data-action="tab" data-tab="signals">Overview<\/button><button class="tab" data-action="tab" data-tab="pairWith">Pair With<\/button>';
+  if (hasBrands) html += '<button class="tab" data-action="tab" data-tab="conquesting">Conquesting<\/button>';
+  html += '<\/div>';
   html += '<div id="tabContent">';
   html += renderOverviewTab(cat);
   html += '<\/div><\/div>';
@@ -1861,16 +1865,6 @@ function renderConquestingTab(cat) {
     html += '<p style="font-size:12px;color:var(--gray-500);margin-top:12px;">Segment format: <code style="background:var(--gray-100);padding:2px 6px;border-radius:3px;">segment_brand_[name]<\/code><\/p>';
     html += '<\/div>';
   }
-
-  html += '<div class="signal-card" style="border-left-color:var(--signal-1);margin-top:16px;">';
-  html += '<h3>Custom Brand Target<\/h3>';
-  html += '<p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;">Any business with a Yelp page can be targeted. Enter a competitor name to preview the audience:<\/p>';
-  html += '<input class="conquest-input" type="text" placeholder="Enter a competitor name..." id="conquestInput">';
-  html += '<div class="conquest-preview" id="conquestPreview">';
-  html += '<h4>Your Conquesting Audience<\/h4>';
-  html += '<p>Type a competitor name above to see the audience definition.<\/p>';
-  html += '<\/div>';
-  html += '<\/div>';
 
   html += '<div style="margin-top:16px;padding:16px;background:var(--yelp-red-light);border-radius:8px;font-size:13px;color:var(--gray-700)"><strong>Why this is powerful:<\/strong> You\'re reaching someone who <em>typed a competitor\'s name<\/em> into Yelp. That\'s deterministic competitive intent, not inferred interest.<\/div>';
   return html;

@@ -51,7 +51,8 @@
       "mcp__google__search_gmail_messages",
       "mcp__google__get_gmail_messages_content_batch",
       "mcp__slack__slack_search_public_and_private",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "mcp__Google-Workspace__get_doc_as_markdown"
     ]
   },
   "hooks": {
