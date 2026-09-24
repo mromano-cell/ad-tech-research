@@ -4,69 +4,53 @@ function doGet() {
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
-function getOrCreateLogSheet_() {
-  var props = PropertiesService.getScriptProperties();
-  var sheetId = props.getProperty('LOG_SHEET_ID');
-  if (sheetId) {
-    try {
-      return SpreadsheetApp.openById(sheetId);
-    } catch (e) {
-      // Sheet was deleted or inaccessible, create a new one
-    }
-  }
-  var ss = SpreadsheetApp.create('YA Explorer - AI Builder Submissions');
-  var sheet = ss.getActiveSheet();
-  sheet.setName('Submissions');
-  sheet.appendRow([
-    'Timestamp', 'Advertiser', 'Categories', 'Ideal Customer',
-    'Competitors', 'Business Challenge', 'What Makes Them Unique',
-    'Website URL', '# Strategies Generated', 'Strategy Names'
-  ]);
-  sheet.getRange('1:1').setFontWeight('bold');
-  sheet.setFrozenRows(1);
-  sheet.setColumnWidth(1, 160);
-  sheet.setColumnWidth(2, 180);
-  sheet.setColumnWidth(3, 250);
-  sheet.setColumnWidth(4, 250);
-  sheet.setColumnWidth(5, 200);
-  sheet.setColumnWidth(6, 250);
-  sheet.setColumnWidth(7, 250);
-  sheet.setColumnWidth(8, 200);
-  sheet.setColumnWidth(9, 100);
-  sheet.setColumnWidth(10, 350);
-  props.setProperty('LOG_SHEET_ID', ss.getId());
-  return ss;
-}
-
 function logBuilderSubmission(data) {
   try {
-    var ss = getOrCreateLogSheet_();
-    var sheet = ss.getSheetByName('Submissions') || ss.getActiveSheet();
-    sheet.appendRow([
-      new Date(),
-      data.advertiserName || '',
-      (data.categories || []).join(', '),
-      data.idealCustomer || '',
-      data.competitors || '',
-      data.challenge || '',
-      data.differentiator || '',
-      data.website || '',
-      data.numStrategies || 0,
-      data.strategyNames || ''
-    ]);
+    var props = PropertiesService.getScriptProperties();
+    var key = 'sub_' + new Date().getTime() + '_' + Math.random().toString(36).substr(2, 5);
+    var record = {
+      timestamp: new Date().toISOString(),
+      advertiserName: data.advertiserName || '',
+      categories: Array.isArray(data.categories) ? data.categories.join(', ') : (data.categories || ''),
+      idealCustomer: data.idealCustomer || '',
+      competitors: data.competitors || '',
+      challenge: data.challenge || '',
+      differentiator: data.differentiator || '',
+      website: data.website || '',
+      numStrategies: data.numStrategies || 0,
+      strategyNames: data.strategyNames || ''
+    };
+    props.setProperty(key, JSON.stringify(record));
     return { success: true };
   } catch (e) {
     return { success: false, error: e.message };
   }
 }
 
-function getLogSheetUrl() {
+// Run this from the Apps Script editor to export all submissions to a Google Sheet
+function exportSubmissionsToSheet() {
   var props = PropertiesService.getScriptProperties();
-  var sheetId = props.getProperty('LOG_SHEET_ID');
-  if (sheetId) {
-    return 'https://docs.google.com/spreadsheets/d/' + sheetId;
+  var all = props.getProperties();
+  var rows = [];
+  for (var key in all) {
+    if (key.indexOf('sub_') === 0) {
+      try {
+        var r = JSON.parse(all[key]);
+        rows.push([r.timestamp, r.advertiserName, r.categories, r.idealCustomer, r.competitors, r.challenge, r.differentiator, r.website, r.numStrategies, r.strategyNames]);
+      } catch (e) {}
+    }
   }
-  return null;
+  rows.sort(function(a, b) { return a[0] < b[0] ? -1 : 1; });
+  var ss = SpreadsheetApp.create('YA Builder Submissions Export - ' + new Date().toLocaleDateString());
+  var sheet = ss.getActiveSheet();
+  sheet.appendRow(['Timestamp', 'Advertiser', 'Categories', 'Ideal Customer', 'Competitors', 'Challenge', 'Differentiator', 'Website', '# Strategies', 'Strategy Names']);
+  for (var i = 0; i < rows.length; i++) {
+    sheet.appendRow(rows[i]);
+  }
+  sheet.getRange(1, 1, 1, 10).setFontWeight('bold');
+  sheet.autoResizeColumns(1, 10);
+  Logger.log('Exported ' + rows.length + ' submissions to: ' + ss.getUrl());
+  return { count: rows.length, url: ss.getUrl() };
 }
 
 function fetchWebsiteContent(url) {

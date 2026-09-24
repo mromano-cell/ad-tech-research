@@ -1251,20 +1251,23 @@ function callChatProxy(input) {
       state.builderStep = 'error';
     }
     render();
-    // Log submission to Google Sheet (non-blocking)
+    // Log submission via server-side form POST (non-blocking)
     if (state.builderResults && state.builderInput) {
       var strategies = state.builderResults.strategies || [];
-      google.script.run.logBuilderSubmission({
-        advertiserName: state.builderInput.advertiserName,
-        categories: state.builderInput.categories,
-        idealCustomer: state.builderInput.idealCustomer,
-        competitors: state.builderInput.competitors,
-        challenge: state.builderInput.challenge,
-        differentiator: state.builderInput.differentiator,
-        website: state.builderInput.website,
-        numStrategies: strategies.length,
-        strategyNames: strategies.map(function(s) { return s.name; }).join(' | ')
-      });
+      google.script.run
+        .withSuccessHandler(function(r) { console.log('Log result:', JSON.stringify(r)); })
+        .withFailureHandler(function(e) { console.error('Log error:', e); })
+        .logBuilderSubmission({
+          advertiserName: state.builderInput.advertiserName,
+          categories: state.builderInput.categories,
+          idealCustomer: state.builderInput.idealCustomer,
+          competitors: state.builderInput.competitors,
+          challenge: state.builderInput.challenge,
+          differentiator: state.builderInput.differentiator,
+          website: state.builderInput.website,
+          numStrategies: strategies.length,
+          strategyNames: strategies.map(function(s) { return s.name; }).join(' | ')
+        });
     }
   })
   .catch(function(err) {
