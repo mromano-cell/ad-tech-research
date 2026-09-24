@@ -52,7 +52,11 @@
       "mcp__google__get_gmail_messages_content_batch",
       "mcp__slack__slack_search_public_and_private",
       "WebFetch(domain:github.com)",
-      "mcp__Google-Workspace__get_doc_as_markdown"
+      "mcp__Google-Workspace__get_doc_as_markdown",
+      "Bash(npx @google/clasp push)",
+      "Bash(npx @google/clasp undeploy AKfycbwSK037DCboGYDRSTB919NLUiKSdn98riPKiqFP6cOFlmH11d8PSr0vstp8jn5cw_g)",
+      "Bash(npx @google/clasp deploy -d \"v38: Log AI Builder submissions to Google Sheet\")",
+      "Bash(npx @google/clasp push --force)"
     ]
   },
   "hooks": {

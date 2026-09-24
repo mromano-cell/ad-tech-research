@@ -1251,6 +1251,21 @@ function callChatProxy(input) {
       state.builderStep = 'error';
     }
     render();
+    // Log submission to Google Sheet (non-blocking)
+    if (state.builderResults && state.builderInput) {
+      var strategies = state.builderResults.strategies || [];
+      google.script.run.logBuilderSubmission({
+        advertiserName: state.builderInput.advertiserName,
+        categories: state.builderInput.categories,
+        idealCustomer: state.builderInput.idealCustomer,
+        competitors: state.builderInput.competitors,
+        challenge: state.builderInput.challenge,
+        differentiator: state.builderInput.differentiator,
+        website: state.builderInput.website,
+        numStrategies: strategies.length,
+        strategyNames: strategies.map(function(s) { return s.name; }).join(' | ')
+      });
+    }
   })
   .catch(function(err) {
     state.builderError = err.message || 'Failed to generate recommendations. Please try again.';
