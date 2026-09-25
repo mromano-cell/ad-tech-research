@@ -20,9 +20,19 @@ A quick 2-minute check-in to set your focus for the day.
 4. Searches Drive via `mcp__google__search_drive_files` for matching transcripts
 5. Filters `tasks/active/` for `category: meeting-action` tasks due today
 6. If today is Monday: gathers all outstanding `meeting-action` tasks from the previous week and sends a Slack DM summary to Mike (user ID: U02K11D88N5) via `mcp__slack__slack_send_message`
-7. Returns a focused, prioritized daily plan
+7. Checks `status-updates/schedule.yaml` for any reports due today or tomorrow (see Report Due Alert below)
+8. Returns a focused, prioritized daily plan
 
 ## Output Format
+
+**Report Due Alert** (if any report due today or tomorrow, show this FIRST):
+
+⚠️ **REPORT DUE:**
+- [Report name] is due [today/tomorrow] ([date]). Run `/status-update [type]` to generate, or say "generate it now."
+
+If no reports are due within 2 days, skip this section entirely.
+
+---
 
 **Today's Recommendation:**
 

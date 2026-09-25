@@ -1,0 +1,91 @@
+# Status Update Schedule
+# This file tracks cadences, due dates, and project mappings for automated status updates.
+# The /status-update skill reads this to determine reporting periods and updates it after generation.
+
+reports:
+  wrike:
+    name: "Wrike Status Update"
+    cadence_days: 14
+    next_due: "2026-10-01"
+    last_generated: null
+    notify_days_before: 1
+
+  gtm:
+    name: "GTM Biweekly"
+    cadence_days: 14
+    next_due: "2026-10-08"
+    last_generated: null
+    notify_days_before: 1
+
+  mbr:
+    name: "Monthly Business Report"
+    cadence_type: "first_wednesday"
+    next_due: "2026-10-07"
+    last_generated: null
+    notify_days_before: 1
+
+# Wrike project-to-search-term mapping
+# Used by the skill to find relevant activity per project from Slack, Drive, Calendar, Git, WINS.md
+wrike_projects:
+  - name: "YA Roadmap 2026"
+    wrike_id: "MKT-2716"
+    status: on_hold
+    search_terms: ["YA roadmap", "roadmap 2026", "product roadmap"]
+
+  - name: "Market research to identify YA adoption drivers"
+    wrike_id: "MKT-27"
+    status: on_hold
+    search_terms: ["adoption drivers", "market research", "YA adoption"]
+
+  - name: "YA Creative Product Exploration"
+    wrike_id: "MKT-2961"
+    status: in_progress
+    search_terms: ["creative product", "Celtra", "pre-sale creative", "creative consultation", "creative process"]
+
+  - name: "DCO GTM + Audience-specific Custom Creative Narrative"
+    wrike_id: "MKT-unknown"
+    status: in_progress
+    search_terms: ["DCO GTM", "IBCC narrative", "custom creative narrative", "audience-specific", "DCO positioning"]
+
+  - name: "Drive DCO (IBCC) Adoption"
+    wrike_id: "MKT-2449.8"
+    status: in_progress
+    search_terms: ["IBCC adoption", "IBCC sprint", "IBCC pipeline", "seller adoption", "IBCC traction"]
+
+  - name: "YA IBCC White Paper"
+    wrike_id: "MKT-2449.9"
+    status: in_progress
+    search_terms: ["white paper", "whitepaper", "IBCC white paper", "thought leadership", "growth marketing"]
+
+  - name: "Updated YA Landing Page"
+    wrike_id: "MKT-2449.7"
+    status: on_hold
+    search_terms: ["landing page", "YA landing page"]
+
+# MBR sub-topic mapping
+# Used by the skill to organize the read-only MBR section by topic
+mbr_topics:
+  - name: "IBCC GTM Launch"
+    search_terms: ["IBCC launch", "IBCC GTM", "IBCC pipeline", "IBCC opportunities"]
+    include_sfdc: true
+    sfdc_query: >
+      SELECT Id, Name, StageName, Amount, CreatedDate, CloseDate
+      FROM Opportunity
+      WHERE (Name LIKE '%Custom Display%' OR Name LIKE '%Rich Media%' OR Name LIKE '%DYCA%' OR Name LIKE '%IBCC%')
+      AND CreatedDate >= THIS_MONTH
+      ORDER BY CreatedDate DESC
+
+  - name: "IBCC Enablement"
+    search_terms: ["IBCC enablement", "IBCC training", "seller confidence", "eLearning", "scrimmage", "office hours"]
+
+  - name: "IBCC Tactical Sprint"
+    search_terms: ["IBCC sprint", "outreach", "target accounts", "vertical", "low hanging fruit"]
+
+  - name: "Whitepaper Development"
+    search_terms: ["white paper", "whitepaper", "growth marketing", "Joe Marcus", "thought leadership"]
+
+  - name: "IBCC Phase 2 – Search-Based Audiences"
+    search_terms: ["search-based", "Phase 2", "keyword-level", "search queries", "Kashish"]
+
+  - name: "TTD Creative Partner Exploration"
+    search_terms: ["Bunny Studio", "Spaceback", "Nova", "creative partner", "TTD creative", "audio creative"]
