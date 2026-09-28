@@ -19,6 +19,10 @@ A running log of accomplishments. Review this before performance conversations, 
 
 - 2026-09-04: Drafted full MBR update for Yelp Audiences section (Product + Marketing). Consolidated IBCC launch traction, Phase 2 product scoping, TTD creative partner recs, and enablement progress into a single executive-ready narrative. This is the first MBR where IBCC pipeline data and creative partner strategy are presented together.
 
+- 2026-09-28: YA Explorer tool getting strong positive feedback from sales. First PMM on the MLoc team to build a self-service tool that helps sellers do their job better. No other PMM has created anything like it. Demonstrates technical initiative and direct sales enablement impact beyond traditional PMM scope. Key talking point for annual review with Lisa.
+
+- 2026-09-28: YA white paper receiving positive remarks from senior MLoc sales leadership: Jarden, Max, and Sarah all praised the structure and value as a sales asset. Validates the competitive positioning work and proves PMM can deliver high-quality strategic content that resonates with the field. Key talking point for annual review with Lisa.
+
 ---
 
 <!-- Example format:
