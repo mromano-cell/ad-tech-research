@@ -153,6 +153,11 @@
     .component-chip--persona { background: #faf5ff; color: #6b21a8; border: 1px solid #e9d5ff; }
     .component-chip--demo { background: #fdf4ff; color: #86198f; border: 1px solid #f0abfc; }
     .component-chip--geo { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .chip-3p { position: relative; cursor: help; }
+    .chip-3p-badge { font-size: 9px; font-weight: 700; background: #86198f; color: #fff; padding: 1px 4px; border-radius: 3px; margin-left: 4px; vertical-align: middle; }
+    .chip-3p-tooltip { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #1f2937; color: #fff; font-size: 11px; font-family: -apple-system, sans-serif; padding: 8px 12px; border-radius: 6px; width: 260px; line-height: 1.4; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,.15); pointer-events: none; }
+    .chip-3p-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #1f2937; }
+    .chip-3p:hover .chip-3p-tooltip { display: block; }
 
     /* BUILDER ERROR */
     .builder-error { text-align: center; padding: 80px 24px; }
@@ -370,8 +375,13 @@ var BUILDER_PROMPT = 'You are a Yelp Audiences Targeting Strategy Builder. You r
   '### Competitor Conquesting / Brand Targeting\n' +
   'Built from users who engaged with a specific competitor brand on Yelp.\n' +
   '- Segment naming: segment_brand_<brand_name> (e.g., segment_brand_chipotle)\n' +
-  '- Available for any business with a Yelp page\n' +
-  '- Can target multiple competitor brands in one strategy\n\n' +
+  '- Can target multiple competitor brands in one strategy\n' +
+  '- **CRITICAL CONSTRAINT**: Brand segments are ONLY available for businesses that operate physical storefronts or locations with their own Yelp business pages. This means restaurants, retail chains, service providers, gyms, salons, etc.\n' +
+  '- Brand segments are NOT available for: CPG/product brands (Purina, Nike, Tide), software companies, product manufacturers, online-only brands, media companies, or any brand that does not have its own brick-and-mortar locations listed on Yelp.\n' +
+  '- Before including ANY brand target, ask: "Does this brand operate physical locations that a consumer would visit and that would appear on Yelp?" If the answer is no, DO NOT include it.\n' +
+  '- Examples of VALID brand targets: Chipotle, PetSmart, Planet Fitness, Starbucks, Jiffy Lube (all have physical Yelp-listed locations)\n' +
+  '- Examples of INVALID brand targets: Purina, Blue Buffalo, Nike, Samsung, Allbirds (online-first), Mint Mobile (no storefronts) — these are product/online brands without Yelp business pages\n' +
+  '- If the advertiser or their competitors are non-brick-and-mortar brands, do NOT generate any brand conquesting strategies. Focus on category, price, attribute, and persona targeting instead.\n\n' +
   '### Business Attributes & Highlights\n' +
   '**Biz Highlights**: segment_biz_highlight_<highlight> (e.g., outdoor_seating, offers_delivery, good_for_kids, open_late, take_out, reservations)\n' +
   '**Biz Attributes**: segment_biz_attribute_<attribute> (e.g., accept_credit_cards, has_wifi, pet_friendly)\n' +
@@ -1076,8 +1086,8 @@ function renderBuilderResults(app) {
         html += '<div class="component-group">';
         html += '<span class="component-label">\u{1F4CA} Demographics</span>';
         html += '<div class="component-chips">';
-        if (s.demographics.gender) html += '<span class="component-chip component-chip--demo">' + s.demographics.gender + '</span>';
-        if (s.demographics.ageRange) html += '<span class="component-chip component-chip--demo">' + s.demographics.ageRange + '</span>';
+        if (s.demographics.gender) html += '<span class="component-chip component-chip--demo chip-3p">' + s.demographics.gender + '<span class="chip-3p-badge">3P</span><span class="chip-3p-tooltip">Yelp does not capture granular demographic data natively. This targeting leverages The Trade Desk’s third-party data capabilities to layer demographic filters onto Yelp’s first-party intent audiences.</span></span>';
+        if (s.demographics.ageRange) html += '<span class="component-chip component-chip--demo chip-3p">' + s.demographics.ageRange + '<span class="chip-3p-badge">3P</span><span class="chip-3p-tooltip">Yelp does not capture granular demographic data natively. This targeting leverages The Trade Desk’s third-party data capabilities to layer demographic filters onto Yelp’s first-party intent audiences.</span></span>';
         html += '</div></div>';
       }
       if (s.locationTargeting && s.locationTargeting.value) {
