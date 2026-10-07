@@ -6,15 +6,15 @@ reports:
   wrike:
     name: "Wrike Status Update"
     cadence_days: 14
-    next_due: "2026-10-01"
-    last_generated: null
+    next_due: "2026-10-15"
+    last_generated: "2026-10-01"
     notify_days_before: 1
 
   gtm:
     name: "GTM Biweekly"
     cadence_days: 14
-    next_due: "2026-10-08"
-    last_generated: null
+    next_due: "2026-10-22"
+    last_generated: "2026-10-07"
     notify_days_before: 1
 
   mbr:
@@ -29,8 +29,9 @@ reports:
 wrike_projects:
   - name: "YA Roadmap 2026"
     wrike_id: "MKT-2716"
-    status: on_hold
-    search_terms: ["YA roadmap", "roadmap 2026", "product roadmap"]
+    status: in_progress
+    notes: "All AML updates go here. AML is the only eng team allocated to YA. Track YA + AML applications and collaboration."
+    search_terms: ["YA roadmap", "roadmap 2026", "product roadmap", "AML", "AML x YA", "segment alignment"]
 
   - name: "Market research to identify YA adoption drivers"
     wrike_id: "MKT-27"
@@ -45,7 +46,8 @@ wrike_projects:
   - name: "DCO GTM + Audience-specific Custom Creative Narrative"
     wrike_id: "MKT-unknown"
     status: in_progress
-    search_terms: ["DCO GTM", "IBCC narrative", "custom creative narrative", "audience-specific", "DCO positioning"]
+    notes: "Tracker line for IBCC state: live campaigns, opp count, pipeline. Also covers Bunny Studios test/GTM."
+    search_terms: ["DCO GTM", "IBCC narrative", "custom creative narrative", "audience-specific", "DCO positioning", "IBCC campaigns", "IBCC live", "Bunny Studio", "audio creative"]
 
   - name: "Drive DCO (IBCC) Adoption"
     wrike_id: "MKT-2449.8"
@@ -61,6 +63,12 @@ wrike_projects:
     wrike_id: "MKT-2449.7"
     status: on_hold
     search_terms: ["landing page", "YA landing page"]
+
+  - name: "LinkedIn Content Posts for Sales Leadership"
+    wrike_id: "NEW"
+    status: in_progress
+    notes: "New line item added by June. Mike creating LinkedIn posts for Max on AI, digital marketing landscape, and Yelp verticals."
+    search_terms: ["LinkedIn", "LI content", "content pilot", "Max posts", "sales leadership content", "AI content"]
 
 # MBR sub-topic mapping
 # Used by the skill to organize the read-only MBR section by topic
@@ -89,3 +97,52 @@ mbr_topics:
 
   - name: "TTD Creative Partner Exploration"
     search_terms: ["Bunny Studio", "Spaceback", "Nova", "creative partner", "TTD creative", "audio creative"]
+
+# In-flight context for auto-generation
+# These are facts/decisions that happened recently and should be picked up by the next auto-generated report.
+# The skill should incorporate these when relevant and clear them once they've been reported in the appropriate report type.
+pending_context:
+  - date: "2026-10-07"
+    fact: "Celtra pricing change: switching from $0.10 CPM fee per creative variation to a flat $0.20 CPM fee on all YCS."
+    reported_in: ["gtm"]
+    pending_for: ["wrike", "mbr"]
+
+  - date: "2026-10-07"
+    fact: "Creative variation guardrail change: replacing the 10-creative-variation max with a one-design-variation max per opportunity."
+    reported_in: ["gtm"]
+    pending_for: ["wrike", "mbr"]
+
+  - date: "2026-10-07"
+    fact: "YA Audience Explorer tool pilot completed. 20+ sellers and CDs tested and provided feedback."
+    reported_in: ["gtm"]
+    pending_for: ["wrike", "mbr"]
+
+  - date: "2026-10-07"
+    fact: "7 YA product requests being prioritized with leadership."
+    reported_in: ["gtm"]
+    pending_for: ["wrike", "mbr"]
+
+  - date: "2026-10-07"
+    fact: "SFDC updates: 6 YA products and 2 creative checkbox fields (Intent Based Custom Creative + Custom Creative) targeting mid-November go-live."
+    reported_in: ["gtm"]
+    pending_for: ["wrike", "mbr"]
+
+  - date: "2026-10-07"
+    fact: "Pre-sale creative consultation process rolling out to all GTM teams."
+    reported_in: ["gtm"]
+    pending_for: ["wrike", "mbr"]
+
+  - date: "2026-10-07"
+    fact: "Roadway Moving closed 10/1 as third IBCC Closed Won deal ($105K, IBCC + Radio omnichannel, Oct 2026 through Apr 2027)."
+    reported_in: ["gtm"]
+    pending_for: ["wrike", "mbr"]
+
+  - date: "2026-10-07"
+    fact: "Bunny Studios v1 audio test creative delivered 9/30. Feedback: sounds slightly AI, pacing slow. Exploring best practices for audience-specific audio messaging."
+    reported_in: ["gtm"]
+    pending_for: ["wrike", "mbr"]
+
+  - date: "2026-10-07"
+    fact: "Celtra September production surpassed monthly creative minimums and started eating into pacing credits."
+    reported_in: ["gtm"]
+    pending_for: ["wrike", "mbr"]

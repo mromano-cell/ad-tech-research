@@ -66,6 +66,11 @@ Run these in parallel, filtered to the reporting period. Only pull sources relev
 - Check `status-updates/` for the most recent file of this report type
 - Use it to understand what was already reported (avoid repeating, show progression)
 
+### 2i: Pending Context
+- Read the `pending_context` list from `schedule.yaml`
+- Include any items where the current report type appears in `pending_for`
+- These are facts/decisions from recent periods that haven't been reported in this report type yet
+
 ## Phase 3: Generate Output
 
 ### For type: `wrike`
@@ -121,6 +126,7 @@ Generate one section for the GTM biweekly shared doc.
 
 1. From gathered data, identify what was completed in the period (shipped, delivered, decided, shared)
 2. From tasks/active, calendar, and recent communications, identify what's coming up next
+3. Focus on strategic outcomes and decisions, not operational blow-by-blow. Individual deal closes, seller interviews, and partner feedback details belong in MBR, not GTM.
 
 **Output format:**
 ```
@@ -129,7 +135,11 @@ Reporting period: [start] to [end]
 
 **Intent-Based Custom Creative & YA Creative Partnerships (Mike Romano):**
 
-- **Completed:** [Narrative paragraph. 3-5 sentences. What shipped, what progressed, key milestones. Conversational tone, specific details. Include partner names, account names, metrics where relevant.]
+- **Completed:**
+  - [Outcome or decision 1. 1-2 sentences. What happened and why it matters.]
+  - [Outcome or decision 2. Include sub-bullets for specific details like pricing changes or guardrail updates.]
+  - [Outcome or decision 3.]
+  - [3-5 bullets total]
 
 - **Coming Up:**
   - [Next action 1 — specific, with timeframe if known]
@@ -139,12 +149,12 @@ Reporting period: [start] to [end]
 ```
 
 **Style guide:**
-- Conversational but specific — this is verbally delivered in most cases
-- "Completed" is a narrative paragraph, not bullets
-- "Coming Up" is a bulleted list
-- Include names of people and teams involved
-- Reference specific accounts, tools, or deliverables
-- If Mike can't attend, add slightly more detail so it reads well standalone
+- Completed uses **bullets**, not a narrative paragraph. Each bullet is one outcome or decision, 1-2 sentences max. Use sub-bullets for specifics (e.g., pricing numbers, guardrail changes).
+- Coming Up is a bulleted list of forward-looking actions with timeframes where known.
+- Keep it strategic: process changes, pricing decisions, tool launches, cross-functional milestones. Not individual account updates or detailed enablement play-by-play.
+- Conversational but specific. This is verbally delivered in most cases.
+- Include names of teams involved, not individuals (unless leadership-level).
+- If Mike can't attend, add slightly more detail so it reads well standalone.
 
 ---
 
@@ -209,13 +219,16 @@ Read the `mbr_topics` list from `schedule.yaml`. For each topic:
    - Bump `next_due` forward:
      - For `wrike` and `gtm`: add `cadence_days` (14) to current `next_due`
      - For `mbr`: calculate the first Wednesday of the next month
-4. Offer: "Want me to copy this to your clipboard?" (use `pbcopy` on macOS)
+4. Update `pending_context` in schedule.yaml:
+   - For any item where the current report type was in `pending_for`, remove this report type from the list
+   - If `pending_for` is now empty, remove the entire item (it's been reported everywhere)
+5. Offer: "Want me to copy this to your clipboard?" (use `pbcopy` on macOS)
 
 ## Rules
 
 - Match the exact format and tone of each report type. Do not blend styles across reports.
 - For Wrike: match June's lowercase, action-oriented style exactly.
-- For GTM: keep "Completed" as a narrative paragraph, not bullets.
+- For GTM: use bullets for "Completed" (not a narrative paragraph). Keep each bullet strategic and outcome-focused.
 - For MBR: be thorough and specific. This is the most detailed report.
 - Never fabricate data. If Salesforce query fails or returns no results, say so explicitly.
 - If a Wrike project has no activity in the period, say "no updates this period" rather than inventing content.

@@ -8,7 +8,7 @@ set -euo pipefail
 PROJECT_DIR="/Users/mromano/Documents/Mike-Claude-Master-Folder"
 SCHEDULE="$PROJECT_DIR/status-updates/schedule.yaml"
 LOG_DIR="$PROJECT_DIR/status-updates/logs"
-CLAUDE="/Users/mromano/.local/bin/claude"
+CLAUDE="/usr/local/bin/claude"
 TODAY=$(date +%Y-%m-%d)
 TOMORROW=$(date -v+1d +%Y-%m-%d)
 
