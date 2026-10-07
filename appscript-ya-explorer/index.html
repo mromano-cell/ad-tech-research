@@ -354,6 +354,8 @@ var STRATEGIST_PROMPT = 'You are an expert Yelp Audiences Strategist. Your job i
   '- Think like a media strategist, not a data analyst.\n' +
   '- If the user provided competitors, prioritize those. Otherwise, infer the top competitors.\n' +
   '- Only set geoRelevant to true for travel, hospitality, tourism, airlines, hotel chains, or destination-oriented businesses.\n' +
+  '- CRITICAL: Competitor conquesting on Yelp is ONLY possible for competitors that operate physical, brick-and-mortar locations (restaurants, retail stores, gyms, salons, etc.). Do NOT list CPG brands (Purina, Tide), product manufacturers, online-only brands, or any entity without physical storefronts as competitors for conquesting purposes. If the advertiser or their competitors are non-brick-and-mortar, note this in your strategic brief so the Builder avoids brand targeting.\n' +
+  '- When identifying competitors, base them on the SPECIFIC category the advertiser operates in, not the parent vertical. An amusement park competes with other amusement parks and entertainment venues, not gyms or yoga studios that happen to share the same parent vertical.\n' +
   '- Return ONLY the JSON. No preamble, no markdown fences.';
 
 // ===== AGENT 2: TARGETING STRATEGY BUILDER =====
@@ -414,6 +416,13 @@ var BUILDER_PROMPT = 'You are a Yelp Audiences Targeting Strategy Builder. You r
   '3. Price-Point Signaling - Engaged with price filters ($-$$$$)\n' +
   '4. Cross-Category Combos - Searched multiple categories (reveals lifestyle)\n' +
   '5. Timing + Intent + Location - Daypart + proximity + intent stacked\n\n' +
+  '## Category Alias Rules\n' +
+  '- Category aliases are lowercase, no spaces, no special characters. They are the URL-slug form of Yelp category names.\n' +
+  '- VALID alias examples: pizza, sushi, autorepair, hairsalons, yoga, petstore, juicebars, coffeetea, medicalspa, homeservices\n' +
+  '- INVALID alias examples: "dog" (not a category), "cat" (not a category), "traveltips" (not a category), "handmade" (not a category), "healthy" (not a category)\n' +
+  '- Aliases come from real Yelp business categories. If you are unsure whether an alias exists, use the closest known Yelp category. When in doubt, use the parent category alias.\n' +
+  '- Common patterns: single words (pizza, sushi, yoga), compound words (autorepair, hairsalons, nailsalons), or abbreviated (hvac, djs, rvparks)\n' +
+  '- Do NOT invent aliases. Do NOT use generic English words as aliases. Every alias must correspond to a real Yelp business category.\n\n' +
   '## Scale Requirements\n' +
   '- Each targeting strategy MUST include at least 20 category aliases or be anchored in a major persona or parent category to ensure scalable audience size.\n' +
   '- Never recommend a strategy built around a single narrow category. Always group related categories.\n' +
@@ -447,6 +456,7 @@ var BUILDER_PROMPT = 'You are a Yelp Audiences Targeting Strategy Builder. You r
   '- Prioritize strategies that use Yelp\'s unique signals (declared intent, brand search, price filters) over generic demographic targeting.\n' +
   '- All audiences use a 90-day rolling lookback window. New users are added in near real-time as they engage on Yelp. Do NOT suggest configurable recency windows or time-based targeting tiers.\n' +
   '- Only include locationTargeting if the strategic brief flagged geoRelevant as true. For most advertisers, omit it entirely.\n' +
+  '- Competitor conquesting strategies must target the advertiser\'s SPECIFIC category competitors, NOT businesses from sibling categories in the same parent vertical. Example: an Amusement Park\'s conquesting targets should be other amusement parks (Six Flags, Cedar Point, Dave & Buster\'s), NOT gyms, yoga studios, or martial arts schools that happen to share the "Active Life" parent.\n' +
   '- Keep language professional but accessible. A non-technical salesperson should be able to read each strategy name and oneLiner and immediately understand the pitch.\n' +
   '- Return ONLY the JSON. No preamble, no explanation, no markdown fences.';
 
@@ -919,9 +929,10 @@ function renderBuilderInput(app) {
 
   html += '<div class="builder-field"><label>Business Categories <span class="required">*</span></label>';
   html += '<div class="cat-picker">';
-  html += '<input class="cat-picker-input" type="text" id="bCatSearch" placeholder="Type to search categories (e.g. Pizza, Hair Salons, Auto Repair)..." autocomplete="off">';
+  html += '<input class="cat-picker-input" type="text" id="bCatSearch" placeholder="Search and select categories one at a time (e.g. Pizza, Hair Salons)..." autocomplete="off">';
   html += '<div class="cat-picker-dropdown" id="catDropdown"></div>';
   html += '</div>';
+  html += '<p style="font-size:11px;color:var(--gray-500);margin-top:4px;">Type a keyword, then click to select. Add categories one at a time. Do not paste.</p>';
   html += '<div class="cat-chips" id="catChips"></div></div>';
 
   html += '<div class="builder-field"><label>Who is their ideal customer? <span class="required">*</span></label>';
@@ -1048,10 +1059,22 @@ function renderBuilderResults(app) {
     if (hasComponents) {
       html += '<div class="strategy-components">';
       if (s.categories && s.categories.length) {
+        var validCount = s.categories.filter(function(c) { return typeof c === 'string' || c.valid; }).length;
+        var invalidCount = s.categories.length - validCount;
         html += '<div class="component-group">';
-        html += '<span class="component-label">\u{1F50D} Categories (' + s.categories.length + ')</span>';
+        html += '<span class="component-label">\u{1F50D} Categories (' + s.categories.length + ')';
+        if (invalidCount > 0) html += ' <span style="font-size:10px;color:#dc2626;">(' + invalidCount + ' unverified)</span>';
+        html += '</span>';
         html += '<div class="component-chips">';
-        s.categories.forEach(function(c) { html += '<span class="component-chip component-chip--cat">' + c + '</span>'; });
+        s.categories.forEach(function(c) {
+          if (typeof c === 'string') {
+            html += '<span class="component-chip component-chip--cat">' + c + '</span>';
+          } else if (c.valid) {
+            html += '<span class="component-chip component-chip--cat">' + c.name + '</span>';
+          } else {
+            html += '<span class="component-chip component-chip--cat" style="opacity:0.5;text-decoration:line-through;" title="Not a verified Yelp 1P category">' + c.name + '</span>';
+          }
+        });
         html += '</div></div>';
       }
       if (s.brands && s.brands.length) {
@@ -1106,10 +1129,16 @@ function renderBuilderResults(app) {
     html += '</div>';
   });
 
+  if (state.isSharedView) {
+    html += '<div style="text-align:center;padding:12px 16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;margin-bottom:16px;font-size:13px;color:#1e40af;">\u{1F517} Shared view — generated by a team member using the AI Audience Builder</div>';
+  }
   html += '<div class="results-actions">';
   html += '<button class="results-btn results-btn--primary" data-action="copy-results">Copy All to Clipboard</button>';
-  html += '<button class="results-btn results-btn--outline" data-action="regenerate">Regenerate</button>';
-  html += '<button class="results-btn results-btn--secondary" data-action="start-over">Start Over</button>';
+  if (!state.isSharedView) {
+    html += '<button class="results-btn results-btn--outline" data-action="share-results">\u{1F517} Share Link</button>';
+    html += '<button class="results-btn results-btn--outline" data-action="regenerate">Regenerate</button>';
+    html += '<button class="results-btn results-btn--secondary" data-action="start-over">Start Over</button>';
+  }
   html += '</div></div>';
   app.innerHTML = html;
 }
@@ -1249,6 +1278,19 @@ function callChatProxy(input) {
   })
   .then(function(builderRaw) {
     var data = JSON.parse(builderRaw);
+    // Validate categories against real Yelp aliases
+    if (data && data.strategies) {
+      var validAliases = {};
+      ALL_CATEGORIES.forEach(function(c) { validAliases[c.a.toLowerCase()] = true; });
+      data.strategies.forEach(function(s) {
+        if (s.categories && s.categories.length) {
+          s.categories = s.categories.map(function(cat) {
+            var clean = cat.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return { name: cat, valid: !!validAliases[clean] };
+          });
+        }
+      });
+    }
     if (data && data.strategies && data.strategies.length > 0) {
       state.builderResults = data;
       state.builderStep = 'results';
@@ -1300,7 +1342,10 @@ function copyResults() {
     text += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
     text += 'STRATEGY ' + (i + 1) + ': ' + s.name.toUpperCase() + '\n';
     text += s.oneLiner + '\n\n';
-    if (s.categories && s.categories.length) text += '   Categories (' + s.categories.length + '): ' + s.categories.join(', ') + '\n';
+    if (s.categories && s.categories.length) {
+      var catNames = s.categories.map(function(c) { return typeof c === 'string' ? c : c.name; });
+      text += '   Categories (' + s.categories.length + '): ' + catNames.join(', ') + '\n';
+    }
     if (s.brands && s.brands.length) text += '   Brand Targets: ' + s.brands.join(', ') + '\n';
     if (s.priceFilters && s.priceFilters.length) text += '   Price Filters: ' + s.priceFilters.join(', ') + '\n';
     if (s.bizAttributes && s.bizAttributes.length) text += '   Attributes: ' + s.bizAttributes.join(', ') + '\n';
@@ -1361,6 +1406,59 @@ function renderLibrary(app, backBtn, breadcrumb) {
   else if (state.level === 2) renderLevel2(app);
   else if (state.level === 3) renderLevel3(app);
   else if (state.level === 4) { state.level = 3; renderLevel3(app); }
+}
+
+function shareResults() {
+  if (!state.builderResults || !state.builderInput) { showToast('No results to share.'); return; }
+  var shareBtn = document.querySelector('[data-action="share-results"]');
+  if (shareBtn) { shareBtn.textContent = 'Generating link...'; shareBtn.disabled = true; }
+  google.script.run
+    .withSuccessHandler(function(r) {
+      if (r.success) {
+        // Build the share URL using the current deployment base
+        var baseUrl = window.location.href.split('?')[0];
+        var shareUrl = baseUrl + '?view=' + r.id;
+        // Copy to clipboard
+        var ta = document.createElement('textarea');
+        ta.value = shareUrl;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('Share link copied to clipboard!');
+      } else {
+        showToast('Failed to create share link: ' + (r.error || 'Unknown error'));
+      }
+      if (shareBtn) { shareBtn.textContent = '\u{1F517} Share Link'; shareBtn.disabled = false; }
+    })
+    .withFailureHandler(function(e) {
+      showToast('Failed to create share link.');
+      if (shareBtn) { shareBtn.textContent = '\u{1F517} Share Link'; shareBtn.disabled = false; }
+    })
+    .saveSharedResult({
+      input: state.builderInput,
+      results: state.builderResults
+    });
+}
+
+function loadSharedView(viewId) {
+  google.script.run
+    .withSuccessHandler(function(r) {
+      if (r.success && r.data) {
+        state.builderInput = r.data.input;
+        state.builderResults = r.data.results;
+        state.builderStep = 'results';
+        state.journey = 'builder';
+        state.isSharedView = true;
+        render();
+      } else {
+        showToast('Shared result not found or expired.');
+      }
+    })
+    .withFailureHandler(function(e) {
+      showToast('Could not load shared result.');
+    })
+    .loadSharedResult(viewId);
 }
 
 function getTotalCount() {
@@ -1733,7 +1831,75 @@ function filterCats(query) {
   });
 }
 
+// Sub-vertical groupings: categories that share a "job to be done" and make sense as scale partners
+var SUB_VERTICALS = {
+  "Home Services": {
+    "Repair & Trades": ["Plumbing","Electricians","Heating & Air Conditioning/HVAC","Handyman","Appliance Repair","Garage Door Services","Water Heater Installation/Repair","Foundation Repair","Drywall","Roof Inspectors","Roofing","Chimney Sweeps","Fire Protection","Mobile Home Repair","Structural Engineers"],
+    "Outdoor & Landscaping": ["Landscaping","Lawn Services","Gardeners","Tree Services","Irrigation","Artificial Turf","Patio Coverings","Fences & Gates","Pressure Washers","Pool & Hot Tub Service","Solar Panel Cleaning","Landscape Architects","Snow Removal"],
+    "Renovation & Improvement": ["Contractors","Painters","Flooring","Carpet Installation","Tiling","Cabinetry","Countertop Installation","Stucco","Masonry/Concrete","Decks & Railing","Refinishing","Wallpapering","Windows Installation","Door Sales","Vinyl Siding","Building Supplies","Glass & Mirrors","Insulation Installation"],
+    "Cleaning & Maintenance": ["Home Cleaning","Damage Restoration","Gutter Services","Window Washing","Waterproofing","Grout Services","Home Energy Auditors","Pest Control","Septic Services","Demolition Services","Excavation Services","Junk Removal & Hauling"],
+    "Design & Organization": ["Interior Design","Home Staging","Home Organization","Home Automation","Home Theatre Installation","Home Network Install","Home Window Tinting","Lighting","Blinds","Shutters"],
+    "Moving & Security": ["Movers","Packing Services","Keys & Locksmiths","Security Systems","House Sitters"]
+  },
+  "Active Life": {
+    "Fitness & Training": ["Gyms","Yoga","Pilates","Barre Classes","Boot Camps","Boxing","Cardio Classes","Cycling Classes","Dance Studios","Martial Arts","Trainers","Aerial Fitness","Tai Chi","Gymnastics","Swimming Lessons","Golf Lessons","Fencing Clubs"],
+    "Outdoor Recreation": ["Hiking","Mountain Biking","Rock Climbing","Kayaking","Paddleboarding","Rafting/Kayaking","Sailing","Fishing","Surfing","Beaches","Parks","Camping","Horseback Riding","Canyoneering","Hang Gliding"],
+    "Sports & Games": ["Golf","Tennis","Pickleball","Bowling","Batting Cages","Volleyball","Soccer","Squash","Badminton","Bocce Ball","Disc Golf","Basketball Courts","Baseball Fields","Sports Clubs","Swimming Pools","Skating Rinks","Ice Skating","Roller Skating"],
+    "Amusement & Entertainment": ["Amusement Parks","Water Parks","Trampoline Parks","Go Karts","Laser Tag","Mini Golf","Paintball","Escape Games","Arcades","Axe Throwing","Bubble Soccer","Zorbing","Ziplining","Skydiving","Bungee Jumping","Hot Air Balloons","Indoor Playcentre","Carousels"],
+    "Family & Kids": ["Kids Activities","Day Camps","Playgrounds","Indoor Playcentre","Trampoline Parks","Recreation Centers","Leisure Centers","Zoos","Aquariums"]
+  },
+  "Automotive": {
+    "Repair & Maintenance": ["Auto Repair","Oil Change Stations","Tire Dealers","Tires","Body Shops","Auto Glass Services","Brake Repair","Hybrid Car Repair","Mobile Dent Repair","Windshield Installation & Repair","Commercial Truck Repair","DIY Auto Shop","Smog Check Stations","Emissions Inspection Stations"],
+    "Sales & Dealers": ["Car Dealers","Used Car Dealers","Motorcycle Dealers","Motorsport Vehicle Dealers","RV Dealers","Trailer Dealers"],
+    "Detailing & Wash": ["Car Wash","Auto Detailing","Vehicle Wraps","Car Stereo Installation"],
+    "Rental & Transport": ["Truck Rental","Towing","Parking","Auto Parts & Supplies","Auto Loan Providers","RV Repair","Motorcycle Repair","Gas Stations"]
+  },
+  "Restaurants": {
+    "Quick Service & Casual": ["Burgers","Pizza","Sandwiches","Fast Food","Tacos","Hot Dogs","Chicken Wings","Fish & Chips","Kebab","Falafel","Wraps"],
+    "Fine Dining & Specialty": ["Steakhouses","Seafood","French","Mediterranean","Tapas/Small Plates","Fondue","Wine Bars"],
+    "Asian Cuisine": ["Sushi Bars","Japanese","Chinese","Thai","Vietnamese","Korean","Ramen","Dim Sum","Pho","Indian","Malaysian","Filipino"],
+    "Breakfast & Brunch": ["Breakfast & Brunch","Diners","Cafes","Pancakes","Waffles","Creperies"],
+    "Italian & Mexican": ["Italian","Pizza","Pasta Shops","Mexican","Tex-Mex","Latin American"]
+  },
+  "Health & Medical": {
+    "Dental": ["Dentists","General Dentistry","Orthodontists","Endodontists","Oral Surgeons","Pediatric Dentists","Periodontists","Cosmetic Dentists"],
+    "Primary & Urgent": ["Doctors","Family Practice","Internal Medicine","Urgent Care","Walk-in Clinics","Nurse Practitioners","Primary Care","Emergency Medicine"],
+    "Specialists": ["Dermatologists","Allergists","Neurologists","Gastroenterologists","Pulmonologists","Urologists","Ear Nose & Throat","Orthopedists","Podiatrists","Surgeons","Plastic Surgeons"],
+    "Mental Health & Wellness": ["Counseling & Mental Health","Psychiatrists","Psychologists","Hypnosis/Hypnotherapy","Acupuncture","Naturopathic/Holistic","Nutritionists","Dietitians","Weight Loss Centers"],
+    "Vision & Hearing": ["Eye Doctors","Optometrists","Ophthalmologists","Laser Eye Surgery/LASIK","Audiologists","Hearing Aid Providers","Hearing Aids"],
+    "Therapy & Rehab": ["Physical Therapy","Chiropractors","Occupational Therapy","Sports Medicine","Speech Therapists","Rehabilitation Center"]
+  },
+  "Beauty & Spas": {
+    "Hair": ["Hair Salons","Hair Stylists","Barbers","Blow Dry/Out Services","Hair Extensions","Hair Loss Centers","Hair Removal","Laser Hair Removal"],
+    "Skin & Body": ["Skin Care","Day Spas","Medical Spas","Massage","Massage Therapy","Body Contouring","Spray Tanning","Tanning","Waxing","Threading Services"],
+    "Nails & Makeup": ["Nail Salons","Nail Technicians","Makeup Artists","Permanent Makeup","Cosmetics & Beauty Supply","Eyelash Service"]
+  },
+  "Shopping": {
+    "Fashion & Apparel": ["Shoe Stores","Women's Clothing","Men's Clothing","Children's Clothing","Accessories","Jewelry","Watches","Leather Goods","Bridal","Lingerie","Plus Size Fashion","Vintage & Consignment","Thrift Stores"],
+    "Home & Living": ["Furniture Stores","Home Decor","Kitchen & Bath","Mattresses","Lighting Stores","Rugs","Antiques","Art Galleries"],
+    "Electronics & Tech": ["Electronics","Mobile Phones","Mobile Phone Accessories","Computers"],
+    "Specialty & Gifts": ["Gift Shops","Bookstores","Toy Stores","Hobby Shops","Musical Instruments","Sporting Goods","Outdoor Gear"]
+  },
+  "Financial Services": {
+    "Banking & Credit": ["Banks & Credit Unions","Check Cashing","Currency Exchange"],
+    "Insurance": ["Insurance"],
+    "Advisory & Tax": ["Financial Advising","Tax Services","Investing","Payroll Services"],
+    "Loans & Debt": ["Loans","Debt Relief Services","Title Loans"]
+  }
+};
+
 function getSiblingCategories(cat, verticalName, max) {
+  // First try sub-vertical groupings for tighter matches
+  var groups = SUB_VERTICALS[verticalName];
+  if (groups) {
+    for (var groupName in groups) {
+      var members = groups[groupName];
+      if (members.indexOf(cat) !== -1) {
+        return members.filter(function(c) { return c !== cat; }).slice(0, max || 6);
+      }
+    }
+  }
+  // Fallback: all siblings in the vertical
   var siblings = CATEGORIES[verticalName] || [];
   return siblings.filter(function(c) { return c !== cat; }).slice(0, max || 6);
 }
@@ -2045,6 +2211,7 @@ document.addEventListener('click', function(e) {
   else if (action === 'toggle-bucket') { var card = el.classList.contains('bucket-card') ? el : el.closest('.bucket-card'); if (card) card.classList.toggle('expanded'); }
   else if (action === 'toggle-persona') { var card = el.classList.contains('persona-card') ? el : el.closest('.persona-card'); if (card) card.classList.toggle('expanded'); }
   else if (action === 'copy-results') { copyResults(); }
+  else if (action === 'share-results') { shareResults(); }
   else if (action === 'regenerate') { state.builderStep = 'loading'; render(); callChatProxy(state.builderInput); }
   else if (action === 'start-over') { state.builderStep = 'input'; state.builderResults = null; state.builderError = null; selectedCategories = []; render(); }
 });
@@ -2058,6 +2225,14 @@ document.addEventListener('input', function(e) {
 });
 
 
-render();
+// Check for shared view on load
+if (typeof SHARED_VIEW_ID !== 'undefined' && SHARED_VIEW_ID) {
+  state.journey = 'builder';
+  state.builderStep = 'loading';
+  render();
+  loadSharedView(SHARED_VIEW_ID);
+} else {
+  render();
+}
 </script>
 </html>

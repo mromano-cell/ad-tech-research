@@ -1,7 +1,40 @@
-function doGet() {
-  return HtmlService.createHtmlOutputFromFile('index')
+function doGet(e) {
+  var html = HtmlService.createHtmlOutputFromFile('index')
     .setTitle('Yelp Audiences Explorer')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  // Inject shared view ID if present in URL
+  if (e && e.parameter && e.parameter.view) {
+    var script = '<script>var SHARED_VIEW_ID = "' + e.parameter.view.replace(/[^a-zA-Z0-9_-]/g, '') + '";<\/script>';
+    html.append(script);
+  }
+  return html;
+}
+
+function saveSharedResult(data) {
+  try {
+    var props = PropertiesService.getScriptProperties();
+    var id = 'share_' + new Date().getTime().toString(36) + '_' + Math.random().toString(36).substr(2, 6);
+    var record = {
+      timestamp: new Date().toISOString(),
+      input: data.input,
+      results: data.results
+    };
+    props.setProperty(id, JSON.stringify(record));
+    return { success: true, id: id };
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
+}
+
+function loadSharedResult(id) {
+  try {
+    var props = PropertiesService.getScriptProperties();
+    var raw = props.getProperty(id);
+    if (!raw) return { success: false, error: 'Not found' };
+    return { success: true, data: JSON.parse(raw) };
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
 }
 
 function logBuilderSubmission(data) {
