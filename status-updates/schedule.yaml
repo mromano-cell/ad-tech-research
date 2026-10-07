@@ -20,7 +20,7 @@ reports:
   mbr:
     name: "Monthly Business Report"
     cadence_type: "first_wednesday"
-    next_due: "2026-10-07"
+    next_due: "2026-10-14"
     last_generated: null
     notify_days_before: 1
 
