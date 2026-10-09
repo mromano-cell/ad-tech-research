@@ -1206,8 +1206,9 @@ function callLLM(systemPrompt, userPrompt, maxTokens) {
       { role: 'system', content: systemPrompt },
       { role: 'user', content: userPrompt }
     ],
-    temperature: 0.7,
-    max_tokens: maxTokens || 2000
+    max_tokens: maxTokens || 2000,
+    // Sonnet 5.5 thinks by default and spends max_tokens on it, truncating the JSON
+    thinking: { type: 'between_tools' }
   };
 
   return fetch(LITELLM_BASE_URL + '/v1/chat/completions', {
@@ -1274,7 +1275,7 @@ function callChatProxy(input) {
       'ORIGINAL REQUEST:\n' + userPrompt + '\n\n' +
       'Using the strategic brief above, generate 3-10 distinct targeting strategies. Each strategy should combine multiple audience building blocks (categories, brands, price filters, attributes, personas, demographics) as appropriate. Anchor each strategy in a group of 20+ related categories or a major persona for scale.';
 
-    return callLLM(BUILDER_PROMPT, builderUserPrompt, 5000);
+    return callLLM(BUILDER_PROMPT, builderUserPrompt, 8000);
   })
   .then(function(builderRaw) {
     var data = JSON.parse(builderRaw);
@@ -1408,6 +1409,8 @@ function renderLibrary(app, backBtn, breadcrumb) {
   else if (state.level === 4) { state.level = 3; renderLevel3(app); }
 }
 
+var APP_URL = 'https://script.google.com/macros/s/AKfycbw4WSTl5BFcgZLxnEFLAKGMqxiPpvAD-mmfFZB86ssUbj4WrlZyW6JsUd_WhCq-TNw1/exec';
+
 function shareResults() {
   if (!state.builderResults || !state.builderInput) { showToast('No results to share.'); return; }
   var shareBtn = document.querySelector('[data-action="share-results"]');
@@ -1415,17 +1418,23 @@ function shareResults() {
   google.script.run
     .withSuccessHandler(function(r) {
       if (r.success) {
-        // Build the share URL using the current deployment base
-        var baseUrl = window.location.href.split('?')[0];
-        var shareUrl = baseUrl + '?view=' + r.id;
-        // Copy to clipboard
-        var ta = document.createElement('textarea');
-        ta.value = shareUrl;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        showToast('Share link copied to clipboard!');
+        // window.location is the sandbox iframe, so use the deployment URL from the server
+        var shareUrl = (r.url || APP_URL) + '?view=' + r.id;
+        // Show the link in a selectable box in case clipboard copy is blocked
+        var box = document.getElementById('share-link-box');
+        if (!box) {
+          box = document.createElement('input');
+          box.id = 'share-link-box';
+          box.readOnly = true;
+          box.style.cssText = 'width:100%;margin-top:8px;padding:8px;font-size:13px;border:1px solid #ccc;border-radius:6px;';
+          box.onclick = function() { this.select(); };
+          if (shareBtn && shareBtn.parentNode) shareBtn.parentNode.appendChild(box);
+        }
+        box.value = shareUrl;
+        box.select();
+        var copied = false;
+        try { copied = document.execCommand('copy'); } catch (err) {}
+        showToast(copied ? 'Share link copied to clipboard!' : 'Share link ready. Copy it from the box below.');
       } else {
         showToast('Failed to create share link: ' + (r.error || 'Unknown error'));
       }
@@ -1452,10 +1461,14 @@ function loadSharedView(viewId) {
         state.isSharedView = true;
         render();
       } else {
+        state.builderStep = 'form';
+        render();
         showToast('Shared result not found or expired.');
       }
     })
     .withFailureHandler(function(e) {
+      state.builderStep = 'form';
+      render();
       showToast('Could not load shared result.');
     })
     .loadSharedResult(viewId);
@@ -2225,14 +2238,16 @@ document.addEventListener('input', function(e) {
 });
 
 
-// Check for shared view on load
-if (typeof SHARED_VIEW_ID !== 'undefined' && SHARED_VIEW_ID) {
-  state.journey = 'builder';
-  state.builderStep = 'loading';
-  render();
-  loadSharedView(SHARED_VIEW_ID);
-} else {
-  render();
-}
+// Check for shared view on load (google.script.url reads the top-level page URL, not the iframe)
+render();
+google.script.url.getLocation(function(loc) {
+  var viewId = loc && loc.parameter && loc.parameter.view;
+  if (viewId) {
+    state.journey = 'builder';
+    state.builderStep = 'loading';
+    render();
+    loadSharedView(viewId.replace(/[^a-zA-Z0-9_-]/g, ''));
+  }
+});
 </script>
 </html>

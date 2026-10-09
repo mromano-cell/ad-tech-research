@@ -1,26 +1,34 @@
-function doGet(e) {
-  var html = HtmlService.createHtmlOutputFromFile('index')
+function doGet() {
+  return HtmlService.createHtmlOutputFromFile('index')
     .setTitle('Yelp Audiences Explorer')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
-  // Inject shared view ID if present in URL
-  if (e && e.parameter && e.parameter.view) {
-    var script = '<script>var SHARED_VIEW_ID = "' + e.parameter.view.replace(/[^a-zA-Z0-9_-]/g, '') + '";<\/script>';
-    html.append(script);
+}
+
+// Shared results live in a Google Sheet (Script Properties cap values at 9KB / 500KB total)
+var SHARE_CHUNK = 45000; // Sheets cells hold max 50,000 chars
+
+function getShareSheet() {
+  var props = PropertiesService.getScriptProperties();
+  var ssId = props.getProperty('SHARE_SHEET_ID');
+  var ss;
+  if (ssId) {
+    ss = SpreadsheetApp.openById(ssId);
+  } else {
+    ss = SpreadsheetApp.create('YA Explorer - Shared Results (do not edit)');
+    props.setProperty('SHARE_SHEET_ID', ss.getId());
+    ss.getActiveSheet().appendRow(['ID', 'Timestamp', 'Advertiser', 'JSON (chunked across columns)']);
   }
-  return html;
+  return ss.getSheets()[0];
 }
 
 function saveSharedResult(data) {
   try {
-    var props = PropertiesService.getScriptProperties();
     var id = 'share_' + new Date().getTime().toString(36) + '_' + Math.random().toString(36).substr(2, 6);
-    var record = {
-      timestamp: new Date().toISOString(),
-      input: data.input,
-      results: data.results
-    };
-    props.setProperty(id, JSON.stringify(record));
-    return { success: true, id: id };
+    var json = JSON.stringify({ timestamp: new Date().toISOString(), input: data.input, results: data.results });
+    var row = [id, new Date(), (data.input && data.input.advertiserName) || ''];
+    for (var i = 0; i < json.length; i += SHARE_CHUNK) row.push(json.substring(i, i + SHARE_CHUNK));
+    getShareSheet().appendRow(row);
+    return { success: true, id: id, url: ScriptApp.getService().getUrl() };
   } catch (e) {
     return { success: false, error: e.message };
   }
@@ -28,10 +36,16 @@ function saveSharedResult(data) {
 
 function loadSharedResult(id) {
   try {
-    var props = PropertiesService.getScriptProperties();
-    var raw = props.getProperty(id);
-    if (!raw) return { success: false, error: 'Not found' };
-    return { success: true, data: JSON.parse(raw) };
+    var sheet = getShareSheet();
+    var match = sheet.getRange('A:A').createTextFinder(id).matchEntireCell(true).findNext();
+    if (match) {
+      var values = sheet.getRange(match.getRow(), 4, 1, sheet.getLastColumn() - 3).getValues()[0];
+      return { success: true, data: JSON.parse(values.join('')) };
+    }
+    // Fallback for links created before the move to Sheets
+    var raw = PropertiesService.getScriptProperties().getProperty(id);
+    if (raw) return { success: true, data: JSON.parse(raw) };
+    return { success: false, error: 'Not found' };
   } catch (e) {
     return { success: false, error: e.message };
   }
