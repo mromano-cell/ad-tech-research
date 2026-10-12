@@ -344,6 +344,7 @@ var STRATEGIST_PROMPT = 'You are an expert Yelp Audiences Strategist. Your job i
   '  "adjacentCategories": ["category1", "category2", "category3"],\n' +
   '  "pricePosition": "budget|mid-range|premium|luxury",\n' +
   '  "demographicRelevance": "Which demographics matter for this advertiser and why, or \'none\' if demographics are not a meaningful differentiator",\n' +
+  '  "attributeAndLeadSignals": "Business attributes/highlights tied to the advertiser\'s offer or differentiator (e.g., free estimates, catering, family-owned), and whether lead actions (calls, Request a Quote, messaging) signal purchase intent for this advertiser",\n' +
   '  "geoRelevant": true or false,\n' +
   '  "geoConsiderations": "If geoRelevant is true, explain the travel/location angle. If false, omit or leave empty.",\n' +
   '  "websiteInsights": "Key takeaways from the advertiser website (products, messaging, value props). Omit if no website provided.",\n' +
@@ -385,10 +386,20 @@ var BUILDER_PROMPT = 'You are a Yelp Audiences Targeting Strategy Builder. You r
   '- Examples of INVALID brand targets: Purina, Blue Buffalo, Nike, Samsung, Allbirds (online-first), Mint Mobile (no storefronts) — these are product/online brands without Yelp business pages\n' +
   '- If the advertiser or their competitors are non-brick-and-mortar brands, do NOT generate any brand conquesting strategies. Focus on category, price, attribute, and persona targeting instead.\n\n' +
   '### Business Attributes & Highlights\n' +
-  '**Biz Highlights**: segment_biz_highlight_<highlight> (e.g., outdoor_seating, offers_delivery, good_for_kids, open_late, take_out, reservations)\n' +
-  '**Biz Attributes**: segment_biz_attribute_<attribute> (e.g., accept_credit_cards, has_wifi, pet_friendly)\n' +
-  '**Leads-based**: LEAD_TYPE_CALL, LEAD_TYPE_SITE_VISIT, LEAD_TYPE_DIRECTION, LEAD_TYPE_CALL_TO_ACTION\n' +
-  '- Use as layers on top of category groups, not standalone\n\n' +
+  'Users who engaged with businesses that have a specific attribute or highlight (e.g., free estimates, catering, women-owned, EV charging).\n' +
+  '- Segment naming: segment_biz_highlight_<segment> and segment_biz_attribute_<segment>\n' +
+  '- ONLY use segment names from the "Valid Biz Highlights & Attributes" list appended at the end of these instructions. Never invent one.\n' +
+  '- Use them when an attribute maps to the advertiser\'s differentiator, offer, or customer need (e.g., a contractor offering free in-home consults → free_estimates; a fast-casual chain → grab_and_go or catering_service). Include them in 1-3 strategies max (up to 3 per strategy), only where the attribute is central to the pitch. Skip them when nothing fits.\n' +
+  '- Use as layers alongside category groups, not standalone\n\n' +
+  '### Leads-Based Audiences (Complementary only)\n' +
+  'Users who took a lead action on a Yelp business page. Available lead audiences:\n' +
+  '- "Phone Calls" (LEAD_TYPE_CALL): called a business from Yelp\n' +
+  '- "Website Visits" (LEAD_TYPE_SITE_VISIT): clicked through to a business website\n' +
+  '- "Directions / Map Views" (LEAD_TYPE_DIRECTION): requested directions or viewed on map\n' +
+  '- "CTA Clicks" (LEAD_TYPE_CALL_TO_ACTION): clicked a call-to-action button on a business page\n' +
+  '- "Request a Quote (RAQ/RAX/MTB)": went through the Request a Quote, Request-a-X (consult, appointment), or Message the Business lead journey. Best for service businesses (home services, contractors, movers, auto repair, professional services, events).\n' +
+  '- Include lead audiences in only 1-2 strategies total, and only when high-intent lead behavior fits the advertiser\'s goal. Do NOT add them to every strategy.\n' +
+  '- These are complementary audiences with limited scale. They run as an additional segment with partial budget alongside the strategy\'s category audience. Never use them as a standalone strategy or as a filter narrowing a larger segment.\n\n' +
   '### Yelpy Personas (Supporting building block)\n' +
   'Pre-built audience bundles that group users by lifestyle theme. Each persona contains 15-100 category aliases already grouped for scale.\n' +
   'Available personas include: Foodies, Health & Wellness Enthusiasts, Pet Parents, Moms/Parents, Travelers, Tech Savvy, Outdoor Adventurers, Nightlife & Social, Home Improvers, Auto Enthusiasts, Beauty & Fashion, Eco Conscious, Fitness Fanatics, Students & Young Adults, Luxury Seekers, Budget Savvy, Young Professionals, Digital Nomads, Hygge Seekers, and more.\n' +
@@ -438,7 +449,8 @@ var BUILDER_PROMPT = 'You are a Yelp Audiences Targeting Strategy Builder. You r
   '      "categories": ["category_alias_1", "category_alias_2", "...at least 20 aliases when using categories"],\n' +
   '      "brands": ["brand_name_1", "brand_name_2"] or [],\n' +
   '      "priceFilters": ["$$", "$$$"] or [],\n' +
-  '      "bizAttributes": ["outdoor_seating", "offers_delivery"] or [],\n' +
+  '      "bizAttributes": ["segment names from the valid list, e.g. free_estimates"] or [],\n' +
+  '      "leadAudiences": ["Phone Calls", "Request a Quote (RAQ/RAX/MTB)"] or [] (max 1-2 strategies total),\n' +
   '      "personas": ["Foodies", "Health & Wellness Enthusiasts"] or [],\n' +
   '      "demographics": {"gender": "Women" or null, "ageRange": "30s-50s" or null} or null,\n' +
   '      "locationTargeting": {"type": "city|state|country", "value": "location name"} or null,\n' +
@@ -963,9 +975,21 @@ function initCatPicker() {
   input.addEventListener('input', function() {
     var q = input.value.toLowerCase().trim();
     if (q.length < 2) { dropdown.classList.remove('visible'); return; }
+    // Broad match: every word must appear somewhere in the path or alias, in any order
+    var words = q.split(/[\s>\/&,]+/).filter(Boolean);
     var matches = ALL_CATEGORIES.filter(function(c) {
-      return c.d.toLowerCase().indexOf(q) !== -1 && selectedCategories.indexOf(c.d) === -1;
-    }).slice(0, 12);
+      if (selectedCategories.indexOf(c.d) !== -1) return false;
+      var hay = (c.d + ' ' + c.a).toLowerCase();
+      return words.every(function(w) { return hay.indexOf(w) !== -1; });
+    });
+    // Rank categories whose own name matches ahead of parent-only matches
+    var leafHits = function(c) {
+      var leafWords = c.d.split(' > ').pop().toLowerCase().split(/[^a-z0-9]+/);
+      return words.filter(function(w) {
+        return leafWords.some(function(lw) { return lw.indexOf(w) === 0; });
+      }).length;
+    };
+    matches = matches.sort(function(a, b) { return leafHits(b) - leafHits(a); }).slice(0, 12);
     if (matches.length === 0) { dropdown.classList.remove('visible'); return; }
     var html = '';
     matches.forEach(function(c) {
@@ -1055,31 +1079,23 @@ function renderBuilderResults(app) {
     html += '<p style="font-size:14px;color:var(--gray-700);margin-bottom:12px;font-style:italic;">' + oneLiner + '</p>';
 
     // Targeting components chips
-    var hasComponents = (s.categories && s.categories.length) || (s.brands && s.brands.length) || (s.priceFilters && s.priceFilters.length) || (s.bizAttributes && s.bizAttributes.length) || (s.personas && s.personas.length) || s.demographics || s.locationTargeting;
+    var hasComponents = (s.categories && s.categories.length) || (s.brands && s.brands.length) || (s.priceFilters && s.priceFilters.length) || (s.bizAttributes && s.bizAttributes.length) || (s.leadAudiences && s.leadAudiences.length) || (s.personas && s.personas.length) || s.demographics || s.locationTargeting;
     if (hasComponents) {
       html += '<div class="strategy-components">';
       if (s.categories && s.categories.length) {
-        var validCount = s.categories.filter(function(c) { return typeof c === 'string' || c.valid; }).length;
-        var invalidCount = s.categories.length - validCount;
+        // Invalid categories are hidden (older shared links may still carry them)
+        var shownCats = s.categories.filter(function(c) { return typeof c === 'string' || c.valid; });
         html += '<div class="component-group">';
-        html += '<span class="component-label">\u{1F50D} Categories (' + s.categories.length + ')';
-        if (invalidCount > 0) html += ' <span style="font-size:10px;color:#dc2626;">(' + invalidCount + ' unverified)</span>';
-        html += '</span>';
+        html += '<span class="component-label">\u{1F50D} Categories (' + shownCats.length + ')</span>';
         html += '<div class="component-chips">';
-        s.categories.forEach(function(c) {
-          if (typeof c === 'string') {
-            html += '<span class="component-chip component-chip--cat">' + c + '</span>';
-          } else if (c.valid) {
-            html += '<span class="component-chip component-chip--cat">' + c.name + '</span>';
-          } else {
-            html += '<span class="component-chip component-chip--cat" style="opacity:0.5;text-decoration:line-through;" title="Not a verified Yelp 1P category">' + c.name + '</span>';
-          }
+        shownCats.forEach(function(c) {
+          html += '<span class="component-chip component-chip--cat">' + (typeof c === 'string' ? c : c.name) + '</span>';
         });
         html += '</div></div>';
       }
       if (s.brands && s.brands.length) {
         html += '<div class="component-group">';
-        html += '<span class="component-label">\u{1F3AF} Brand Targets</span>';
+        html += '<span class="component-label">\u{1F3AF} Competitor Targets</span>';
         html += '<div class="component-chips">';
         s.brands.forEach(function(b) { html += '<span class="component-chip component-chip--brand">' + b + '</span>'; });
         html += '</div></div>';
@@ -1095,8 +1111,28 @@ function renderBuilderResults(app) {
         html += '<div class="component-group">';
         html += '<span class="component-label">\u{2699}\u{FE0F} Attributes</span>';
         html += '<div class="component-chips">';
-        s.bizAttributes.forEach(function(a) { html += '<span class="component-chip component-chip--attr">' + a + '</span>'; });
-        html += '</div></div>';
+        var bizTypes = {};
+        s.bizAttributes.forEach(function(a) {
+          var type = getBizType(a);
+          if (type) bizTypes[type] = true;
+          var full = type ? 'segment_biz_' + type + '_' + a : a;
+          html += '<span class="component-chip component-chip--attr" title="' + full + '">' + a + '</span>';
+        });
+        html += '</div>';
+        var srcLinks = Object.keys(bizTypes).map(function(t) {
+          return '<a href="' + BIZ_SOURCE_DOCS[t] + '" target="_blank" style="color:var(--gray-500);">Biz ' + (t === 'highlight' ? 'Highlights' : 'Attributes') + ' doc</a>';
+        });
+        if (srcLinks.length) html += '<div style="font-size:11px;color:var(--gray-500);margin-top:4px;">Source: ' + srcLinks.join(' · ') + '</div>';
+        html += '</div>';
+      }
+      if (s.leadAudiences && s.leadAudiences.length) {
+        html += '<div class="component-group">';
+        html += '<span class="component-label">\u{1F4DE} Lead Audiences</span>';
+        html += '<div class="component-chips">';
+        s.leadAudiences.forEach(function(l) { html += '<span class="component-chip component-chip--attr">' + l + '</span>'; });
+        html += '</div>';
+        html += '<div style="font-size:11px;color:var(--gray-500);margin-top:4px;">Complementary, limited scale. Run alongside the category audience with partial budget. Not standalone or as a filter on larger segments.</div>';
+        html += '</div>';
       }
       if (s.personas && s.personas.length) {
         html += '<div class="component-group">';
@@ -1238,6 +1274,44 @@ function callLLM(systemPrompt, userPrompt, maxTokens) {
   });
 }
 
+var LEAD_AUDIENCES = ['Phone Calls', 'Website Visits', 'Directions / Map Views', 'CTA Clicks', 'Request a Quote (RAQ/RAX/MTB)'];
+
+// Source of truth for BIZ_HIGHLIGHTS / BIZ_ATTRIBUTES
+var BIZ_SOURCE_DOCS = {
+  highlight: 'https://docs.google.com/spreadsheets/d/1khcfyz3gGncsikYt7xdc0JcjGgTfxSl9T06yKGTK21U/edit?gid=2076939544#gid=2076939544',
+  attribute: 'https://docs.google.com/spreadsheets/d/1e6NH5IMl4YJoocorQIQexGB9vpBzhpfpf-GVDeppo-U/edit?gid=74097482#gid=74097482'
+};
+
+// Flagged yellow in the Highlights doc: never pitch as proxies for reaching gender or ethnically
+// diverse audiences. Attribute-side ownership equivalents get the same treatment.
+var BIZ_PROXY_RESTRICTED = ['women_owned_operated', 'minority_owned_operated', 'lgbtq_friendly',
+  'is_women_owned', 'is_asian_owned', 'is_black_owned', 'is_latinx_owned', 'is_lgbtq_owned'];
+
+function isRecommendableBiz(segment) {
+  return segment.indexOf('covid_19') === -1 && BIZ_PROXY_RESTRICTED.indexOf(segment) === -1;
+}
+
+function getBizType(segment) {
+  var inObj = function(obj) {
+    return Object.keys(obj).some(function(g) { return obj[g].some(function(x) { return x.segment === segment; }); });
+  };
+  if (inObj(BIZ_HIGHLIGHTS)) return 'highlight';
+  if (inObj(BIZ_ATTRIBUTES)) return 'attribute';
+  return null;
+}
+
+// Real highlight/attribute segment names, appended to the Builder prompt so it never invents one
+function getBizSegmentPromptList() {
+  var list = function(obj) {
+    return Object.keys(obj).map(function(group) {
+      return group + ': ' + obj[group].filter(function(x) { return isRecommendableBiz(x.segment); })
+        .map(function(x) { return x.segment; }).join(', ');
+    }).join('\n');
+  };
+  return '## Valid Biz Highlights & Attributes\n' +
+    'Highlights:\n' + list(BIZ_HIGHLIGHTS) + '\n\nAttributes:\n' + list(BIZ_ATTRIBUTES);
+}
+
 function callChatProxy(input) {
   var userPrompt = 'Advertiser: ' + input.advertiserName + '\n' +
     'Categories: ' + input.categories.join(', ') + '\n' +
@@ -1275,20 +1349,59 @@ function callChatProxy(input) {
       'ORIGINAL REQUEST:\n' + userPrompt + '\n\n' +
       'Using the strategic brief above, generate 3-10 distinct targeting strategies. Each strategy should combine multiple audience building blocks (categories, brands, price filters, attributes, personas, demographics) as appropriate. Anchor each strategy in a group of 20+ related categories or a major persona for scale.';
 
-    return callLLM(BUILDER_PROMPT, builderUserPrompt, 8000);
+    return callLLM(BUILDER_PROMPT + '\n\n' + getBizSegmentPromptList(), builderUserPrompt, 8000);
   })
   .then(function(builderRaw) {
     var data = JSON.parse(builderRaw);
     // Validate categories against real Yelp aliases
     if (data && data.strategies) {
-      var validAliases = {};
-      ALL_CATEGORIES.forEach(function(c) { validAliases[c.a.toLowerCase()] = true; });
+      // Map normalized alias and leaf name to the real alias, so near-misses
+      // (door_sales, siding, glass_mirrors) auto-correct to doorsales, vinylsiding, glassandmirrors
+      var norm = function(t) { return String(t).toLowerCase().replace(/[^a-z0-9]/g, ''); };
+      var aliasMap = {}, leafMap = {};
+      ALL_CATEGORIES.forEach(function(c) {
+        aliasMap[norm(c.a)] = c.a;
+        var leaf = norm(c.d.split(' > ').pop());
+        if (!leafMap[leaf]) leafMap[leaf] = c.a;
+      });
+      var leafKeys = Object.keys(leafMap);
+      var resolve = function(cat) {
+        var k = norm(cat);
+        if (aliasMap[k]) return aliasMap[k];
+        if (leafMap[k]) return leafMap[k];
+        if (k.length >= 5) {
+          var prefix = leafKeys.filter(function(l) { return l.indexOf(k) === 0; });
+          if (prefix.length === 1) return leafMap[prefix[0]];
+        }
+        return null;
+      };
       data.strategies.forEach(function(s) {
         if (s.categories && s.categories.length) {
-          s.categories = s.categories.map(function(cat) {
-            var clean = cat.toLowerCase().replace(/[^a-z0-9]/g, '');
-            return { name: cat, valid: !!validAliases[clean] };
+          var seen = {}, kept = [];
+          s.categories.forEach(function(cat) {
+            var real = resolve(cat);
+            if (real && !seen[real]) { seen[real] = true; kept.push({ name: real, valid: true }); }
           });
+          s.categories = kept;
+        }
+      });
+      // Keep only real highlight/attribute segments and known lead audiences
+      var bizMap = {};
+      [BIZ_HIGHLIGHTS, BIZ_ATTRIBUTES].forEach(function(obj) {
+        Object.keys(obj).forEach(function(g) {
+          obj[g].forEach(function(x) { if (isRecommendableBiz(x.segment)) bizMap[norm(x.segment)] = x.segment; });
+        });
+      });
+      var leadMap = {};
+      LEAD_AUDIENCES.forEach(function(l) { leadMap[norm(l)] = l; });
+      data.strategies.forEach(function(s) {
+        if (s.bizAttributes && s.bizAttributes.length) {
+          s.bizAttributes = s.bizAttributes.map(function(a) {
+            return bizMap[norm(String(a).replace(/^segment_biz_(highlight|attribute)_/, ''))];
+          }).filter(Boolean);
+        }
+        if (s.leadAudiences && s.leadAudiences.length) {
+          s.leadAudiences = s.leadAudiences.map(function(l) { return leadMap[norm(l)]; }).filter(Boolean);
         }
       });
     }
@@ -1344,12 +1457,20 @@ function copyResults() {
     text += 'STRATEGY ' + (i + 1) + ': ' + s.name.toUpperCase() + '\n';
     text += s.oneLiner + '\n\n';
     if (s.categories && s.categories.length) {
-      var catNames = s.categories.map(function(c) { return typeof c === 'string' ? c : c.name; });
-      text += '   Categories (' + s.categories.length + '): ' + catNames.join(', ') + '\n';
+      var catNames = s.categories
+        .filter(function(c) { return typeof c === 'string' || c.valid; })
+        .map(function(c) { return typeof c === 'string' ? c : c.name; });
+      text += '   Categories (' + catNames.length + '): ' + catNames.join(', ') + '\n';
     }
-    if (s.brands && s.brands.length) text += '   Brand Targets: ' + s.brands.join(', ') + '\n';
+    if (s.brands && s.brands.length) text += '   Competitor Targets: ' + s.brands.join(', ') + '\n';
     if (s.priceFilters && s.priceFilters.length) text += '   Price Filters: ' + s.priceFilters.join(', ') + '\n';
-    if (s.bizAttributes && s.bizAttributes.length) text += '   Attributes: ' + s.bizAttributes.join(', ') + '\n';
+    if (s.bizAttributes && s.bizAttributes.length) {
+      text += '   Attributes: ' + s.bizAttributes.map(function(a) {
+        var type = getBizType(a);
+        return type ? 'segment_biz_' + type + '_' + a : a;
+      }).join(', ') + '\n';
+    }
+    if (s.leadAudiences && s.leadAudiences.length) text += '   Lead Audiences (complementary, partial budget): ' + s.leadAudiences.join(', ') + '\n';
     if (s.personas && s.personas.length) text += '   Personas: ' + s.personas.join(', ') + '\n';
     if (s.demographics && (s.demographics.gender || s.demographics.ageRange)) {
       var demo = [];
@@ -1364,7 +1485,12 @@ function copyResults() {
   });
 
   text += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-  text += 'Source: Yelp Audiences Explorer | AI Audience Builder';
+  text += 'Source: Yelp Audiences Explorer | AI Audience Builder\n';
+  var usesBiz = strategies.some(function(s) { return s.bizAttributes && s.bizAttributes.length; });
+  if (usesBiz) {
+    text += 'Biz Highlights doc: ' + BIZ_SOURCE_DOCS.highlight + '\n';
+    text += 'Biz Attributes doc: ' + BIZ_SOURCE_DOCS.attribute;
+  }
 
   navigator.clipboard.writeText(text).then(function() {
     var btn = document.querySelector('[data-action="copy-results"]');
