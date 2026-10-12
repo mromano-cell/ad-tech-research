@@ -195,20 +195,22 @@ Read the `mbr_topics` list from `schedule.yaml`. For each topic:
 **Celtra / Intent Based Custom Creative (Mike Romano):**
 
 - **Intent-Based Custom Creative (IBCC):**
-  - **IBCC GTM Launch:** [Status narrative. Include SFDC data: N opportunities, $X pipeline, N closed won. Reference specific accounts if notable. Compare to prior period if data available.]
-  - **IBCC Enablement:** [Training status, materials delivered, adoption metrics like seller confidence scores, teams reached.]
-  - **IBCC Tactical Sprint:** [Outreach progress, number of target accounts, verticals covered, results so far.]
-  - **Whitepaper Development:** [Current status, partners involved, ETA on asset.]
-  - **IBCC Phase 2 – Search-Based Audiences:** [Product/eng scoping status, proposed scope, resource/timeline status.]
-- **TTD Creative Partner Exploration:** [Partner status updates, any new developments, open questions.]
+  - **IBCC Adoption:** [2-3 sentences. Closed Won count to date + latest win, open opp count and $ pipeline, stage health.]
+    - *Additional detail (optional):* [account-level opps, losses, notable RFPs, production status]
+  - **[Topic]:** [2-4 sentences. What we're doing, why, and the target date.]
+    - *Additional detail (optional):* [names, docs, links, sub-steps]
+  - [...one main bullet per topic that had meaningful movement]
+- **TTD Creative Partner Exploration:** [2-3 sentences.]
+  - *Additional detail (optional):* [...]
 ```
 
 **Style guide:**
-- This is the most detailed of the 3 reports
-- Include specific numbers with sources (e.g., "SFDC data shows 22 YA Custom Display/Rich Media opportunities")
-- Link to Google Docs where relevant (use the Drive file URLs found in Phase 2c)
-- Bold partner names and key terms on first mention
-- Be thorough — this is read-only, so it needs to stand on its own without verbal explanation
+- Main bullets are leadership-level: 2-4 sentences each, plain language, outcome and "why" first. Recipients do not want operational play-by-play.
+- Under each main bullet, add *Additional detail (optional):* sub-bullets with the full specifics (accounts, names, dates, doc links, seller quotes). Mike decides what to promote or cut. These are for drafting only.
+- Topics come from `mbr_topics` but can be merged, renamed, or skipped based on what moved that month (e.g., Mike used "SFDC Tracking" and "Pricing on Creative Variations vs Designs" in Oct 2026).
+- Include specific numbers with sources in main bullets only when they carry the point (pipeline $, deal count, price).
+- Bold partner names and key terms on first mention.
+- Reference example (Mike's Oct 2026 MBR): see `status-updates/2026-10-12-mbr.md`.
 
 ## Phase 4: Write Output and Update Schedule
 
@@ -218,7 +220,7 @@ Read the `mbr_topics` list from `schedule.yaml`. For each topic:
    - Set `last_generated` to today's date
    - Bump `next_due` forward:
      - For `wrike` and `gtm`: add `cadence_days` (14) to current `next_due`
-     - For `mbr`: calculate the first Wednesday of the next month
+     - For `mbr`: use `cadence_type` (currently second Wednesday of the next month)
 4. Update `pending_context` in schedule.yaml:
    - For any item where the current report type was in `pending_for`, remove this report type from the list
    - If `pending_for` is now empty, remove the entire item (it's been reported everywhere)
