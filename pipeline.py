@@ -275,9 +275,12 @@ def generate_digest(week_start, new_articles, counts):
         cat: sorted(topics.items(), key=lambda x: -x[1])[:5]
         for cat, topics in counts.items()
     }
+    # Long URLs (e.g. Google News redirects) eat the output token budget, so the
+    # model writes short LINK placeholders that get swapped for real URLs below.
+    link_map = {f"LINK{i}": a["url"] for i, a in enumerate(new_articles[:30], 1)}
     articles_list = "\n".join(
-        f"- [{a['publication']}] {a['title']} | URL: {a['url']}"
-        for a in new_articles[:30]
+        f"- [{a['publication']}] {a['title']} | URL: LINK{i}"
+        for i, a in enumerate(new_articles[:30], 1)
     )
     prompt = f"""Write a weekly market research digest for a product marketing team covering the digital advertising industry.
 
@@ -324,10 +327,13 @@ FORMATTING RULES — follow these exactly:
 
     response = client.chat.completions.create(
         model="opus-latest",
-        max_tokens=4000,
+        max_tokens=6000,
         messages=[{"role": "user", "content": prompt}],
     )
-    return response.choices[0].message.content.strip()
+    digest = response.choices[0].message.content.strip()
+    for key in sorted(link_map, key=len, reverse=True):
+        digest = digest.replace(f'"{key}"', f'"{html_lib.escape(link_map[key])}"')
+    return digest
 
 
 def _score_class(score_str):
