@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ad Tech Digest &mdash; 2026-07-06</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f7fa;color:#222}
+    header{background:#0f172a;color:#fff;padding:2rem 2.5rem}
+    header h1{font-size:1.4rem;font-weight:700;letter-spacing:-0.01em}
+    header p{color:#94a3b8;margin-top:0.3rem;font-size:0.9rem}
+    .container{max-width:1280px;margin:0 auto;padding:2rem 2.5rem}
+    .card{background:#fff;border-radius:10px;padding:1.75rem;margin-bottom:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    h2{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:1.2rem}
+    .digest{line-height:1.8;font-size:0.95rem;color:#334155}
+    .digest p{margin-bottom:1rem}
+    .digest a{color:#4f46e5;text-decoration:underline}
+    .digest h3{font-size:0.88rem;font-weight:700;color:#0f172a;margin:1.4rem 0 0.5rem;padding-top:0.8rem;border-top:1px solid #e2e8f0}
+    .digest ul{margin:0.4rem 0 1rem 1.2rem;padding:0}
+    .digest li{margin-bottom:0.5rem;line-height:1.6;font-size:0.93rem}
+    .score-legend{font-size:.72rem;color:#94a3b8;cursor:help;position:relative;display:inline-block;border-bottom:1px dotted #94a3b8}
+    .score-legend:hover::after{content:'Relevance to digital ad tech:\A\A8-10 (green) = Highly relevant\A5-7 (yellow) = Somewhat relevant\A1-4 (blue) = Low relevance';white-space:pre-wrap;position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;font-size:.7rem;padding:.5rem .7rem;border-radius:6px;width:240px;z-index:10;line-height:1.6;box-shadow:0 4px 12px rgba(0,0,0,.15);text-align:left}
+    .chart-controls{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem}
+    .chart-time-controls{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem}
+    .cat-btn,.time-btn{padding:.35rem .75rem;border:1px solid #e2e8f0;border-radius:6px;background:#fff;font-size:.78rem;cursor:pointer;color:#475569;transition:all .15s}
+    .cat-btn:hover,.time-btn:hover{border-color:#6366f1;color:#4f46e5}
+    .cat-btn.active,.time-btn.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
+    .time-label{font-size:.72rem;color:#94a3b8;font-weight:600;margin-right:.25rem}
+    .week-select{padding:.3rem .5rem;border:1px solid #e2e8f0;border-radius:6px;font-size:.75rem;color:#475569;background:#fff}
+    .week-select:focus{border-color:#6366f1;outline:none}
+    .chart-container{position:relative;height:400px;width:100%}
+    .chart-note{font-size:.72rem;color:#94a3b8;margin-top:.75rem}
+    .trends-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}
+    .trend-category h3{font-size:0.72rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;margin-bottom:.6rem;font-weight:600}
+    .trend-item{display:flex;justify-content:space-between;align-items:center;padding:.3rem 0;border-bottom:1px solid #f1f5f9;font-size:.82rem}
+    .trend-count{font-weight:700;color:#0f172a;background:#f1f5f9;padding:.1rem .45rem;border-radius:999px;font-size:.75rem}
+    input#filter{width:100%;padding:.55rem .8rem;border:1px solid #e2e8f0;border-radius:6px;font-size:.875rem;margin-bottom:1rem;outline:none}
+    input#filter:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+    table{width:100%;border-collapse:collapse;font-size:.8rem}
+    th{background:#f8fafc;text-align:left;padding:.55rem .75rem;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;border-bottom:2px solid #e2e8f0;white-space:nowrap}
+    td{padding:.55rem .75rem;border-bottom:1px solid #f1f5f9;vertical-align:top}
+    tr:hover td{background:#fafbff}
+    a{color:#4f46e5;text-decoration:none}
+    a:hover{text-decoration:underline}
+    .score{display:inline-block;padding:.15rem .45rem;border-radius:999px;font-size:.72rem;font-weight:700;background:#dbeafe;color:#1e40af}
+    .score.high{background:#dcfce7;color:#166534}
+    .score.med{background:#fef9c3;color:#854d0e}
+    .tag{display:inline-block;background:#f1f5f9;border-radius:4px;padding:.1rem .35rem;font-size:.68rem;margin:.1rem;color:#475569}
+    .back{font-size:.85rem;margin-bottom:1.25rem;display:inline-block;color:#64748b}
+    .back:hover{color:#0f172a}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ad Tech Weekly Digest</h1>
+    <p>Week of 2026-07-06 &bull; 35 articles analyzed</p>
+  </header>
+  <div class="container">
+    <a href="index.html" class="back">&larr; All reports</a>
+    <div class="card">
+      <h2>Weekly Narrative</h2>
+      <div class="digest"><h3>This Week's TL;DR</h3>
+<p>CTV and streaming advertising dominated the conversation this week with 12 articles touching on video/CTV formats, as the industry races to unlock show-level optimization, programmatic pause ads, and live sports outcomes measurement—all converging around the FIFA World Cup as a proving ground. Meanwhile, AI continues its march across the industry with OpenAI/ChatGPT and Google each appearing in 5 articles, as agencies grapple with a widening AI capabilities gap with their clients and publishers rebuild their web presence for AI agents.</p>
+
+<h3>AI & Search</h3>
+<ul>
+<li><strong>OpenAI/ChatGPT</strong> appeared in 5 articles this week, reflecting its growing presence in the advertising ecosystem. <strong>Meta</strong>'s marketing team is actively <a href="https://www.adexchanger.com/daily-news-roundup/monday-06072026/" target="_blank">deploying AI tools across its operations</a>, signaling enterprise-scale adoption of generative AI in marketing workflows.</li>
+<li><strong>Profound</strong> launched an <a href="https://www.adweek.com/media/profound-launches-an-ai-agent-to-manage-end-to-end-marketing/" target="_blank">AI agent designed to manage end-to-end marketing</a>, representing a new class of autonomous marketing tools that could reshape how campaigns are planned and executed.</li>
+<li>Agency leaders report the <a href="https://digiday.com/marketing/agency-bosses-say-the-ai-gap-with-clients-is-only-getting-wider/" target="_blank">AI capabilities gap between agencies and their clients is widening</a>, creating tension as brands accelerate internal AI adoption faster than their agency partners.</li>
+<li>Publishers like <strong>Time</strong> are <a href="https://digiday.com/media/how-time-and-others-are-rebuilding-parts-of-the-web-for-ai-agents/" target="_blank">rebuilding parts of their web infrastructure specifically for AI agents</a>, anticipating a future where AI-driven discovery replaces traditional search and browsing behaviors.</li>
+<li>"<a href="https://digiday.com/marketing/wtf-is-ai-poisoning/" target="_blank">AI poisoning</a>" emerged as a new concern—a practice where content creators deliberately corrupt training data, raising brand safety questions for advertisers relying on AI-generated outputs.</li>
+</ul>
+
+<h3>Programmatic & Data</h3>
+<ul>
+<li><strong>Equativ's</strong> Michael Lehman expressed <a href="https://www.adexchanger.com/content-studio/equativs-michael-lehman-on-ai-the-open-web-and-programmatic-advertising-why-hes-still-bullish/" target="_blank">bullish optimism on AI, the open web, and programmatic advertising</a>, suggesting the open web remains a viable and growing opportunity for programmatic buyers despite walled garden dominance.</li>
+<li>The FIFA World Cup is serving as a <a href="https://www.adexchanger.com/on-tv-and-video/the-world-cup-is-a-live-outcomes-test-for-programmatic-live-sports/" target="_blank">live outcomes test for programmatic live sports advertising</a>, with buyers measuring real-time performance in what may be the largest programmatic sports activation to date.</li>
+<li><strong>LiveRamp</strong> launched a brand campaign on <strong>Netflix</strong> even as its <a href="https://www.adweek.com/media/liveramp-launches-brand-campaign-on-netflix-as-publicis-deal-fuels-scrutiny-of-its-neutrality/" target="_blank">Publicis deal fuels scrutiny of its data neutrality</a>—a significant development for identity resolution and clean room infrastructure trust.</li>
+<li>The <a href="https://digiday.com/marketing/the-rise-of-pharma-ad-tech/" target="_blank">rise of pharma-specific ad tech</a> signals growing vertical specialization in programmatic, with healthcare advertisers demanding compliant, privacy-first targeting solutions.</li>
+<li>New "<a href="https://digiday.com/media/media-briefing-surveillance-pricing-laws-are-coming-for-dynamic-subscription-strategies/" target="_blank">surveillance pricing" legislation is approaching</a> that could impact dynamic subscription and pricing strategies, with potential downstream effects on how advertisers target and bid on audiences.</li>
+</ul>
+
+<h3>CTV & Video</h3>
+<ul>
+<li><strong>CTV advertising appeared in 8 articles this week</strong> (with CTV/OTT and Video formats each tagged 12 times), making it by far the dominant topic. Buyers are now getting <a href="https://www.adexchanger.com/tv/ctv-buyers-are-getting-the-show-level-performance-optimization-theyve-always-wanted/" target="_blank">show-level performance optimization</a> they've long demanded, enabling targeting and measurement at the content level rather than just the platform level.</li>
+<li>Advertisers are eagerly <a href="https://www.adexchanger.com/streaming/advertisers-await-programmatic-pause-ads/" target="_blank">awaiting programmatic pause ads</a>—a new non-intrusive format that activates when viewers pause content, offering high-attention placements without disrupting the viewing experience.</li>
+<li><strong>Disney</strong> is capitalizing on the success of <em>The Bear</em> to <a href="https://www.adweek.com/convergent-tv/how-the-bear-helped-cook-up-new-ad-interest-in-disney-shows/" target="_blank">attract new advertiser interest</a> in its streaming programming, demonstrating how premium content drives ad demand on AVOD tiers.</li>
+<li><strong>Electronic Arts</strong> is betting that <a href="https://digiday.com/marketing/electronic-arts-is-betting-that-in-game-ads-can-out-earn-ctv/" target="_blank">in-game ads can out-earn CTV</a>, positioning gaming environments as a competitive alternative to streaming video for advertiser budgets.</li>
+<li><strong>NBCU's</strong> planned <a href="https://digiday.com/media-buying/what-will-nbcus-conscious-uncoupling-from-comcast-mean-for-brands/" target="_blank">separation from Comcast</a> raises questions about what the restructuring means for brands and their existing CTV/linear buying relationships, with Digiday identifying it as one of the <a href="https://digiday.com/future-of-tv/future-of-tv-briefing-the-5-biggest-news-stories-of-2026-so-far/" target="_blank">5 biggest TV news stories of 2026 so far</a>.</li>
+</ul>
+
+<h3>Agencies</h3>
+<ul>
+<li><strong>Publicis</strong> (mentioned in 1 article specifically) faces scrutiny tied to its <strong>LiveRamp</strong> deal, as the industry questions whether the acquisition compromises LiveRamp's <a href="https://www.adweek.com/media/liveramp-launches-brand-campaign-on-netflix-as-publicis-deal-fuels-scrutiny-of-its-neutrality/" target="_blank">data neutrality positioning</a>—a key concern for competing agency holding companies.</li>
+<li>The <a href="https://digiday.com/marketing/agency-bosses-say-the-ai-gap-with-clients-is-only-getting-wider/" target="_blank">widening AI gap between agencies and clients</a> is creating existential pressure on agencies to upskill rapidly or risk disintermediation as brands build internal AI capabilities.</li>
+<li>Cannes Lions continued to generate industry conversation, with <a href="https://www.adweek.com/brand-marketing/marketing-vanguard-at-cannes-human-ingenuity-still-runs-the-game-ft-dara-treseder/" target="_blank">Dara Treseder emphasizing human ingenuity</a> still drives marketing success even as AI tools proliferate, and <strong>IAB</strong> joining as a <a href="https://www.adweek.com/agencies/jupiter-festival-miami-adds-iab-as-new-founding-partner-ahead-of-launch/" target="_blank">founding partner of Jupiter Festival Miami</a>.</li>
+<li>World Cup media buying is largely <a href="https://digiday.com/media-buying/media-buying-briefing-its-a-world-party-at-the-world-cup-unless-youre-looking-to-get-in-now/" target="_blank">sold out for last-minute buyers</a>, with brands increasingly supplementing traditional sports sponsorships by <a href="https://digiday.com/media/why-brands-are-bringing-creators-to-the-world-cup-sidelines/" target="_blank">bringing creators to the sidelines</a> as an influencer marketing play.</li>
+</ul>
+
+<h3>Yelp Impact Analysis</h3>
+<p>While no articles this week directly addressed local business advertising platforms, several adjacent developments carry implications for high-intent platforms like <strong>Yelp</strong>. <strong>Google's</strong> continued prominence (5 mentions) and <strong>OpenAI/ChatGPT's</strong> expanding footprint (5 mentions) underscore the ongoing competitive pressure on local discovery—particularly as publishers <a href="https://digiday.com/media/how-time-and-others-are-rebuilding-parts-of-the-web-for-ai-agents/" target="_blank">rebuild for AI agents</a> that could reshape how consumers find and choose local services. The rise of <a href="https://digiday.com/marketing/the-rise-of-pharma-ad-tech/" target="_blank">vertical-specific ad tech</a> (in this case, pharma) validates the broader trend of specialized advertising solutions tailored to regulated or high-consideration verticals—a model that aligns with Yelp's positioning for restaurants, home services, and professional services. Additionally, incoming <a href="https://digiday.com/media/media-briefing-surveillance-pricing-laws-are-coming-for-dynamic-subscription-strategies/" target="_blank">"surveillance pricing" legislation</a> could affect how platforms present pricing and offers to consumers, potentially impacting dynamic ad delivery for multi-location businesses. The <strong>LiveRamp/Publicis</strong> neutrality debate also signals that identity and data infrastructure choices are becoming more politically charged—relevant for any platform offering managed-service or programmatic products that rely on third-party data partnerships.</p></div>
+    </div>
+    <div class="card">
+      <h2>Topic Trends Over Time</h2>
+      <div class="chart-controls">
+        <button class="cat-btn" data-category="all">All</button>
+      </div>
+      <div class="chart-time-controls">
+        <span class="time-label">Time:</span>
+        <button class="time-btn active" data-range="all">All Time</button>
+        <button class="time-btn" data-range="4">Last 4 Weeks</button>
+        <button class="time-btn" data-range="8">Last 8 Weeks</button>
+        <button class="time-btn" data-range="12">Last 12 Weeks</button>
+        <button class="time-btn" data-range="monthly">Monthly</button>
+        <span class="time-label" style="margin-left:.75rem">Custom:</span>
+        <select class="week-select" id="weekFrom"><option value="">From</option></select>
+        <span style="font-size:.72rem;color:#94a3b8">to</span>
+        <select class="week-select" id="weekTo"><option value="">To</option></select>
+      </div>
+      <div class="chart-container">
+        <canvas id="trendsChart"></canvas>
+      </div>
+      <p class="chart-note">Click category buttons to filter. Click legend items to toggle individual topics. Use time controls to adjust the date range.</p>
+    </div>
+    <div class="card">
+      <h2>Trending Topics This Week</h2>
+      <div class="trends-grid"><div class="trend-category"><h3>Ad Formats</h3><div class="trend-item"><span>CTV/OTT</span><span class="trend-count">12</span></div>
+<div class="trend-item"><span>Video</span><span class="trend-count">12</span></div>
+<div class="trend-item"><span>Display</span><span class="trend-count">3</span></div>
+<div class="trend-item"><span>Social</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>Search</span><span class="trend-count">1</span></div>
+<div class="trend-item"><span>Native</span><span class="trend-count">1</span></div>
+</div>
+<div class="trend-category"><h3>Agencies</h3><div class="trend-item"><span>Publicis</span><span class="trend-count">1</span></div>
+</div>
+<div class="trend-category"><h3>Attribution</h3><div class="trend-item"><span>Clean Rooms</span><span class="trend-count">1</span></div>
+<div class="trend-item"><span>ID Solutions</span><span class="trend-count">1</span></div>
+</div>
+<div class="trend-category"><h3>Major Ad Tech Companies</h3><div class="trend-item"><span>OpenAI/ChatGPT</span><span class="trend-count">5</span></div>
+<div class="trend-item"><span>Google</span><span class="trend-count">5</span></div>
+<div class="trend-item"><span>Netflix</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>TikTok</span><span class="trend-count">1</span></div>
+<div class="trend-item"><span>Meta</span><span class="trend-count">1</span></div>
+</div>
+<div class="trend-category"><h3>Topics</h3><div class="trend-item"><span>CTV advertising</span><span class="trend-count">8</span></div>
+<div class="trend-item"><span>influencer marketing</span><span class="trend-count">3</span></div>
+<div class="trend-item"><span>programmatic advertising</span><span class="trend-count">3</span></div>
+<div class="trend-item"><span>industry events</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>brand safety</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>sports sponsorship</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>branded content</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>Cannes Lions</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>AI agents</span><span class="trend-count">2</span></div>
+<div class="trend-item"><span>creator economy</span><span class="trend-count">2</span></div>
+</div></div>
+    </div>
+    <div class="card">
+      <h2>Articles (35)</h2>
+      <input type="text" id="filter" placeholder="Filter by headline, topic, publication&hellip;">
+      <table id="tbl">
+        <thead>
+          <tr>
+            <th>Date</th><th>Publication</th><th>Headline</th>
+            <th>Categories</th><th>Companies</th><th>Ad Formats</th>
+            <th>Score <span class="score-legend">(?)</span></th>
+          </tr>
+        </thead>
+        <tbody><tr><td>2026-07-06</td><td>Adweek</td><td><a href="https://www.adweek.com/agencies/jupiter-festival-miami-adds-iab-as-new-founding-partner-ahead-of-launch/" target="_blank" rel="noopener">Jupiter Festival Miami Adds IAB as New Founding Partner Ahead of Launch</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">The IAB has joined as a founding partner of the Jupiter Festival Miami, with CEO David Cohen citing programming influence as a key motivation for the partnership.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">2</span></td></tr>
+<tr><td>2026-07-06</td><td>Adweek</td><td><a href="https://www.adweek.com/media/liveramp-launches-brand-campaign-on-netflix-as-publicis-deal-fuels-scrutiny-of-its-neutrality/" target="_blank" rel="noopener">LiveRamp Launches Brand Campaign on Netflix as Publicis Deal Fuels Scrutiny of its Neutrality</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">LiveRamp is launching a brand campaign on Netflix to position itself as a trustworthy AI marketing data foundation, even as its acquisition by Publicis raises industry concerns about its ability to remain a neutral, independent data connectivity platform.</div></td><td><span class="tag">Attribution/Measurement</span> <span class="tag">Major Ad Tech Companies</span> <span class="tag">Industry/Business</span> <span class="tag">Privacy/Regulation</span> <span class="tag">Technology</span></td><td><span class="tag">Netflix</span></td><td><span class="tag">CTV/OTT</span></td><td><span class="score high">8</span></td></tr>
+<tr><td>2026-07-05</td><td>Adweek</td><td><a href="https://www.adweek.com/convergent-tv/hyundai-world-cup-robot-halftime-activation/" target="_blank" rel="noopener">Hyundai Upgrades World Cup Stunts With First Robot-Powered Halftime Activation</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Hyundai debuted its Atlas humanoid robot in a live halftime activation at the FIFA World Cup, marking a novel experiential brand stunt rather than a digital advertising initiative.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Technology</span></td><td></td><td></td><td><span class="score ">2</span></td></tr>
+<tr><td>2026-07-02</td><td>Adweek</td><td><a href="https://www.adweek.com/tvnewser/week-of-june-22-2026-cable-news-ratings/" target="_blank" rel="noopener">Week of June 22 Cable News Ratings: Fox News and MS NOW Share the Spoils</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Fox News led cable news networks with primetime growth in both total viewers and the key demo during the week of June 22.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">1</span></td></tr>
+<tr><td>2026-07-02</td><td>Adweek</td><td><a href="https://www.adweek.com/tvnewser/here-are-the-2nd-quarter-of-2026-evening-news-ratings/" target="_blank" rel="noopener">Here Are the 2nd Quarter of 2026 Evening News Ratings</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">The article reports Q2 2026 evening news TV ratings, including weekly ratings for the week of June 22, with no substantive digital advertising or ad tech content.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">1</span></td></tr>
+<tr><td>2026-07-02</td><td>Adweek</td><td><a href="https://www.adweek.com/brand-marketing/for-america250-patriotic-marketing-has-to-look-beyond-the-cliches/" target="_blank" rel="noopener">For America250, Patriotic Marketing Has to Look Beyond the Cliches</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">The article argues that marketers must move beyond patriotic clichés to achieve authentic brand messaging for America&#x27;s 250th anniversary and July 4th campaigns.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">2</span></td></tr>
+<tr><td>2026-07-02</td><td>Adweek</td><td><a href="https://www.adweek.com/convergent-tv/how-the-bear-helped-cook-up-new-ad-interest-in-disney-shows/" target="_blank" rel="noopener">How The Bear Helped Cook Up New Ad Interest in Disney Shows</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">The Bear&#x27;s final season on FX/Disney sold out its sponsorships and is driving broader advertiser interest in Disney&#x27;s streaming and television properties.</div></td><td><span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span></td><td></td><td><span class="tag">CTV/OTT</span> <span class="tag">Video</span></td><td><span class="score ">3</span></td></tr>
+<tr><td>2026-07-02</td><td>Adweek</td><td><a href="https://www.adweek.com/brand-marketing/marketing-vanguard-at-cannes-human-ingenuity-still-runs-the-game-ft-dara-treseder/" target="_blank" rel="noopener">Marketing Vanguard at Cannes: Human Ingenuity Still Runs the Game ft. Dara Treseder</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Dara Treseder discusses the enduring value of human creativity and trust in marketing at Cannes Lions 2026, arguing that human ingenuity remains central to the industry despite technological change.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">2</span></td></tr>
+<tr><td>2026-07-02</td><td>Adweek</td><td><a href="https://www.adweek.com/brand-marketing/inside-julie-thompsons-annual-thursday-vip-dinner-club-discotheque-at-cannes-lions/" target="_blank" rel="noopener">Inside Julie Thompson&amp;#8217;s Annual Thursday VIP Dinner Club &amp;amp; Discotheque at Cannes Lions</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">A feature piece about a VIP dinner and social event hosted by Julie Thompson at the Cannes Lions advertising festival.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">1</span></td></tr>
+<tr><td>2026-07-02</td><td>Adweek</td><td><a href="https://www.adweek.com/media/profound-launches-an-ai-agent-to-manage-end-to-end-marketing/" target="_blank" rel="noopener">Profound Launches an AI Agent to Manage End-to-End Marketing</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Profound has launched an AI agent designed to manage end-to-end marketing workflows, amid growing industry adoption of agentic AI and concerns about rising token costs.</div></td><td><span class="tag">Technology</span> <span class="tag">Industry/Business</span> <span class="tag">Major Ad Tech Companies</span></td><td><span class="tag">OpenAI/ChatGPT</span></td><td></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-07-06</td><td>Digiday</td><td><a href="https://digiday.com/media/in-graphic-detail-the-state-of-streaming-highlights-the-power-of-creators/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">In Graphic Detail: The state of streaming highlights the power of creators</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">An analysis of streaming platform viewership data showing that &#x27;Just Chatting&#x27; personality-driven creator content is the dominant force behind views on major streaming platforms.</div></td><td><span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span></td><td></td><td><span class="tag">Video</span></td><td><span class="score ">3</span></td></tr>
+<tr><td>2026-07-06</td><td>Digiday</td><td><a href="https://digiday.com/media/hot-ones-creator-sean-evans-on-youtube-vs-tv-the-interview-boom-and-what-comes-next/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Hot Ones creator Sean Evans on YouTube vs. TV, the interview boom and what comes next</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Hot Ones host Sean Evans discusses the evolution of the creator economy, the rise of the interview format, and the ongoing comparison between YouTube and traditional television.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td><span class="tag">Video</span></td><td><span class="score ">2</span></td></tr>
+<tr><td>2026-07-06</td><td>Digiday</td><td><a href="https://digiday.com/marketing/wtf-is-ai-poisoning/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">WTF is AI poisoning?</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">AI poisoning is an emerging threat where competitors or bad actors manipulate LLM search results to spread misinformation about a brand&#x27;s online profile, posing new risks for marketers investing in AI-driven search channels.</div></td><td><span class="tag">Major Ad Tech Companies</span> <span class="tag">Technology</span> <span class="tag">Industry/Business</span> <span class="tag">Privacy/Regulation</span></td><td><span class="tag">OpenAI/ChatGPT</span> <span class="tag">Google</span></td><td><span class="tag">Search</span></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-07-06</td><td>Digiday</td><td><a href="https://digiday.com/media-buying/media-buying-briefing-its-a-world-party-at-the-world-cup-unless-youre-looking-to-get-in-now/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Media Buying Briefing: It’s a world party at the World Cup, unless you’re looking to get in now</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">This article examines the advertising landscape around the 2026 FIFA World Cup, noting strong ratings and viewer enthusiasm but challenges for brands looking to buy in mid-tournament given locked-up inventory.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Ad Formats</span></td><td></td><td><span class="tag">CTV/OTT</span> <span class="tag">Video</span></td><td><span class="score ">4</span></td></tr>
+<tr><td>2026-07-06</td><td>Digiday</td><td><a href="https://digiday.com/marketing/agency-bosses-say-the-ai-gap-with-clients-is-only-getting-wider/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Agency bosses say the AI gap with clients is only getting wider</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Agency leaders express growing frustration over a widening AI knowledge and adoption gap between their organizations and their clients.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Technology</span></td><td></td><td></td><td><span class="score ">4</span></td></tr>
+<tr><td>2026-07-03</td><td>Digiday</td><td><a href="https://digiday.com/marketing/electronic-arts-is-betting-that-in-game-ads-can-out-earn-ctv/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Electronic Arts is betting that in-game ads can out-earn CTV</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Electronic Arts has built a proprietary in-game advertising stack and is positioning itself to set industry standards, arguing that in-game ads can generate higher revenue than CTV advertising.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span> <span class="tag">Technology</span></td><td></td><td><span class="tag">CTV/OTT</span> <span class="tag">Display</span> <span class="tag">Video</span></td><td><span class="score med">7</span></td></tr>
+<tr><td>2026-07-03</td><td>Digiday</td><td><a href="https://digiday.com/marketing/future-of-marketing-briefing-why-bose-is-building-an-entertainment-company/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Future of Marketing Briefing: Why Bose is building an entertainment company</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Bose&#x27;s CMO explains how launching an entertainment division and moving away from external creative agencies over the past five years are interconnected strategic decisions.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">2</span></td></tr>
+<tr><td>2026-07-02</td><td>Digiday</td><td><a href="https://digiday.com/marketing/the-rise-of-pharma-ad-tech/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">The rise of pharma ad tech</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Pharmaceutical-specific ad tech platforms are gaining traction in the healthcare advertising market, reportedly at the expense of traditional DSPs and SSPs that have historically served pharma advertisers.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Major Ad Tech Companies</span> <span class="tag">Industry/Business</span> <span class="tag">Privacy/Regulation</span> <span class="tag">Technology</span></td><td></td><td></td><td><span class="score med">7</span></td></tr>
+<tr><td>2026-07-02</td><td>Digiday</td><td><a href="https://digiday.com/media/why-brands-are-bringing-creators-to-the-world-cup-sidelines/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Why brands are bringing creators to the World Cup sidelines</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Brands are deploying creators at the 2026 World Cup to drive social engagement, reach new audiences, and participate in cultural moments around the tournament.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Ad Formats</span></td><td></td><td><span class="tag">Social</span> <span class="tag">Video</span></td><td><span class="score ">3</span></td></tr>
+<tr><td>2026-07-02</td><td>Digiday</td><td><a href="https://digiday.com/marketing/nike-says-it-expects-986-million-in-ieepa-tariff-refunds/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Nike says it expects $986 million in IEEPA tariff refunds</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Nike announced it expects to receive approximately $986 million in refunds related to IEEPA tariffs from the U.S. government, with $965 million attributed to its North America business.</div></td><td><span class="tag">Industry/Business</span></td><td></td><td></td><td><span class="score ">1</span></td></tr>
+<tr><td>2026-07-02</td><td>Digiday</td><td><a href="https://digiday.com/media/media-briefing-surveillance-pricing-laws-are-coming-for-dynamic-subscription-strategies/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Media Briefing: ‘Surveillance pricing’ laws are coming for dynamic subscription strategies</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">A new &#x27;surveillance pricing&#x27; lawsuit and pending New York legislation threaten to restrict publishers&#x27; ability to use personalized or dynamic pricing models for digital subscriptions.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Privacy/Regulation</span></td><td></td><td></td><td><span class="score ">3</span></td></tr>
+<tr><td>2026-07-01</td><td>Digiday</td><td><a href="https://digiday.com/media-buying/what-will-nbcus-conscious-uncoupling-from-comcast-mean-for-brands/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">What will NBCU’s conscious uncoupling from Comcast mean for brands?</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">NBCUniversal&#x27;s planned spinoff from Comcast could reshape upfront ad negotiations and ad format strategies for brands as the media landscape continues to consolidate.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Ad Formats</span></td><td></td><td><span class="tag">CTV/OTT</span> <span class="tag">Video</span></td><td><span class="score ">4</span></td></tr>
+<tr><td>2026-07-01</td><td>Digiday</td><td><a href="https://digiday.com/marketing/digiday-research-the-marketers-2026-guide-to-creator-marketing-including-duolingo-ulta-and-youtube/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Digiday+ Research: The marketers’ 2026 guide to creator marketing, including Duolingo, Ulta and YouTube</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">A Digiday+ research report examines how marketers in 2026 are deploying creator and influencer marketing beyond traditional social platforms like Instagram, TikTok, and YouTube into channels such as retail media, CTV, and display advertising.</div></td><td><span class="tag">Retail Media</span> <span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span></td><td><span class="tag">TikTok</span></td><td><span class="tag">CTV/OTT</span> <span class="tag">Display</span> <span class="tag">Social</span> <span class="tag">Video</span></td><td><span class="score med">5</span></td></tr>
+<tr><td>2026-07-01</td><td>Digiday</td><td><a href="https://digiday.com/future-of-tv/future-of-tv-briefing-the-5-biggest-news-stories-of-2026-so-far/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">Future of TV Briefing: The 5 biggest news stories of 2026 so far</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">A mid-year retrospective from Digiday&#x27;s Future of TV Briefing recapping the five most significant developments in the TV, streaming, and digital video industry during the first half of 2026.</div></td><td><span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span> <span class="tag">Major Ad Tech Companies</span></td><td><span class="tag">Netflix</span></td><td><span class="tag">CTV/OTT</span> <span class="tag">Video</span></td><td><span class="score med">5</span></td></tr>
+<tr><td>2026-07-01</td><td>Digiday</td><td><a href="https://digiday.com/media/how-time-and-others-are-rebuilding-parts-of-the-web-for-ai-agents/?utm_campaign=digidaydis&amp;utm_medium=rss&amp;utm_source=general-rss" target="_blank" rel="noopener">How Time and others are rebuilding parts of the web for AI agents</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Publishers like Time are building AI-friendly versions of their websites to maintain content discoverability as AI agents and chatbots increasingly mediate how users find and consume information online.</div></td><td><span class="tag">Major Ad Tech Companies</span> <span class="tag">Technology</span> <span class="tag">Industry/Business</span></td><td><span class="tag">Google</span> <span class="tag">OpenAI/ChatGPT</span></td><td></td><td><span class="score ">4</span></td></tr>
+<tr><td>2026-07-06</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/tv/ctv-buyers-are-getting-the-show-level-performance-optimization-theyve-always-wanted/" target="_blank" rel="noopener">CTV Buyers Are Getting The Show-Level Performance Optimization They’ve Always Wanted</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">CTV advertisers are increasingly gaining access to show-level performance data and optimization capabilities that allow them to understand which streaming content their ads ran in and how it impacted campaign results.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Ad Formats</span> <span class="tag">Attribution/Measurement</span> <span class="tag">Technology</span></td><td></td><td><span class="tag">CTV/OTT</span></td><td><span class="score high">8</span></td></tr>
+<tr><td>2026-07-06</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/streaming/advertisers-await-programmatic-pause-ads/" target="_blank" rel="noopener">Advertisers Await Programmatic Pause Ads</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">The IAB Tech Lab is working to standardize programmatic signals for streaming TV pause ads, a format that brands are increasingly eager to adopt.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span></td><td></td><td><span class="tag">CTV/OTT</span> <span class="tag">Video</span></td><td><span class="score med">7</span></td></tr>
+<tr><td>2026-07-06</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/on-tv-and-video/the-world-cup-is-a-live-outcomes-test-for-programmatic-live-sports/" target="_blank" rel="noopener">The World Cup Is A Live Outcomes Test For Programmatic Live Sports</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">The 2026 World Cup is serving as a real-world stress test for programmatic live sports advertising, building on lessons from the 2024 Paris Olympics which first proved that premium live sports inventory could be transacted programmatically at scale.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Ad Formats</span> <span class="tag">Industry/Business</span></td><td></td><td><span class="tag">CTV/OTT</span> <span class="tag">Video</span></td><td><span class="score med">7</span></td></tr>
+<tr><td>2026-07-06</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/daily-news-roundup/monday-06072026/" target="_blank" rel="noopener">Careful, Merge Ahead; How Meta’s Marketers Use AI</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Paramount Skydance is consolidating its ad tech and product teams under former Google executive Hugh Williams, while the article also touches on how Meta&#x27;s marketers are leveraging AI.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Major Ad Tech Companies</span> <span class="tag">Technology</span></td><td><span class="tag">Meta</span> <span class="tag">Google</span></td><td></td><td><span class="score med">5</span></td></tr>
+<tr><td>2026-07-02</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/content-studio/equativs-michael-lehman-on-ai-the-open-web-and-programmatic-advertising-why-hes-still-bullish/" target="_blank" rel="noopener">Optimism On The Croisette: AI, The Open Web And Programmatic Advertising With Equativ’s Michael Lehman</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Equativ President of Americas Michael Lehman shares an optimistic perspective on AI&#x27;s impact on programmatic advertising and the open web in a Cannes 2026 interview with AdExchanger.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Major Ad Tech Companies</span> <span class="tag">Industry/Business</span> <span class="tag">Technology</span></td><td></td><td></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-07-02</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/publishers/people-dont-trust-ai-they-trust-creators-says-people-inc-s-jonathan-roberts/" target="_blank" rel="noopener">People Don’t Trust AI – They Trust Creators, Says People Inc.’s Jonathan Roberts</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">People Inc.&#x27;s Jonathan Roberts argues that consumers trust human creators over AI, while publishers grapple with the tension between AI content surfacing and uncompensated scraping of their content by LLMs.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Technology</span> <span class="tag">Privacy/Regulation</span></td><td><span class="tag">OpenAI/ChatGPT</span> <span class="tag">Google</span></td><td></td><td><span class="score med">5</span></td></tr>
+<tr><td>2026-07-02</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/ctv-roundup/dynamically-inserted-billboards-in-tv-content-groundbreaking-or-distracting/" target="_blank" rel="noopener">Dynamically Inserted Billboards In TV Content: Groundbreaking Or Distracting?</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">The article explores the emerging practice of dynamically inserting virtual billboard advertisements into the backgrounds of TV content, examining whether this ad format represents an innovative opportunity or a viewer distraction.</div></td><td><span class="tag">Ad Formats</span> <span class="tag">Technology</span> <span class="tag">Industry/Business</span></td><td></td><td><span class="tag">CTV/OTT</span> <span class="tag">Display</span> <span class="tag">Video</span></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-07-02</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/daily-news-roundup/thursday-02072026/" target="_blank" rel="noopener">OpenAI Seeks Ad Format Innovation; Monetizing The Post-Click Web</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">OpenAI&#x27;s hiring strategy signals new directions for its emerging ad platform, while Cloudflare introduces tools to categorize web crawlers amid broader questions about monetizing the post-click web.</div></td><td><span class="tag">Major Ad Tech Companies</span> <span class="tag">Ad Formats</span> <span class="tag">Technology</span> <span class="tag">Industry/Business</span></td><td><span class="tag">OpenAI/ChatGPT</span></td><td><span class="tag">Native</span></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-07-01</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/marketers/as-ai-tools-multiply-cadent-and-google-cloud-make-the-case-for-connected-advertising-intelligence/" target="_blank" rel="noopener">As AI Tools Multiply, Cadent And Google Cloud Make The Case For Connected Advertising Intelligence</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">Cadent and Google Cloud are making the case for unified &#x27;connected advertising intelligence&#x27; as advertisers struggle to manage a proliferating stack of siloed AI-powered tools across planning, activation, measurement, and workflow.</div></td><td><span class="tag">Programmatic</span> <span class="tag">Major Ad Tech Companies</span> <span class="tag">Attribution/Measurement</span> <span class="tag">Technology</span> <span class="tag">Industry/Business</span></td><td><span class="tag">Google</span></td><td></td><td><span class="score med">6</span></td></tr>
+<tr><td>2026-07-01</td><td>AdExchanger</td><td><a href="https://www.adexchanger.com/tv/why-media-mergers-and-spin-offs-dont-always-keep-their-promises/" target="_blank" rel="noopener">Why Media Mergers And Spin-Offs Don’t Always Keep Their Promises</a><div style="color:#888;font-size:0.75rem;margin-top:0.2rem">NYU Stern professor Scott Schiller examines why media megamergers, acquisitions, and spin-offs often fail to deliver on their promises amid the rapid rise of on-demand streaming.</div></td><td><span class="tag">Industry/Business</span> <span class="tag">Ad Formats</span></td><td></td><td><span class="tag">CTV/OTT</span></td><td><span class="score ">3</span></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    document.getElementById('filter').addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      document.querySelectorAll('#tbl tbody tr').forEach(r => {
+        r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    });
+  </script>
+  <script>
+  (function() {
+    var trendData = {"Ad Formats": {"Video": [{"week": "2026-04-20", "count": 3}, {"week": "2026-04-27", "count": 5}, {"week": "2026-05-04", "count": 4}, {"week": "2026-05-18", "count": 28}, {"week": "2026-05-26", "count": 9}, {"week": "2026-06-01", "count": 14}, {"week": "2026-06-08", "count": 14}, {"week": "2026-06-15", "count": 2}, {"week": "2026-06-22", "count": 4}, {"week": "2026-06-29", "count": 7}, {"week": "2026-07-06", "count": 12}], "CTV/OTT": [{"week": "2026-04-20", "count": 4}, {"week": "2026-04-27", "count": 9}, {"week": "2026-05-04", "count": 4}, {"week": "2026-05-18", "count": 15}, {"week": "2026-05-26", "count": 3}, {"week": "2026-06-01", "count": 7}, {"week": "2026-06-08", "count": 7}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-22", "count": 7}, {"week": "2026-06-29", "count": 7}, {"week": "2026-07-06", "count": 12}], "Social": [{"week": "2026-04-20", "count": 5}, {"week": "2026-04-27", "count": 5}, {"week": "2026-05-04", "count": 5}, {"week": "2026-05-18", "count": 9}, {"week": "2026-05-26", "count": 5}, {"week": "2026-06-01", "count": 9}, {"week": "2026-06-08", "count": 12}, {"week": "2026-06-22", "count": 2}, {"week": "2026-06-29", "count": 4}, {"week": "2026-07-06", "count": 2}], "Search": [{"week": "2026-04-20", "count": 1}, {"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 1}, {"week": "2026-05-18", "count": 3}, {"week": "2026-05-26", "count": 2}, {"week": "2026-06-01", "count": 8}, {"week": "2026-06-08", "count": 11}, {"week": "2026-06-15", "count": 3}, {"week": "2026-06-22", "count": 2}, {"week": "2026-06-29", "count": 2}, {"week": "2026-07-06", "count": 1}], "Retail Media Ads": [{"week": "2026-04-20", "count": 2}, {"week": "2026-05-04", "count": 1}, {"week": "2026-05-18", "count": 1}, {"week": "2026-05-26", "count": 2}, {"week": "2026-06-01", "count": 3}, {"week": "2026-06-08", "count": 6}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-22", "count": 3}], "Audio": [{"week": "2026-04-27", "count": 3}, {"week": "2026-05-18", "count": 4}, {"week": "2026-06-29", "count": 1}], "Native": [{"week": "2026-04-20", "count": 2}, {"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 1}, {"week": "2026-05-26", "count": 1}, {"week": "2026-06-01", "count": 3}, {"week": "2026-06-08", "count": 3}, {"week": "2026-06-15", "count": 2}, {"week": "2026-06-22", "count": 2}, {"week": "2026-06-29", "count": 1}, {"week": "2026-07-06", "count": 1}], "Display": [{"week": "2026-04-27", "count": 2}, {"week": "2026-05-18", "count": 2}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-08", "count": 2}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-22", "count": 1}, {"week": "2026-06-29", "count": 1}, {"week": "2026-07-06", "count": 3}], "DOOH": [{"week": "2026-04-20", "count": 1}, {"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 1}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-22", "count": 1}, {"week": "2026-06-29", "count": 1}]}, "Attribution": {"Cookieless": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 2}, {"week": "2026-05-18", "count": 12}, {"week": "2026-05-26", "count": 1}, {"week": "2026-06-01", "count": 3}, {"week": "2026-06-08", "count": 1}, {"week": "2026-06-29", "count": 2}], "ID Solutions": [{"week": "2026-05-18", "count": 11}, {"week": "2026-06-01", "count": 3}, {"week": "2026-06-08", "count": 1}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-29", "count": 3}, {"week": "2026-07-06", "count": 1}], "Clean Rooms": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-18", "count": 8}, {"week": "2026-06-01", "count": 3}, {"week": "2026-06-08", "count": 2}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-22", "count": 1}, {"week": "2026-06-29", "count": 2}, {"week": "2026-07-06", "count": 1}], "Incrementality": [{"week": "2026-05-04", "count": 3}, {"week": "2026-05-18", "count": 4}, {"week": "2026-05-26", "count": 1}, {"week": "2026-06-01", "count": 5}, {"week": "2026-06-08", "count": 1}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-22", "count": 1}, {"week": "2026-06-29", "count": 2}], "MMM": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 3}, {"week": "2026-05-18", "count": 2}, {"week": "2026-06-08", "count": 2}, {"week": "2026-06-29", "count": 1}], "Last-Click": [{"week": "2026-04-20", "count": 1}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-08", "count": 1}], "View-Through": [{"week": "2026-04-20", "count": 1}], "MTA": [{"week": "2026-05-26", "count": 1}, {"week": "2026-06-08", "count": 1}]}, "Major Ad Tech Companies": {"Google": [{"week": "2026-04-20", "count": 3}, {"week": "2026-04-27", "count": 4}, {"week": "2026-05-04", "count": 3}, {"week": "2026-05-18", "count": 9}, {"week": "2026-05-26", "count": 7}, {"week": "2026-06-01", "count": 9}, {"week": "2026-06-08", "count": 11}, {"week": "2026-06-15", "count": 4}, {"week": "2026-06-22", "count": 3}, {"week": "2026-06-29", "count": 2}, {"week": "2026-07-06", "count": 5}], "OpenAI/ChatGPT": [{"week": "2026-05-04", "count": 5}, {"week": "2026-05-18", "count": 7}, {"week": "2026-05-26", "count": 4}, {"week": "2026-06-01", "count": 9}, {"week": "2026-06-08", "count": 7}, {"week": "2026-06-15", "count": 3}, {"week": "2026-06-22", "count": 5}, {"week": "2026-06-29", "count": 2}, {"week": "2026-07-06", "count": 5}], "Amazon": [{"week": "2026-04-20", "count": 2}, {"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 1}, {"week": "2026-05-18", "count": 7}, {"week": "2026-05-26", "count": 2}, {"week": "2026-06-01", "count": 2}, {"week": "2026-06-08", "count": 3}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-22", "count": 2}, {"week": "2026-06-29", "count": 1}], "The Trade Desk": [{"week": "2026-05-18", "count": 7}, {"week": "2026-06-01", "count": 2}, {"week": "2026-06-08", "count": 3}, {"week": "2026-06-22", "count": 2}], "Meta": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-18", "count": 2}, {"week": "2026-05-26", "count": 1}, {"week": "2026-06-01", "count": 3}, {"week": "2026-06-08", "count": 1}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-22", "count": 1}, {"week": "2026-06-29", "count": 3}, {"week": "2026-07-06", "count": 1}], "TikTok": [{"week": "2026-05-04", "count": 1}, {"week": "2026-05-18", "count": 3}, {"week": "2026-05-26", "count": 3}, {"week": "2026-06-01", "count": 3}, {"week": "2026-06-08", "count": 3}, {"week": "2026-06-29", "count": 1}, {"week": "2026-07-06", "count": 1}], "Microsoft/LinkedIn": [{"week": "2026-05-26", "count": 3}, {"week": "2026-06-01", "count": 2}], "Netflix": [{"week": "2026-04-20", "count": 1}, {"week": "2026-05-18", "count": 2}, {"week": "2026-05-26", "count": 1}, {"week": "2026-06-01", "count": 2}, {"week": "2026-06-08", "count": 1}, {"week": "2026-06-22", "count": 2}, {"week": "2026-06-29", "count": 1}, {"week": "2026-07-06", "count": 2}], "DoorDash": [{"week": "2026-05-18", "count": 2}], "Roku": [{"week": "2026-05-18", "count": 2}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-22", "count": 2}], "Snapchat": [{"week": "2026-05-18", "count": 2}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-08", "count": 2}, {"week": "2026-06-29", "count": 1}], "Pinterest": [{"week": "2026-05-18", "count": 2}, {"week": "2026-06-01", "count": 2}, {"week": "2026-06-08", "count": 1}, {"week": "2026-06-22", "count": 1}, {"week": "2026-06-29", "count": 2}], "X/Twitter": [{"week": "2026-05-04", "count": 1}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-08", "count": 1}], "Apple": [{"week": "2026-05-18", "count": 1}, {"week": "2026-06-08", "count": 1}, {"week": "2026-06-29", "count": 1}]}, "Retail Media Networks": {"Amazon Ads": [{"week": "2026-04-20", "count": 2}, {"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 1}, {"week": "2026-05-18", "count": 5}, {"week": "2026-05-26", "count": 1}, {"week": "2026-06-01", "count": 2}, {"week": "2026-06-08", "count": 4}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-22", "count": 2}, {"week": "2026-06-29", "count": 1}], "Walmart Connect": [{"week": "2026-04-27", "count": 2}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-08", "count": 4}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-22", "count": 1}, {"week": "2026-06-29", "count": 1}], "Other": [{"week": "2026-05-04", "count": 3}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-22", "count": 1}], "Albertsons": [{"week": "2026-05-18", "count": 2}]}, "Topics": {"CTV advertising": [{"week": "2026-04-20", "count": 1}, {"week": "2026-04-27", "count": 3}, {"week": "2026-05-04", "count": 4}, {"week": "2026-05-18", "count": 13}, {"week": "2026-05-26", "count": 2}, {"week": "2026-06-01", "count": 5}, {"week": "2026-06-08", "count": 5}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-22", "count": 6}, {"week": "2026-06-29", "count": 5}, {"week": "2026-07-06", "count": 8}], "AI agents": [{"week": "2026-04-20", "count": 1}, {"week": "2026-05-18", "count": 10}, {"week": "2026-05-26", "count": 3}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-08", "count": 1}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-29", "count": 1}, {"week": "2026-07-06", "count": 2}], "data clean rooms": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-18", "count": 8}, {"week": "2026-06-01", "count": 2}, {"week": "2026-06-22", "count": 1}, {"week": "2026-06-29", "count": 2}, {"week": "2026-07-06", "count": 1}], "Cannes Lions": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-26", "count": 2}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-22", "count": 6}, {"week": "2026-06-29", "count": 4}, {"week": "2026-07-06", "count": 2}], "first-party data": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 2}, {"week": "2026-05-18", "count": 6}, {"week": "2026-05-26", "count": 1}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-08", "count": 2}, {"week": "2026-06-22", "count": 1}, {"week": "2026-06-29", "count": 1}], "audience targeting": [{"week": "2026-05-04", "count": 2}, {"week": "2026-05-18", "count": 6}, {"week": "2026-06-08", "count": 2}, {"week": "2026-06-22", "count": 2}, {"week": "2026-06-29", "count": 1}], "ID solutions": [{"week": "2026-05-18", "count": 6}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-29", "count": 1}, {"week": "2026-07-06", "count": 1}], "identity resolution": [{"week": "2026-05-18", "count": 6}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-08", "count": 1}, {"week": "2026-06-29", "count": 1}], "AI search ads": [{"week": "2026-05-26", "count": 1}, {"week": "2026-06-01", "count": 6}, {"week": "2026-06-08", "count": 4}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-22", "count": 1}], "brand safety": [{"week": "2026-04-20", "count": 1}, {"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 2}, {"week": "2026-05-26", "count": 4}, {"week": "2026-06-01", "count": 5}, {"week": "2026-06-08", "count": 4}, {"week": "2026-06-22", "count": 1}, {"week": "2026-06-29", "count": 1}, {"week": "2026-07-06", "count": 2}], "creator economy": [{"week": "2026-04-20", "count": 1}, {"week": "2026-04-27", "count": 2}, {"week": "2026-05-04", "count": 1}, {"week": "2026-06-01", "count": 3}, {"week": "2026-06-08", "count": 5}, {"week": "2026-06-29", "count": 4}, {"week": "2026-07-06", "count": 2}], "upfronts": [{"week": "2026-04-20", "count": 1}, {"week": "2026-05-04", "count": 1}, {"week": "2026-05-18", "count": 5}], "conversational advertising": [{"week": "2026-05-04", "count": 1}, {"week": "2026-05-26", "count": 2}, {"week": "2026-06-01", "count": 5}, {"week": "2026-06-08", "count": 4}, {"week": "2026-06-15", "count": 2}, {"week": "2026-06-22", "count": 1}, {"week": "2026-06-29", "count": 1}, {"week": "2026-07-06", "count": 1}], "AI in advertising": [{"week": "2026-04-27", "count": 1}, {"week": "2026-05-04", "count": 2}, {"week": "2026-05-18", "count": 3}, {"week": "2026-05-26", "count": 4}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-29", "count": 4}, {"week": "2026-07-06", "count": 2}], "influencer marketing": [{"week": "2026-04-27", "count": 3}, {"week": "2026-05-04", "count": 3}, {"week": "2026-05-18", "count": 3}, {"week": "2026-05-26", "count": 1}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-08", "count": 2}, {"week": "2026-06-22", "count": 1}, {"week": "2026-06-29", "count": 4}, {"week": "2026-07-06", "count": 3}]}, "Agencies": {"Publicis": [{"week": "2026-05-18", "count": 12}, {"week": "2026-05-26", "count": 1}, {"week": "2026-06-01", "count": 3}, {"week": "2026-06-08", "count": 2}, {"week": "2026-06-22", "count": 2}, {"week": "2026-06-29", "count": 2}, {"week": "2026-07-06", "count": 1}], "Omnicom": [{"week": "2026-05-18", "count": 9}, {"week": "2026-05-26", "count": 2}, {"week": "2026-06-01", "count": 4}, {"week": "2026-06-08", "count": 2}, {"week": "2026-06-22", "count": 5}, {"week": "2026-06-29", "count": 3}], "IPG": [{"week": "2026-05-18", "count": 9}, {"week": "2026-05-26", "count": 1}, {"week": "2026-06-01", "count": 2}, {"week": "2026-06-08", "count": 2}, {"week": "2026-06-22", "count": 2}, {"week": "2026-06-29", "count": 1}], "Dentsu": [{"week": "2026-05-18", "count": 7}, {"week": "2026-05-26", "count": 1}, {"week": "2026-06-01", "count": 3}, {"week": "2026-06-08", "count": 3}, {"week": "2026-06-22", "count": 2}, {"week": "2026-06-29", "count": 1}], "WPP": [{"week": "2026-05-18", "count": 7}, {"week": "2026-05-26", "count": 2}, {"week": "2026-06-01", "count": 2}, {"week": "2026-06-08", "count": 2}, {"week": "2026-06-15", "count": 1}, {"week": "2026-06-22", "count": 3}, {"week": "2026-06-29", "count": 1}], "GroupM": [{"week": "2026-05-18", "count": 4}, {"week": "2026-06-08", "count": 1}], "Havas": [{"week": "2026-05-18", "count": 3}, {"week": "2026-05-26", "count": 1}, {"week": "2026-06-01", "count": 2}, {"week": "2026-06-08", "count": 1}, {"week": "2026-06-22", "count": 1}, {"week": "2026-06-29", "count": 2}], "Stagwell": [{"week": "2026-05-26", "count": 1}, {"week": "2026-06-01", "count": 1}, {"week": "2026-06-08", "count": 1}, {"week": "2026-06-22", "count": 2}, {"week": "2026-06-29", "count": 1}], "Horizon Media": [{"week": "2026-06-08", "count": 1}]}};
+    var distinctColors = ['#4f46e5','#dc2626','#16a34a','#d97706','#0891b2','#7c3aed','#db2777','#059669','#ea580c','#2563eb','#4338ca','#e11d48','#65a30d','#0d9488','#c026d3'];
+    var allWeeks = [];
+    var weekSet = {};
+    for (var cat in trendData) {
+      for (var topic in trendData[cat]) {
+        trendData[cat][topic].forEach(function(p) {
+          if (!weekSet[p.week]) {
+            weekSet[p.week] = true;
+            allWeeks.push(p.week);
+          }
+        });
+      }
+    }
+    allWeeks.sort();
+    var datasets = [];
+    for (var cat in trendData) {
+      var topicEntries = [];
+      for (var topic in trendData[cat]) {
+        var maxCount = 0;
+        trendData[cat][topic].forEach(function(p) {
+          if (p.count > maxCount) maxCount = p.count;
+        });
+        topicEntries.push({topic: topic, points: trendData[cat][topic], maxCount: maxCount});
+      }
+      topicEntries.sort(function(a, b) { return b.maxCount - a.maxCount; });
+      topicEntries.slice(0, 10).forEach(function(entry, idx) {
+        var weekMap = {};
+        entry.points.forEach(function(p) { weekMap[p.week] = p.count; });
+        var color = distinctColors[idx % distinctColors.length];
+        datasets.push({
+          label: entry.topic,
+          data: allWeeks.map(function(w) { return weekMap[w] || 0; }),
+          borderColor: color,
+          backgroundColor: color + '33',
+          tension: 0.3,
+          pointRadius: 3,
+          borderWidth: 2,
+          _category: cat,
+          hidden: true
+        });
+      });
+    }
+    if (allWeeks.length < 2) {
+      var note = document.querySelector('.chart-note');
+      if (note) note.textContent = 'Only one week of data so far. The trend lines will appear as more weekly reports are generated.';
+    }
+    var ctx = document.getElementById('trendsChart').getContext('2d');
+    var chart = new Chart(ctx, {
+      type: 'line',
+      data: { labels: allWeeks, datasets: datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              font: { size: 11 }, boxWidth: 12, padding: 8,
+              filter: function(item, chartData) { return !chartData.datasets[item.datasetIndex].hidden; }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              title: function(items) { return 'Week of ' + items[0].label; }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: 'Week', font: { size: 12 } },
+            grid: { display: false }
+          },
+          y: {
+            title: { display: true, text: 'Mentions', font: { size: 12 } },
+            beginAtZero: true,
+            ticks: { stepSize: 1 }
+          }
+        }
+      }
+    });
+    function applyFilter(selectedCat) {
+      var colorIdx = 0;
+      chart.data.datasets.forEach(function(ds, i) {
+        if (selectedCat === 'all') {
+          ds.borderColor = distinctColors[i % distinctColors.length];
+          ds.backgroundColor = ds.borderColor + '33';
+          ds.hidden = false;
+          chart.setDatasetVisibility(i, true);
+        } else if (ds._category === selectedCat) {
+          ds.borderColor = distinctColors[colorIdx % distinctColors.length];
+          ds.backgroundColor = ds.borderColor + '33';
+          ds.hidden = false;
+          colorIdx++;
+          chart.setDatasetVisibility(i, true);
+        } else {
+          ds.hidden = true;
+          chart.setDatasetVisibility(i, false);
+        }
+      });
+      chart.update();
+    }
+    var controlsDiv = document.querySelector('.chart-controls');
+    var categories = Object.keys(trendData).sort();
+    categories.forEach(function(cat) {
+      var btn = document.createElement('button');
+      btn.className = 'cat-btn';
+      btn.setAttribute('data-category', cat);
+      btn.textContent = cat;
+      controlsDiv.appendChild(btn);
+    });
+    controlsDiv.addEventListener('click', function(e) {
+      var btn = e.target.closest('.cat-btn');
+      if (!btn) return;
+      controlsDiv.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      applyFilter(btn.getAttribute('data-category'));
+    });
+    applyFilter('Ad Formats');
+    var defaultBtn = controlsDiv.querySelector('[data-category="Ad Formats"]');
+    if (defaultBtn) {
+      controlsDiv.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('active'); });
+      defaultBtn.classList.add('active');
+    }
+
+    // Time range filter
+    var weekFrom = document.getElementById('weekFrom');
+    var weekTo = document.getElementById('weekTo');
+    allWeeks.forEach(function(w) {
+      var optF = document.createElement('option');
+      optF.value = w; optF.textContent = w;
+      weekFrom.appendChild(optF);
+      var optT = document.createElement('option');
+      optT.value = w; optT.textContent = w;
+      weekTo.appendChild(optT);
+    });
+
+    function getFullData(ds) {
+      return allWeeks.map(function(w) {
+        var cat = ds._category;
+        var topic = ds.label;
+        if (trendData[cat] && trendData[cat][topic]) {
+          var match = 0;
+          trendData[cat][topic].forEach(function(p) { if (p.week === w) match = p.count; });
+          return match;
+        }
+        return 0;
+      });
+    }
+
+    function applyTimeRange(startIdx, endIdx) {
+      var filteredWeeks = allWeeks.slice(startIdx, endIdx + 1);
+      chart.data.labels = filteredWeeks;
+      chart.data.datasets.forEach(function(ds) {
+        ds.data = getFullData(ds).slice(startIdx, endIdx + 1);
+      });
+      chart.options.scales.x.title.text = 'Week';
+      chart.update();
+    }
+
+    function applyMonthlyView() {
+      var monthMap = {};
+      var monthOrder = [];
+      allWeeks.forEach(function(w) {
+        var m = w.substring(0, 7);
+        if (!monthMap[m]) { monthMap[m] = []; monthOrder.push(m); }
+        monthMap[m].push(w);
+      });
+      var monthLabels = monthOrder.map(function(m) {
+        var parts = m.split('-');
+        var names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        return names[parseInt(parts[1]) - 1] + ' ' + parts[0];
+      });
+      chart.data.labels = monthLabels;
+      chart.data.datasets.forEach(function(ds) {
+        var fullData = getFullData(ds);
+        var monthlyData = monthOrder.map(function(m) {
+          var total = 0;
+          monthMap[m].forEach(function(w) {
+            var idx = allWeeks.indexOf(w);
+            if (idx >= 0) total += fullData[idx];
+          });
+          return total;
+        });
+        ds.data = monthlyData;
+      });
+      chart.options.scales.x.title.text = 'Month';
+      chart.update();
+    }
+
+    var timeControlsDiv = document.querySelector('.chart-time-controls');
+    timeControlsDiv.addEventListener('click', function(e) {
+      var btn = e.target.closest('.time-btn');
+      if (!btn) return;
+      timeControlsDiv.querySelectorAll('.time-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      weekFrom.value = ''; weekTo.value = '';
+      var range = btn.getAttribute('data-range');
+      if (range === 'monthly') {
+        applyMonthlyView();
+      } else if (range === 'all') {
+        applyTimeRange(0, allWeeks.length - 1);
+      } else {
+        var n = parseInt(range);
+        var startIdx = Math.max(0, allWeeks.length - n);
+        applyTimeRange(startIdx, allWeeks.length - 1);
+      }
+    });
+
+    weekFrom.addEventListener('change', applyCustomRange);
+    weekTo.addEventListener('change', applyCustomRange);
+    function applyCustomRange() {
+      var from = weekFrom.value;
+      var to = weekTo.value;
+      if (!from && !to) return;
+      var startIdx = from ? allWeeks.indexOf(from) : 0;
+      var endIdx = to ? allWeeks.indexOf(to) : allWeeks.length - 1;
+      if (startIdx < 0) startIdx = 0;
+      if (endIdx < 0) endIdx = allWeeks.length - 1;
+      if (startIdx > endIdx) { var tmp = startIdx; startIdx = endIdx; endIdx = tmp; }
+      timeControlsDiv.querySelectorAll('.time-btn').forEach(function(b) { b.classList.remove('active'); });
+      applyTimeRange(startIdx, endIdx);
+    }
+  })();
+  </script>
+</body>
+</html>
